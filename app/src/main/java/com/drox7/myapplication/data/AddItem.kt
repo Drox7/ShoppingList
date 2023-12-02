@@ -9,5 +9,5 @@ data class AddItem(
     val id:Int? = null,
     val name: String,
     val isCheck: Boolean,
-    val listID: Int
+    val listId: Int
 )

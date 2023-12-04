@@ -25,10 +25,11 @@ fun BottomNav() {
                 selected = true,
                 onClick = { },
                 icon = {
-                    Icon(painter = painterResource(
-                        id =bottomNavItem.iconId
-                    ),
-                        contentDescription ="icon"
+                    Icon(
+                        painter = painterResource(
+                            id = bottomNavItem.iconId
+                        ),
+                        contentDescription = "icon"
                     )
                 },
                 label = {

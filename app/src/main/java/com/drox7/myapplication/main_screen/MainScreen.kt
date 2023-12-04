@@ -9,15 +9,20 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.drox7.myapplication.R
+import com.drox7.myapplication.navigation.NavigationGraph
 import com.drox7.myapplication.ui.theme.BlueLight
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
+    val navController = rememberNavController()
+
     Scaffold(bottomBar = {
-        BottomNav()
+        BottomNav(navController)
     },
         floatingActionButton = {
             FloatingActionButton(onClick = { }, backgroundColor = BlueLight) {
@@ -32,6 +37,6 @@ fun MainScreen() {
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true
     ) { 
-        
+        NavigationGraph(navController)
     }
 }

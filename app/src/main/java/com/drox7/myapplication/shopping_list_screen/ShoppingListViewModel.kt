@@ -7,7 +7,10 @@ import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.DialogController
+import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +20,9 @@ class ShoppingListViewModel @Inject constructor(
 ) : ViewModel(), DialogController {
 
     private val list = repository.getAllItem()
+
+    private val _uiEvent = Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
+    val uEvent = _uiEvent.receiveAsFlow()     //receiver
 
     private var listItem: ShoppingListItem? = null
 
@@ -46,13 +52,13 @@ class ShoppingListViewModel @Inject constructor(
             }
 
             is ShoppingListEvent.OnItemClick -> {
-
+                sendUiEvent(UiEvent.Navigate(event.route))
             }
 
             is ShoppingListEvent.OnShowEditDialog -> {
                 listItem = event.item
                 openDialog.value = true
-                editTableText.value = listItem?.name ?:""
+                editTableText.value = listItem?.name ?: ""
                 dialogTitle.value = "List name"
                 showEditTableText.value = true
 
@@ -74,7 +80,7 @@ class ShoppingListViewModel @Inject constructor(
             }
 
             is DialogEvent.OnConfirm -> {
-                if(showEditTableText.value){
+                if (showEditTableText.value) {
                     onEvent(ShoppingListEvent.OnItemSave)
                 } else {
                     viewModelScope.launch {
@@ -90,4 +96,9 @@ class ShoppingListViewModel @Inject constructor(
         }
     }
 
+    private fun sendUiEvent(event: UiEvent) {
+    viewModelScope.launch {
+        _uiEvent.send(event)
+    }
+    }
 }

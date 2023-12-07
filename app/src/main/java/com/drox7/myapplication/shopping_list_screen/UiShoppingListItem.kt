@@ -30,6 +30,7 @@ import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.LightText
 import com.drox7.myapplication.ui.theme.Red
 
+
 @Preview(showBackground = true)
 @Composable
 fun UiShoppingListItem() {

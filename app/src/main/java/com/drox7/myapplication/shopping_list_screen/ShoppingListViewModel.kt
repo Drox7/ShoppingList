@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.utils.DialogController
+import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -26,13 +26,13 @@ class ShoppingListViewModel @Inject constructor(
 
     private var listItem: ShoppingListItem? = null
 
-    override var dialogTitle = mutableStateOf("")
+    override var dialogTitle = mutableStateOf("List name:")
         private set
     override var editTableText = mutableStateOf("")
         private set
-    override var openDialog = mutableStateOf(false)
+    override var openDialog = mutableStateOf(true)
         private set
-    override var showEditTableText = mutableStateOf(false)
+    override var showEditTableText = mutableStateOf(true)
         private set
 
     fun onEvent(event: ShoppingListEvent) {
@@ -73,7 +73,7 @@ class ShoppingListViewModel @Inject constructor(
         }
     }
 
-    fun onDialogEvent(event: DialogEvent) {
+    override fun onDialogEvent(event: DialogEvent) {
         when (event) {
             is DialogEvent.OnCancel -> {
                 openDialog.value = false

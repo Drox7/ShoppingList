@@ -24,22 +24,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.drox7.myapplication.R
+import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.DarkText
 import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.LightText
 import com.drox7.myapplication.ui.theme.Red
+import com.drox7.myapplication.ui.theme.seed
 
 
-@Preview(showBackground = true)
 @Composable
-fun UiShoppingListItem() {
+fun UiShoppingListItem(
+    item :ShoppingListItem
+) {
     ConstraintLayout(
         modifier = Modifier.padding(
-            start = 3.dp, top = 18.dp, end = 3.dp
+            start = 3.dp, top = 8.dp, end = 3.dp
         )
     ) {
-        val (card, deleteButton, editButton, counter, sum) = createRefs()
+        val (card, deleteButton, editButton, counter, sum,col) = createRefs()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,15 +50,17 @@ fun UiShoppingListItem() {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
+                },
+            shape = RoundedCornerShape(10.dp),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
+                    .constrainAs(col){}
             ) {
                 Text(
-                    text = "Пятак",
+                    text = item.name,
                     style = TextStyle(
                         color = DarkText,
                         fontWeight = FontWeight.Bold,
@@ -63,16 +68,49 @@ fun UiShoppingListItem() {
                     )
                 )
                 Text(
-                    text = "12/12/2023 13:00",
+                    text = item.time,
                     style = TextStyle(
                         color = LightText,
                         fontSize = 12.sp
                     )
                 )
+//                Card(
+//                    //sum
+//                    shape = RoundedCornerShape(5.dp),
+//                    modifier = Modifier
+////                        .constrainAs(sum) {
+////                            top.linkTo(counter.bottom)
+////                            bottom.linkTo(counter.bottom)
+////                            end.linkTo(card.end)
+////                        }
+//                        .padding(top = 5.dp),
+//
+//
+//                    ) {
+                    Text(
+                        text = "2000.98 р./10000.45 р.",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                        ),
+                        modifier = Modifier,
+                            // .background(Red)
+//                            .padding(
+//                                top = 2.dp,
+//                                bottom = 2.dp,
+//                                start = 5.dp,
+//                                end = 5.dp
+                       //     ),
+                        color = BlueLight
+                    )
+              //  }
+
                 LinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 7.dp)
+                        .padding(top = 7.dp),
+                    progress = 0.5f,
+                    color = BlueLight
 
                 )
             }
@@ -81,9 +119,9 @@ fun UiShoppingListItem() {
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .constrainAs(deleteButton) {
-                    top.linkTo(card.top)
-                    bottom.linkTo(card.top)
-                    end.linkTo(card.end)
+                    top.linkTo(col.top)
+                    bottom.linkTo(col.bottom)
+                    end.linkTo(parent.end)
                 }
                 .padding(end = 10.dp, top = 10.dp)
                 .size(35.dp)
@@ -93,54 +131,32 @@ fun UiShoppingListItem() {
                 contentDescription = "Delete",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(Red)
+                   // .background(Red)
                     .padding(
                         6.dp
                     ),
-                tint = Color.White
-            )
-        }
-        IconButton( //EditButton
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .constrainAs(editButton) {
-                    top.linkTo(card.top)
-                    bottom.linkTo(card.top)
-                    end.linkTo(deleteButton.start)
-                }
-                .padding(end = 10.dp, top = 10.dp)
-                .size(35.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.edit_icon),
-                contentDescription = "Edit",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(GreenLight)
-                    .padding(
-                        6.dp
-                    ),
-                tint = Color.White
+                tint = Red
             )
         }
         Card( //counter
-            shape = RoundedCornerShape(5.dp),
+            //shape = RoundedCornerShape(5.dp),
+            elevation =0.dp ,
             modifier = Modifier
                 .constrainAs(counter) {
-                    top.linkTo(card.top)
-                    bottom.linkTo(card.top)
-                    end.linkTo(editButton.start)
+                    top.linkTo(col.top)
+                    bottom.linkTo(col.top)
+                    end.linkTo(deleteButton.start)
                 }
                 .padding(end = 5.dp, top = 10.dp)
         ) {
             Text(
-                text = "15/5",
+                text = "${item.allItemCount}/${item.allSelectedItemCount}",
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 ),
                 modifier = Modifier
-                   // .background(Red)
+                    // .background(Red)
                     .padding(
                         top = 7.dp,
                         bottom = 7.dp,
@@ -150,32 +166,31 @@ fun UiShoppingListItem() {
                 color = BlueLight
             )
         }
-        Card( //sum
-            shape = RoundedCornerShape(5.dp),
+
+
+        IconButton( //EditButton
+            onClick = { /*TODO*/ },
             modifier = Modifier
-                .constrainAs(sum) {
-                    top.linkTo(card.bottom)
-                    bottom.linkTo(card.bottom)
-                    end.linkTo(card.end)
+                .constrainAs(editButton) {
+                    top.linkTo(col.top)
+                    bottom.linkTo(col.bottom)
+                    end.linkTo(counter.start)
                 }
-                .padding(end = 9.dp, top = 10.dp)
+                .padding(end = 10.dp, top = 10.dp)
+                .size(35.dp)
         ) {
-            Text(
-                text = "2000.98 р./10000.45 р.",
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                ),
+            Icon(
+                painter = painterResource(id = R.drawable.edit_icon),
+                contentDescription = "Edit",
                 modifier = Modifier
-                   // .background(Red)
+                    //.clip(CircleShape)
+                    //.background(GreenLight)
                     .padding(
-                        top = 2.dp,
-                        bottom = 3.dp,
-                        start = 10.dp,
-                        end = 10.dp
+                        6.dp
                     ),
-                color = BlueLight
+                tint = GreenLight
             )
         }
+
     }
 }

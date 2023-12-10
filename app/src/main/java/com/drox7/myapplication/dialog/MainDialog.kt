@@ -42,26 +42,27 @@ fun MainDialog(
                         )
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (dialogController.showEditTableText.value) TextField(
-                        value = dialogController.editTableText.value,
-                        onValueChange = {
-                            dialogController.onDialogEvent(DialogEvent.OnTextChange(it))
-                        },
-                        label = {
-                            Text(text = "List name:")
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = GrayLight,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        shape = RoundedCornerShape(9.dp),
-                        singleLine = true,
-                        textStyle = TextStyle(
-                            color = DarkText,
-                            fontSize = 16.sp
+                    if (dialogController.showEditTableText.value)
+                        TextField(
+                            value = dialogController.editTableText.value,
+                            onValueChange = {
+                                dialogController.onDialogEvent(DialogEvent.OnTextChange(it))
+                            },
+                            label = {
+                                Text(text = "List name:")
+                            },
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = GrayLight,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
+                            shape = RoundedCornerShape(9.dp),
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                color = DarkText,
+                                fontSize = 16.sp
+                            )
                         )
-                    )
                 }
             },
             confirmButton = {
@@ -78,7 +79,8 @@ fun MainDialog(
                     Text(text = "Cancel")
                 }
 
-            }
+            },
+            shape = RoundedCornerShape(20.dp),
         )
     }
 }

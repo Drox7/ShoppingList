@@ -1,6 +1,7 @@
 package com.drox7.myapplication.shopping_list_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,14 +36,15 @@ import com.drox7.myapplication.ui.theme.seed
 
 @Composable
 fun UiShoppingListItem(
-    item :ShoppingListItem
+    item: ShoppingListItem,
+    onEvent: (ShoppingListEvent) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier.padding(
             start = 3.dp, top = 8.dp, end = 3.dp
         )
     ) {
-        val (card, deleteButton, editButton, counter, sum,col) = createRefs()
+        val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,6 +52,9 @@ fun UiShoppingListItem(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                }
+                .clickable {
+
                 },
             shape = RoundedCornerShape(10.dp),
         ) {
@@ -57,7 +62,7 @@ fun UiShoppingListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .constrainAs(col){}
+                    .constrainAs(col) {}
             ) {
                 Text(
                     text = item.name,
@@ -87,23 +92,23 @@ fun UiShoppingListItem(
 //
 //
 //                    ) {
-                    Text(
-                        text = "2000.98 р./10000.45 р.",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                        ),
-                        modifier = Modifier,
-                            // .background(Red)
+                Text(
+                    text = "2000.98 р./10000.45 р.",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                    ),
+                    modifier = Modifier,
+                    // .background(Red)
 //                            .padding(
 //                                top = 2.dp,
 //                                bottom = 2.dp,
 //                                start = 5.dp,
 //                                end = 5.dp
-                       //     ),
-                        color = BlueLight
-                    )
-              //  }
+                    //     ),
+                    color = BlueLight
+                )
+                //  }
 
                 LinearProgressIndicator(
                     modifier = Modifier
@@ -116,7 +121,9 @@ fun UiShoppingListItem(
             }
         }
         IconButton( //deleteButton
-            onClick = { /*TODO*/ },
+            onClick = {
+                onEvent(ShoppingListEvent.OnShowDeleteDialog(item))
+            },
             modifier = Modifier
                 .constrainAs(deleteButton) {
                     top.linkTo(col.top)
@@ -131,7 +138,7 @@ fun UiShoppingListItem(
                 contentDescription = "Delete",
                 modifier = Modifier
                     .clip(CircleShape)
-                   // .background(Red)
+                    // .background(Red)
                     .padding(
                         6.dp
                     ),
@@ -140,7 +147,7 @@ fun UiShoppingListItem(
         }
         Card( //counter
             //shape = RoundedCornerShape(5.dp),
-            elevation =0.dp ,
+            elevation = 0.dp,
             modifier = Modifier
                 .constrainAs(counter) {
                     top.linkTo(col.top)
@@ -169,7 +176,9 @@ fun UiShoppingListItem(
 
 
         IconButton( //EditButton
-            onClick = { /*TODO*/ },
+            onClick = {
+                      onEvent(ShoppingListEvent.OnShowEditDialog(item))
+            },
             modifier = Modifier
                 .constrainAs(editButton) {
                     top.linkTo(col.top)

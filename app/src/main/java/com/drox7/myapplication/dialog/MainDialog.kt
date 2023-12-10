@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.DarkText
 import com.drox7.myapplication.ui.theme.GrayLight
 
@@ -48,9 +49,9 @@ fun MainDialog(
                             onValueChange = {
                                 dialogController.onDialogEvent(DialogEvent.OnTextChange(it))
                             },
-                            label = {
-                                Text(text = "List name:")
-                            },
+                           // label = {
+                           //     Text(text = "")
+                            //},
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = GrayLight,
                                 focusedIndicatorColor = Color.Transparent,
@@ -69,14 +70,21 @@ fun MainDialog(
                 TextButton(onClick = {
                     dialogController.onDialogEvent(DialogEvent.OnConfirm)
                 }) {
-                    Text(text = "OK")
+                    Text(
+                        text = "OK",
+                        color = BlueLight
+                    )
+
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     dialogController.onDialogEvent(DialogEvent.OnCancel)
                 }) {
-                    Text(text = "Cancel")
+                    Text(
+                        text = "Cancel",
+                        color = BlueLight,
+                    )
                 }
 
             },

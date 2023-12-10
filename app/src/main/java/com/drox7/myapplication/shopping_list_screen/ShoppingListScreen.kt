@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.ui.theme.GrayLight
 
 
@@ -27,7 +28,10 @@ fun ShoppingListScreen(
 
     ) {
         items(itemsList.value){item ->
-            UiShoppingListItem(item)
+            UiShoppingListItem(item){event ->
+                viewModel.onEvent(event)
+            }
         }
     }
+    MainDialog(viewModel)
 }

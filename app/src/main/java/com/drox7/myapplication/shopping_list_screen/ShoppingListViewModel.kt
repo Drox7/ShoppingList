@@ -22,7 +22,7 @@ class ShoppingListViewModel @Inject constructor(
     val list = repository.getAllItem()
 
     private val _uiEvent = Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
-    val uEvent = _uiEvent.receiveAsFlow()     //receiver
+    val uiEvent = _uiEvent.receiveAsFlow() //receiver
 
     private var listItem: ShoppingListItem? = null
 

@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.drox7.myapplication.main_screen.MainScreen
+import com.drox7.myapplication.navigation.MainNavigationGraph
 import com.drox7.myapplication.ui.theme.ShoppingListTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainNavigationGraph()
                 }
             }
         }

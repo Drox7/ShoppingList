@@ -1,6 +1,5 @@
 package com.drox7.myapplication.shopping_list_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +15,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -31,7 +28,7 @@ import com.drox7.myapplication.ui.theme.DarkText
 import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.LightText
 import com.drox7.myapplication.ui.theme.Red
-import com.drox7.myapplication.ui.theme.seed
+import com.drox7.myapplication.utils.Routes
 
 
 @Composable
@@ -54,7 +51,7 @@ fun UiShoppingListItem(
                     end.linkTo(parent.end)
                 }
                 .clickable {
-
+                    onEvent(ShoppingListEvent.OnItemClick(Routes.ADD_ITEM))
                 },
             shape = RoundedCornerShape(10.dp),
         ) {

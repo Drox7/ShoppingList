@@ -49,6 +49,7 @@ class MainScreenViewModel @Inject constructor(
             }
 
 
+            else -> {}
         }
     }
 
@@ -69,6 +70,8 @@ class MainScreenViewModel @Inject constructor(
             is DialogEvent.OnTextChange -> {
                 editTableText.value = event.text
             }
+
+            else -> {}
         }
     }
 }

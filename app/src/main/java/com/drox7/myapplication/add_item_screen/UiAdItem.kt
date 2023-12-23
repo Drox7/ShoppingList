@@ -1,5 +1,6 @@
 package com.drox7.myapplication.add_item_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.AddItem
+import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.Typography
 
 @Composable
@@ -32,12 +34,13 @@ fun UiAdItem(
             .fillMaxWidth()
             .padding(top = 3.dp, bottom = 3.dp)
             .clickable {
-                onEvent(AddItemEvent.onShowEditDialog(item))
+                onEvent(AddItemEvent.OnShowEditDialog(item))
             }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+
         ) {
             Text (
                 modifier = Modifier
@@ -56,11 +59,13 @@ fun UiAdItem(
             )
             IconButton(
                 onClick = {
-                    onEvent(AddItemEvent.onDelete(item))
+                    onEvent(AddItemEvent.OnDelete(item))
                  }
             ) {
                 Icon(painter = painterResource(id = R.drawable.delete_icon),
-                    contentDescription ="Delete" )
+                    contentDescription ="Delete",
+                    tint = Red
+                )
                 
             }
         }

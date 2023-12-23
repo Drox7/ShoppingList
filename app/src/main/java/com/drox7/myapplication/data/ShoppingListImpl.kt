@@ -10,7 +10,7 @@ class ShoppingListImpl(
     }
 
     override suspend fun deleteItem(item: ShoppingListItem) {
-        dao.deleteItem(item)
+        dao.deleteShoppingList(item)
     }
 
     override fun getAllItem(): Flow<List<ShoppingListItem>> {

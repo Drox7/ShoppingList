@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import com.drox7.myapplication.ui.theme.DarkText
 import com.drox7.myapplication.ui.theme.GrayLight
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainDialog(
     dialogController: DialogController
@@ -37,9 +39,9 @@ fun MainDialog(
                     Text(
                         text = dialogController.dialogTitle.value,
                         style = TextStyle(
-                            color = DarkText,
+                            //color = DarkText,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 16.sp
                         )
                     )
                     Spacer(modifier = Modifier.height(10.dp))
@@ -53,15 +55,18 @@ fun MainDialog(
                            //     Text(text = "")
                             //},
                             colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = GrayLight,
+                                //backgroundColor = GrayLight,
                                 focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = BlueLight,
+                                //focusedLabelColor = BlueLight
                             ),
                             shape = RoundedCornerShape(9.dp),
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = DarkText,
-                                fontSize = 16.sp
+                                color = BlueLight,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
                             )
                         )
                 }
@@ -72,7 +77,12 @@ fun MainDialog(
                 }) {
                     Text(
                         text = "OK",
-                        color = BlueLight
+                        color = BlueLight,
+                        style = TextStyle(
+                           // color = DarkText,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
                     )
 
                 }
@@ -82,8 +92,13 @@ fun MainDialog(
                     dialogController.onDialogEvent(DialogEvent.OnCancel)
                 }) {
                     Text(
-                        text = "Cancel",
+                        text = "CANCEL",
                         color = BlueLight,
+                        style = TextStyle(
+                            // color = DarkText,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
                     )
                 }
 

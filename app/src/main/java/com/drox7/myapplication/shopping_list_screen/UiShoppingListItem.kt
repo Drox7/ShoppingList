@@ -156,7 +156,7 @@ fun UiShoppingListItem(
                 .padding(end = 5.dp, top = 10.dp)
         ) {
             Text(
-                text = "${item.allItemCount}/${item.allSelectedItemCount}",
+                text = "${item.allSelectedItemCount}/${item.allItemCount}",
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp

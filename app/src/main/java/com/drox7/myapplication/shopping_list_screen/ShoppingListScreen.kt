@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.ui.theme.GrayLight
+import com.drox7.myapplication.ui.theme.md_theme_dark_tertiary
+import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -40,7 +42,7 @@ fun ShoppingListScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(GrayLight),
+            .background(md_theme_dark_tertiary),
         contentPadding = PaddingValues(bottom = 100.dp)
 
     ) {

@@ -1,5 +1,6 @@
 package com.drox7.myapplication.shopping_list_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,7 @@ import com.drox7.myapplication.R
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.DarkText
+import com.drox7.myapplication.ui.theme.GrayLight
 import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.LightText
 import com.drox7.myapplication.ui.theme.Red
@@ -37,7 +39,9 @@ fun UiShoppingListItem(
     onEvent: (ShoppingListEvent) -> Unit
 ) {
     ConstraintLayout(
-        modifier = Modifier.padding(
+        modifier = Modifier
+            //.background(color = GrayLight)
+            .padding(
             start = 3.dp, top = 8.dp, end = 3.dp
         )
     ) {
@@ -50,6 +54,7 @@ fun UiShoppingListItem(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
+
                 .clickable {
                     onEvent(ShoppingListEvent.OnItemClick(
                         Routes.ADD_ITEM + "/${item.id}"

@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
@@ -34,6 +34,9 @@ import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.GrayLight
+import com.drox7.myapplication.ui.theme.md_theme_dark_inverseOnSurface
+import com.drox7.myapplication.ui.theme.md_theme_dark_tertiary
+import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -60,12 +63,12 @@ fun AddItemScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(GrayLight)
+                .background(md_theme_dark_tertiary)
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
+                    .padding(2.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -81,15 +84,15 @@ fun AddItemScreen(
                             Text(
                                 text = "New item",
                                 fontSize = 12.sp,
-                                color = BlueLight
+                               // color = BlueLight
                             )
 
                         },
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.White,
-                            focusedIndicatorColor = BlueLight,
+                           // backgroundColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = BlueLight
+                            cursorColor = Color.Transparent
                         ),
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -104,7 +107,8 @@ fun AddItemScreen(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.add_icon),
-                            contentDescription = "ADD"
+                            contentDescription = "ADD",
+                            tint = BlueLight
                         )
                     }
                 }

@@ -1,6 +1,5 @@
 package com.drox7.myapplication.main_screen
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,9 +7,11 @@ import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.shopping_list_screen.ShoppingListEvent
+import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +19,9 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor(
     private val repository: ShoppingListRepository
 ) : ViewModel(), DialogController {
+
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
     override var dialogTitle = mutableStateOf("List name:")
         private set
     override var editTableText = mutableStateOf("")
@@ -25,6 +29,8 @@ class MainScreenViewModel @Inject constructor(
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
+        private set
+    var showFloatingButton = mutableStateOf(true)
         private set
 
     fun onEvent(event: MainScreenEvent) {
@@ -48,6 +54,16 @@ class MainScreenViewModel @Inject constructor(
                 openDialog.value = true
             }
 
+            is MainScreenEvent.Navigate -> {
+                sendUiEvent(UiEvent.Navigate(event.route))
+                showFloatingButton.value = !(event.route == Routes.ABOUT
+                        || event.route == Routes.SETTINGS)
+            }
+
+            is MainScreenEvent.NavigateMain -> {
+                sendUiEvent(UiEvent.NavigateMain(event.route))
+
+            }
 
             else -> {}
         }
@@ -72,6 +88,12 @@ class MainScreenViewModel @Inject constructor(
             }
 
             else -> {}
+        }
+    }
+
+    private fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 }

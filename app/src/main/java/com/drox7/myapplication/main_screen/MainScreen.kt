@@ -6,15 +6,19 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.navigation.NavigationGraph
 import com.drox7.myapplication.ui.theme.BlueLight
+import com.drox7.myapplication.utils.UiEvent
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -24,17 +28,35 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is UiEvent.NavigateMain -> {
+                    mainNavHostController.navigate(uiEvent.route)
+                }
 
+                is UiEvent.Navigate -> {
+                    navController.navigate(uiEvent.route)
+                }
+
+                else -> {}
+            }
+        }
+    }
     Scaffold(
         bottomBar = {
-            BottomNav(navController)
+            BottomNav(currentRoute) { route ->
+                viewModel.onEvent(MainScreenEvent.Navigate(route))
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(
+            if(viewModel.showFloatingButton.value) FloatingActionButton(
                 onClick = {
-                  viewModel.onEvent(MainScreenEvent.OnShowEditDialog)
+                    viewModel.onEvent(MainScreenEvent.OnShowEditDialog)
                 },
-               containerColor = BlueLight
+                containerColor = BlueLight
             ) {
                 Icon(
                     painter = painterResource(
@@ -48,9 +70,9 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true
     ) {
-        NavigationGraph(navController){route ->
-            mainNavHostController.navigate(route)
+        NavigationGraph(navController) { route ->
+            viewModel.onEvent(MainScreenEvent.NavigateMain(route))
         }
-        MainDialog(dialogController = viewModel )
+        MainDialog(dialogController = viewModel)
     }
 }

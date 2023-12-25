@@ -4,19 +4,17 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.GrayLight
 
 
 @Composable
 fun BottomNav(
-    navController: NavHostController
+    currentRoute: String?,
+    onNavigate: (String) -> Unit
 ) {
     val listItems = listOf(
         BottomNavItem.ListItem,
@@ -24,14 +22,13 @@ fun BottomNav(
         BottomNavItem.AboutItem,
         BottomNavItem.SettingsItem
     )
-    BottomNavigation(backgroundColor = Color.White) {
+    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
         listItems.forEach { bottomNavItem ->
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
+
             BottomNavigationItem(
                 selected = currentRoute == bottomNavItem.route,
                 onClick = {
-                          navController.navigate(bottomNavItem.route)
+                          onNavigate(bottomNavItem.route)
                 },
                 icon = {
                     Icon(

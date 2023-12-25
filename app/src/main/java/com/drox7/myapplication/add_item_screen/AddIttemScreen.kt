@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -63,7 +64,7 @@ fun AddItemScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(md_theme_dark_tertiary)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Card(
                 modifier = Modifier

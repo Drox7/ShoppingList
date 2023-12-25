@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.ShoppingList" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/blue_light</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
 </resources>

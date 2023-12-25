@@ -1,6 +1,7 @@
 package com.drox7.myapplication.shopping_list_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,10 +13,12 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +51,7 @@ fun UiShoppingListItem(
         val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
             modifier = Modifier
+                //.background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
                 .constrainAs(card) {
                     top.linkTo(parent.top)
@@ -64,6 +68,7 @@ fun UiShoppingListItem(
         ) {
             Column(
                 modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .fillMaxWidth()
                     .padding(8.dp)
                     .constrainAs(col) {}
@@ -71,7 +76,7 @@ fun UiShoppingListItem(
                 Text(
                     text = item.name,
                     style = TextStyle(
-                        color = DarkText,
+                       // color = DarkText,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
@@ -79,7 +84,7 @@ fun UiShoppingListItem(
                 Text(
                     text = item.time,
                     style = TextStyle(
-                        color = LightText,
+                      //  color = LightText,
                         fontSize = 12.sp
                     )
                 )
@@ -146,11 +151,11 @@ fun UiShoppingListItem(
                     .padding(
                         6.dp
                     ),
-                tint = Red
+                tint = MaterialTheme.colorScheme.error
             )
         }
         Card( //counter
-            //shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape( 0.dp),
             elevation = 0.dp,
             modifier = Modifier
                 .constrainAs(counter) {
@@ -158,7 +163,7 @@ fun UiShoppingListItem(
                     bottom.linkTo(col.top)
                     end.linkTo(deleteButton.start)
                 }
-                .padding(end = 5.dp, top = 10.dp)
+                .padding(end = 0.dp, top = 10.dp)
         ) {
             Text(
                 text = "${item.allSelectedItemCount}/${item.allItemCount}",
@@ -167,12 +172,12 @@ fun UiShoppingListItem(
                     fontSize = 16.sp
                 ),
                 modifier = Modifier
-                    // .background(Red)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(
                         top = 7.dp,
                         bottom = 7.dp,
-                        start = 10.dp,
-                        end = 10.dp
+                        start = 4.dp,
+                        end = 7.dp
                     ),
                 color = BlueLight
             )

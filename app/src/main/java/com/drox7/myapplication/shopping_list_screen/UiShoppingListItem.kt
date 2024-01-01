@@ -1,7 +1,6 @@
 package com.drox7.myapplication.shopping_list_screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +12,11 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,11 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.ui.theme.BlueLight
-import com.drox7.myapplication.ui.theme.DarkText
-import com.drox7.myapplication.ui.theme.GrayLight
 import com.drox7.myapplication.ui.theme.GreenLight
-import com.drox7.myapplication.ui.theme.LightText
-import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.utils.Routes
 
 
@@ -45,11 +39,12 @@ fun UiShoppingListItem(
         modifier = Modifier
             //.background(color = GrayLight)
             .padding(
-            start = 3.dp, top = 8.dp, end = 3.dp
+            start = 0.dp, top = 5.dp, end = 0.dp
         )
     ) {
         val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
+           // elevation = 0.dp,
             modifier = Modifier
                 //.background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
@@ -64,11 +59,11 @@ fun UiShoppingListItem(
                         Routes.ADD_ITEM + "/${item.id}"
                     ))
                 },
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(15.dp),
         ) {
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(colorScheme.onPrimary)
                     .fillMaxWidth()
                     .padding(8.dp)
                     .constrainAs(col) {}
@@ -151,7 +146,7 @@ fun UiShoppingListItem(
                     .padding(
                         6.dp
                     ),
-                tint = MaterialTheme.colorScheme.error
+                tint = colorScheme.error
             )
         }
         Card( //counter
@@ -172,7 +167,7 @@ fun UiShoppingListItem(
                     fontSize = 16.sp
                 ),
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(colorScheme.onPrimary)
                     .padding(
                         top = 7.dp,
                         bottom = 7.dp,

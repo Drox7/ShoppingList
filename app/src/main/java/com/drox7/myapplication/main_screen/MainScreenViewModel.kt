@@ -50,8 +50,13 @@ class MainScreenViewModel @Inject constructor(
                 }
             }
 
-            is MainScreenEvent.OnShowEditDialog -> {
-                openDialog.value = true
+            is MainScreenEvent.OnNewItemClick -> {
+                if(event.route == Routes.SHOPPING_LIST){
+                    openDialog.value = true
+                } else{
+                    sendUiEvent(UiEvent.NavigateMain(Routes.NEW_NOTE + "/-1"))
+                }
+
             }
 
             is MainScreenEvent.Navigate -> {
@@ -65,7 +70,6 @@ class MainScreenViewModel @Inject constructor(
 
             }
 
-            else -> {}
         }
     }
 
@@ -86,8 +90,6 @@ class MainScreenViewModel @Inject constructor(
             is DialogEvent.OnTextChange -> {
                 editTableText.value = event.text
             }
-
-            else -> {}
         }
     }
 

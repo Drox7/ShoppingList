@@ -4,11 +4,10 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.drox7.myapplication.ui.theme.BlueLight
-import com.drox7.myapplication.ui.theme.GrayLight
 
 
 @Composable
@@ -22,7 +21,7 @@ fun BottomNav(
         BottomNavItem.AboutItem,
         BottomNavItem.SettingsItem
     )
-    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
+    BottomNavigation(backgroundColor = colorScheme.onPrimary) {
         listItems.forEach { bottomNavItem ->
 
             BottomNavigationItem(
@@ -42,7 +41,7 @@ fun BottomNav(
                     Text(text = bottomNavItem.title)
                 },
                 selectedContentColor = BlueLight,
-                unselectedContentColor = GrayLight,
+                unselectedContentColor = colorScheme.background,
                 alwaysShowLabel = false
             )
         }

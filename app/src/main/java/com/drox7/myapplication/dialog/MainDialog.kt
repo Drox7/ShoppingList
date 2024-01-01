@@ -5,12 +5,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,8 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.ui.theme.BlueLight
-import com.drox7.myapplication.ui.theme.DarkText
-import com.drox7.myapplication.ui.theme.GrayLight
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +29,7 @@ fun MainDialog(
 ) {
     if (dialogController.openDialog.value) {
         AlertDialog(
+            containerColor = colorScheme.onPrimary,
             onDismissRequest = {
                 dialogController.onDialogEvent(DialogEvent.OnCancel)
             },
@@ -55,7 +55,7 @@ fun MainDialog(
                            //     Text(text = "")
                             //},
                             colors = TextFieldDefaults.textFieldColors(
-                                //backgroundColor = GrayLight,
+                                backgroundColor = colorScheme.background,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 cursorColor = BlueLight,
@@ -64,7 +64,7 @@ fun MainDialog(
                             shape = RoundedCornerShape(9.dp),
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = BlueLight,
+                                color = colorScheme.onBackground,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                             )
@@ -76,7 +76,7 @@ fun MainDialog(
                     dialogController.onDialogEvent(DialogEvent.OnConfirm)
                 }) {
                     Text(
-                        text = "OK",
+                        text = "Ok",
                         color = BlueLight,
                         style = TextStyle(
                            // color = DarkText,
@@ -92,7 +92,7 @@ fun MainDialog(
                     dialogController.onDialogEvent(DialogEvent.OnCancel)
                 }) {
                     Text(
-                        text = "CANCEL",
+                        text = "Cancel",
                         color = BlueLight,
                         style = TextStyle(
                             // color = DarkText,

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +18,7 @@ import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.navigation.NavigationGraph
 import com.drox7.myapplication.ui.theme.BlueLight
+import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -52,9 +53,9 @@ fun MainScreen(
             }
         },
         floatingActionButton = {
-            if(viewModel.showFloatingButton.value) FloatingActionButton(
+            if(viewModel.showFloatingButton.value) SmallFloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(MainScreenEvent.OnShowEditDialog)
+                    viewModel.onEvent(MainScreenEvent.OnNewItemClick(currentRoute?: Routes.SHOPPING_LIST))
                 },
                 containerColor = BlueLight
             ) {

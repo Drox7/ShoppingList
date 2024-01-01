@@ -13,70 +13,96 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.ui.theme.BlueLight
-import com.drox7.myapplication.ui.theme.DarkText
+import com.drox7.myapplication.utils.UiEvent
 
-@Preview(showBackground = true)
+
 @Composable
-fun NewNoteScreen() {
+fun NewNoteScreen(
+    viewModel: NewNoteViewModel = hiltViewModel(),
+    onPopBackStack: () -> Unit
+) {
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is UiEvent.PopBackStack -> {
+                    onPopBackStack()
+                }
+
+                else -> {}
+            }
+
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.primaryContainer)
+           // .background(color = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Card(
             modifier = Modifier
+
                 .fillMaxSize()
                 .padding(5.dp),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(0.dp)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .background(colorScheme.onPrimary)
+                        .fillMaxWidth()
                 ) {
                     TextField(
                         modifier = Modifier.weight(1f),
-                        value = "Tit",
-                        onValueChange = {
-
+                        value = viewModel.title,
+                        onValueChange = { text ->
+                            viewModel.onEvent(NewNoteEvent.OnTitleChange(text))
                         },
-                        label = {
-                            Text(
-                                text = "Title...",
-                                fontSize = 14.sp
-                            )
-                        },
+//                        label = {
+//                            Text(
+//                                text = "Title...",
+//                                fontSize = 14.sp
+//                            )
+//                        },
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.White,
+                            backgroundColor = colorScheme.onPrimary,
                             focusedLabelColor = Color.Transparent,
-                            unfocusedIndicatorColor = BlueLight
+                            unfocusedIndicatorColor = BlueLight,
+                            focusedIndicatorColor = BlueLight,
+                            cursorColor = BlueLight
                         ),
                         singleLine = true,
                         textStyle = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = DarkText
+                            color = colorScheme.onBackground
                         )
 
                     )
                     IconButton(
-                        onClick = {}
+                       // modifier = Modifier.background(colorScheme.background),
+                        onClick = {
+                            viewModel.onEvent(NewNoteEvent.OnSave)
+                        }
                     ) {
                         Icon(
+
                             painter = painterResource(id = R.drawable.save),
                             contentDescription = "Save",
                             tint = BlueLight
@@ -85,24 +111,28 @@ fun NewNoteScreen() {
                 }
             }
             TextField(
-                modifier = Modifier.fillMaxSize(),
-                value = "",
-                onValueChange = {
+                shape = RoundedCornerShape(0.dp),
+                modifier = Modifier
+
+                    .fillMaxSize(),
+                value = viewModel.description,
+                onValueChange = { text ->
+                    viewModel.onEvent(NewNoteEvent.OnDescriptionChange(text))
                 },
-                label = {
-                    Text(
-                        text = "Description",
-                        fontSize = 14.sp
-                    )
-                },
+//                label = {
+//                    Text(
+//                        text = "Description...",
+//                        fontSize = 14.sp
+//                    )
+//                },
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
+                    backgroundColor = colorScheme.onPrimary,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 textStyle = TextStyle(
                     fontSize = 14.sp,
-                    color = DarkText
+                    color = colorScheme.onBackground
                 )
             )
         }

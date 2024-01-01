@@ -10,15 +10,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.IconButton
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,10 +35,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.ui.theme.BlueLight
-import com.drox7.myapplication.ui.theme.GrayLight
-import com.drox7.myapplication.ui.theme.md_theme_dark_inverseOnSurface
-import com.drox7.myapplication.ui.theme.md_theme_dark_tertiary
-import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -64,15 +61,18 @@ fun AddItemScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(colorScheme.background)
         ) {
             Card(
+                shape = RoundedCornerShape(bottomStart = 10.dp,bottomEnd = 10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp)
+                    .padding(start = 0.dp, end = 0.dp, top = 0.dp, bottom = 30.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .background(colorScheme.onPrimary)
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextField(
@@ -90,10 +90,10 @@ fun AddItemScreen(
 
                         },
                         colors = TextFieldDefaults.textFieldColors(
-                           // backgroundColor = Color.White,
+                            backgroundColor = colorScheme.onPrimary,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color.Transparent
+                            cursorColor = BlueLight
                         ),
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -102,6 +102,7 @@ fun AddItemScreen(
                         singleLine = true
                     )
                     IconButton(
+
                         onClick = {
                             viewModel.onEvent(AddItemEvent.OnItemSave)
                         }

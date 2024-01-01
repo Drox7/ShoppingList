@@ -9,6 +9,7 @@ import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
+import com.drox7.myapplication.utils.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -42,7 +43,7 @@ class MainScreenViewModel @Inject constructor(
                         ShoppingListItem(
                             null,
                             editTableText.value,
-                            "12-12/2023 13:00",
+                            getCurrentTime(),
                             0,
                             0
                         )

@@ -27,6 +27,7 @@ import com.drox7.myapplication.R
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.ui.theme.GreenLight
+import com.drox7.myapplication.utils.ProgressHelper
 import com.drox7.myapplication.utils.Routes
 
 
@@ -118,7 +119,10 @@ fun UiShoppingListItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 7.dp),
-                    progress = 0.5f,
+                    progress = ProgressHelper.getProgress(
+                        item.allItemCount,
+                        item.allSelectedItemCount
+                    ),
                     color = BlueLight
 
                 )

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.NoteItem
 import com.drox7.myapplication.data.NoteRepository
 import com.drox7.myapplication.utils.UiEvent
+import com.drox7.myapplication.utils.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -62,7 +63,7 @@ class NewNoteViewModel @Inject constructor(
                             noteItem?.id,
                             title,
                             description,
-                            "25/12/2023 18:00"
+                            getCurrentTime()
                         )
                     )
                     sendUiEvent(UiEvent.PopBackStack)

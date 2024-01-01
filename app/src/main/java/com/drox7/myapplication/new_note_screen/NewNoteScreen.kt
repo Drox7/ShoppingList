@@ -57,7 +57,10 @@ fun NewNoteScreen(
 
         }
     }
-    Scaffold(scaffoldState = scaffoldState,snackbarHost = {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = colorScheme.onPrimary,
+        snackbarHost = {
         SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
             Snackbar(
                 snackbarData = data,

@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberScaffoldState
@@ -57,7 +60,17 @@ fun AddItemScreen(
             }
         }
     }
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(scaffoldState = scaffoldState,snackbarHost = {
+        SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
+            Snackbar(
+                snackbarData = data,
+                backgroundColor = BlueLight,
+                actionColor = Color.White,
+                shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+            )
+
+        }
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

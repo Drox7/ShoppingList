@@ -33,7 +33,7 @@ class NewNoteViewModel @Inject constructor(
         private set
 
     init {
-        noteId = savedStateHandle.get<String>("noteId")?.toInt()?: -1
+        noteId = savedStateHandle.get<String>("noteId")?.toInt() ?: -1
         if (noteId != -1) {
             viewModelScope.launch {
                 repository.getNoteItemById(noteId).let { noteItem ->
@@ -49,6 +49,14 @@ class NewNoteViewModel @Inject constructor(
         when (event) {
             is NewNoteEvent.OnSave -> {
                 viewModelScope.launch {
+                    if (title.isEmpty()) {
+                        sendUiEvent(
+                            UiEvent.ShowSnackBar(
+                                "Title can not be empty!"
+                            )
+                        )
+                        return@launch
+                    }
                     repository.insertItem(
                         NoteItem(
                             noteItem?.id,
@@ -57,8 +65,8 @@ class NewNoteViewModel @Inject constructor(
                             "25/12/2023 18:00"
                         )
                     )
+                    sendUiEvent(UiEvent.PopBackStack)
                 }
-                sendUiEvent(UiEvent.PopBackStack)
             }
 
             is NewNoteEvent.OnTitleChange -> {

@@ -86,7 +86,7 @@ fun UiNoteItem(
                 )
                 IconButton(
                     onClick = {
-                        onEvent(NoteListEvent.OnShowDeleteDiaolog(item))
+                        onEvent(NoteListEvent.OnShowDeleteDialog(item))
                     }
                 ) {
                     Icon(

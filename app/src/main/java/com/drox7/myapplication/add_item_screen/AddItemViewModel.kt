@@ -56,13 +56,13 @@ class AddItemViewModel @Inject constructor(
             is AddItemEvent.OnItemSave -> {
                 viewModelScope.launch {
                     if (listId == -1) return@launch
-                    if (addItem != null){
-                        if (addItem!!.name.isEmpty()){
-                            sendUiEvent(UiEvent.ShowSnackBar("Хуй тебе"))
+                    if (addItem != null) {
+                        if (addItem!!.name.isEmpty()) {
+                            sendUiEvent(UiEvent.ShowSnackBar("Name must not be empty!"))
                             return@launch
                         }
                     } else {
-                        if (itemText.value.isEmpty()){
+                        if (itemText.value.isEmpty()) {
                             sendUiEvent(UiEvent.ShowSnackBar("Name must not be empty!"))
                             return@launch
                         }
@@ -105,7 +105,6 @@ class AddItemViewModel @Inject constructor(
                 updateShoppingListCount()
             }
 
-            else -> {}
         }
 
     }
@@ -128,7 +127,6 @@ class AddItemViewModel @Inject constructor(
                 editTableText.value = event.text
             }
 
-            else -> {}
         }
     }
 
@@ -150,6 +148,7 @@ class AddItemViewModel @Inject constructor(
             }
         }
     }
+
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)

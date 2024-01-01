@@ -38,7 +38,6 @@ fun UiShoppingListItem(
 ) {
     ConstraintLayout(
         modifier = Modifier
-            //.background(color = GrayLight)
             .padding(
             start = 0.dp, top = 5.dp, end = 0.dp
         )
@@ -46,8 +45,8 @@ fun UiShoppingListItem(
         val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
            // elevation = 0.dp,
+            shape = RoundedCornerShape(15.dp),
             modifier = Modifier
-                //.background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
                 .constrainAs(card) {
                     top.linkTo(parent.top)
@@ -60,7 +59,7 @@ fun UiShoppingListItem(
                         Routes.ADD_ITEM + "/${item.id}"
                     ))
                 },
-            shape = RoundedCornerShape(15.dp),
+            //shape = CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
         ) {
             Column(
                 modifier = Modifier

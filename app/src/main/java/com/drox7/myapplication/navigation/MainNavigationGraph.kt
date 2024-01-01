@@ -1,6 +1,9 @@
 package com.drox7.myapplication.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,7 +16,9 @@ import com.drox7.myapplication.utils.Routes
 fun MainNavigationGraph() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.MAIN_SCREEN) {
+    NavHost(
+        modifier = Modifier.background(colorScheme.background),
+        navController = navController, startDestination = Routes.MAIN_SCREEN) {
         composable(Routes.ADD_ITEM + "/{listId}") {entry ->
             //Log.d("MyLog", "List id ${entry.arguments?.getString("listId")}")
 

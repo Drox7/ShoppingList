@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -15,8 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.AddItem
@@ -26,6 +29,7 @@ import com.drox7.myapplication.ui.theme.Typography
 @Composable
 
 fun UiAdItem(
+    titleColor: Color,
     item: AddItem,
     onEvent:(AddItemEvent) -> Unit
 ) {
@@ -53,11 +57,17 @@ fun UiAdItem(
                     .padding(minPaddingText)
                 ,
                 text = item.name,
-               style = Typography.bodyLarge
+               style = Typography.bodyLarge,
+                color = titleColor
             )
 
             Checkbox(
                 checked = item.isCheck ,
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color.Transparent,
+                    uncheckedColor = titleColor,
+                    checkmarkColor = titleColor
+                ),
                 onCheckedChange = {isChecked ->
                     onEvent(AddItemEvent.OnCheckedChange(item.copy(isCheck = isChecked)))
                 }
@@ -67,7 +77,9 @@ fun UiAdItem(
                     onEvent(AddItemEvent.OnDelete(item))
                  }
             ) {
-                Icon(painter = painterResource(id = R.drawable.delete_icon),
+                Icon(
+                    //painter = painterResource(id = R.drawable.delete_icon),
+                    imageVector = Icons.Default.Delete,
                     contentDescription ="Delete",
                     tint = Red
                 )

@@ -20,14 +20,12 @@ class NoteListViewModel @Inject constructor(
     private val repository: NoteRepository,
     dataStoreManager: DataStoreManager
 
-    ) : ViewModel(), DialogController {
+) : ViewModel(), DialogController {
     val noteList = repository.getAllItems()
     private var noteItem: NoteItem? = null
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
-
-    var titleColor = mutableStateOf("#FF3699E7")
 
     override var dialogTitle = mutableStateOf("Delete this note?")
         private set
@@ -37,25 +35,31 @@ class NoteListViewModel @Inject constructor(
         private set
     override var showEditTableText = mutableStateOf(false)
         private set
+    override var titleColor = mutableStateOf("#FF3699E7")
+        private set
+
     init {
         viewModelScope.launch {
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
                 "#FF3699E7"
-            ).collect{color ->
+            ).collect { color ->
                 titleColor.value = color
             }
         }
     }
+
     fun onEvent(event: NoteListEvent) {
         when (event) {
             is NoteListEvent.OnShowDeleteDialog -> {
                 openDialog.value = true
                 noteItem = event.item
             }
+
             is NoteListEvent.OnItemClick -> {
                 sendUiEvent(UiEvent.Navigate(event.route))
             }
+
             is NoteListEvent.UnDoneDeleteItem -> {
                 viewModelScope.launch {
                     repository.insertItem(noteItem!!)

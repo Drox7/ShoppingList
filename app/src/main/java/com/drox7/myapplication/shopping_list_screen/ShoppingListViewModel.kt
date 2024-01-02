@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
+import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.utils.UiEvent
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
-    private val repository: ShoppingListRepository
+    private val repository: ShoppingListRepository,
+    dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     val list = repository.getAllItem()
@@ -35,6 +37,20 @@ class ShoppingListViewModel @Inject constructor(
         private set
     override var showEditTableText = mutableStateOf(false)
         private set
+
+    override var titleColor = mutableStateOf("#FF3699E7")
+        private set
+
+    init {
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.TITLE_COLOR,
+                "#FF3699E7"
+            ).collect { color ->
+                titleColor.value = color
+            }
+        }
+    }
 
     fun onEvent(event: ShoppingListEvent) {
         when (event) {

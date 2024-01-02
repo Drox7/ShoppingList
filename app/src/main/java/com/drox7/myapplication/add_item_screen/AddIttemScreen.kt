@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
-import com.drox7.myapplication.ui.theme.BlueLight
+import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -46,6 +45,7 @@ import com.drox7.myapplication.utils.UiEvent
 fun AddItemScreen(
     viewModel: AddItemViewModel = hiltViewModel()
 ) {
+    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
     LaunchedEffect(key1 = true) {
@@ -64,9 +64,10 @@ fun AddItemScreen(
         SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
             Snackbar(
                 snackbarData = data,
-                backgroundColor = BlueLight,
+                backgroundColor = titleColor,
                 actionColor = Color.White,
-                shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+                shape = RoundedCornerShape(10.dp),
+               // shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
             )
 
         }
@@ -98,7 +99,8 @@ fun AddItemScreen(
                             Text(
                                 text = "New item",
                                 fontSize = 12.sp,
-                               // color = BlueLight
+                                color = md_theme_light_tertiary
+                                //color = titleColor
                             )
 
                         },
@@ -106,11 +108,11 @@ fun AddItemScreen(
                             backgroundColor = colorScheme.onPrimary,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = BlueLight
+                            cursorColor = titleColor
                         ),
                         textStyle = TextStyle(
                             fontSize = 16.sp,
-                            color = BlueLight
+                            color = titleColor
                         ),
                         singleLine = true
                     )
@@ -123,7 +125,7 @@ fun AddItemScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.add_icon),
                             contentDescription = "ADD",
-                            tint = BlueLight
+                            tint = titleColor
                         )
                     }
                 }
@@ -139,7 +141,7 @@ fun AddItemScreen(
             ) {
                 if(itemsList!=null){
                     items(itemsList.value){item ->
-                        UiAdItem(item = item, onEvent = {event ->
+                        UiAdItem(titleColor,item = item, onEvent = {event ->
                             viewModel.onEvent(event)
                         })
                     }

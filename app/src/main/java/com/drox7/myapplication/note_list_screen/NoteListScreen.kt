@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.dialog.MainDialog
-import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -37,6 +36,7 @@ fun NoteListScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.noteList.collectAsState(initial = emptyList())
+    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEven ->
             when (uiEven) {
@@ -60,7 +60,7 @@ fun NoteListScreen(
         SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
             Snackbar(
                 snackbarData = data,
-                backgroundColor = BlueLight,
+                backgroundColor = titleColor,
                 modifier = Modifier.padding(bottom = 100.dp),
                 actionColor = Color.White
             )
@@ -75,7 +75,7 @@ fun NoteListScreen(
 
         ) {
             items(itemsList.value) { item ->
-                UiNoteItem(viewModel.titleColor.value, item) { event ->
+                UiNoteItem(titleColor, item) { event ->
                     viewModel.onEvent(event)
                 }
             }

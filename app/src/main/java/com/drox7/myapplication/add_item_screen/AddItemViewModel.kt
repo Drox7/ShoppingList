@@ -1,5 +1,6 @@
 package com.drox7.myapplication.add_item_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.AddItem
 import com.drox7.myapplication.data.AddItemRepository
 import com.drox7.myapplication.data.ShoppingListItem
+import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.UiEvent
@@ -17,10 +19,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@SuppressLint("SuspiciousIndentation")
 @HiltViewModel
 class AddItemViewModel @Inject constructor(
     private val repository: AddItemRepository,
     savedStateHandle: SavedStateHandle,
+    dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     private val _uiEvent = Channel<UiEvent>()
@@ -30,16 +34,6 @@ class AddItemViewModel @Inject constructor(
     var addItem: AddItem? = null
     var shoppingListItem: ShoppingListItem? = null
     var listId: Int = -1
-
-    init {
-        listId = savedStateHandle.get<String>("listId")?.toInt()!!
-        itemsList = repository.getAllItemById(listId)
-        //Log.d("MyLog", "List id View model $listId")
-        viewModelScope.launch {
-            shoppingListItem = repository.getListItemById(listId)
-        }
-    }
-
     var itemText = mutableStateOf("")
         private set
     override var dialogTitle = mutableStateOf("Edit name")
@@ -50,6 +44,34 @@ class AddItemViewModel @Inject constructor(
         private set
     override var showEditTableText = mutableStateOf(true)
         private set
+
+    override var titleColor = mutableStateOf("#FF3699E7")
+        private set
+
+    init {
+        listId = savedStateHandle.get<String>("listId")?.toInt()!!
+        itemsList = repository.getAllItemById(listId)
+        //Log.d("MyLog", "List id View model $listId")
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.TITLE_COLOR,
+                "#FF3699E7"
+            ).collect { color ->
+
+                titleColor.value = color
+            }
+            shoppingListItem = repository.getListItemById(listId)
+        }
+        // viewModelScope.launch {
+//            dataStoreManager.getStringPreferences(
+//                DataStoreManager.TITLE_COLOR,
+//                "#FF3699E7"
+//            ).collect { color ->
+//
+//                titleColor.value = color
+//            }
+        // }
+    }
 
     fun onEvent(event: AddItemEvent) {
         when (event) {

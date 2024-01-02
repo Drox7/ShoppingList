@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
+import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.Routes
@@ -18,11 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val repository: ShoppingListRepository
+    private val repository: ShoppingListRepository,
+    dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+    //var titleColor = mutableStateOf("#FF3699E7")
     override var dialogTitle = mutableStateOf("List name:")
         private set
     override var editTableText = mutableStateOf("")
@@ -33,6 +36,20 @@ class MainScreenViewModel @Inject constructor(
         private set
     var showFloatingButton = mutableStateOf(true)
         private set
+
+    override var titleColor = mutableStateOf("#FF3699E7")
+        private set
+
+    init {
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.TITLE_COLOR,
+                "#FF3699E7"
+            ).collect { color ->
+                titleColor.value = color
+            }
+        }
+    }
 
     fun onEvent(event: MainScreenEvent) {
         when (event) {

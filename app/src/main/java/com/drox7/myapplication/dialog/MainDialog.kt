@@ -19,7 +19,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.drox7.myapplication.ui.theme.BlueLight
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,6 +26,7 @@ import com.drox7.myapplication.ui.theme.BlueLight
 fun MainDialog(
     dialogController: DialogController
 ) {
+    val titleColor = Color(android.graphics.Color.parseColor(dialogController.titleColor.value))
     if (dialogController.openDialog.value) {
         AlertDialog(
             containerColor = colorScheme.onPrimary,
@@ -39,7 +39,6 @@ fun MainDialog(
                     Text(
                         text = dialogController.dialogTitle.value,
                         style = TextStyle(
-                            //color = DarkText,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
@@ -58,15 +57,15 @@ fun MainDialog(
                                 backgroundColor = colorScheme.background,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
-                                cursorColor = BlueLight,
+                                cursorColor = titleColor,
                                 //focusedLabelColor = BlueLight
                             ),
                             shape = RoundedCornerShape(9.dp),
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = colorScheme.onBackground,
+                                color = titleColor,
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
+                                //fontWeight = FontWeight.Bold,
                             )
                         )
                 }
@@ -77,9 +76,8 @@ fun MainDialog(
                 }) {
                     Text(
                         text = "Ok",
-                        color = BlueLight,
                         style = TextStyle(
-                           // color = DarkText,
+                            color = titleColor,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
@@ -93,9 +91,8 @@ fun MainDialog(
                 }) {
                     Text(
                         text = "Cancel",
-                        color = BlueLight,
                         style = TextStyle(
-                            // color = DarkText,
+                            color = titleColor,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )

@@ -7,5 +7,6 @@ interface DialogController {
     val editTableText: MutableState<String>
     val openDialog: MutableState<Boolean>
     val showEditTableText: MutableState<Boolean>
+    val titleColor: MutableState<String>
     fun onDialogEvent(event: DialogEvent)
 }

@@ -17,7 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.navigation.NavigationGraph
-import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 
@@ -31,6 +30,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
@@ -48,16 +48,20 @@ fun MainScreen(
     }
     Scaffold(
         bottomBar = {
-            BottomNav(currentRoute) { route ->
+            BottomNav(titleColor, currentRoute) { route ->
                 viewModel.onEvent(MainScreenEvent.Navigate(route))
             }
         },
         floatingActionButton = {
-            if(viewModel.showFloatingButton.value) SmallFloatingActionButton(
+            if (viewModel.showFloatingButton.value) SmallFloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(MainScreenEvent.OnNewItemClick(currentRoute?: Routes.SHOPPING_LIST))
+                    viewModel.onEvent(
+                        MainScreenEvent.OnNewItemClick(
+                            currentRoute ?: Routes.SHOPPING_LIST
+                        )
+                    )
                 },
-                containerColor = BlueLight
+                containerColor = titleColor
             ) {
                 Icon(
                     painter = painterResource(

@@ -6,12 +6,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import com.drox7.myapplication.ui.theme.BlueLight
+import com.drox7.myapplication.ui.theme.GrayLight
 
 
 @Composable
 fun BottomNav(
+    titleColor: Color,
     currentRoute: String?,
     onNavigate: (String) -> Unit
 ) {
@@ -40,8 +42,8 @@ fun BottomNav(
                 label = {
                     Text(text = bottomNavItem.title)
                 },
-                selectedContentColor = BlueLight,
-                unselectedContentColor = colorScheme.background,
+                selectedContentColor = titleColor,
+                unselectedContentColor = GrayLight,
                 alwaysShowLabel = false
             )
         }

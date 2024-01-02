@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +28,7 @@ import com.drox7.myapplication.utils.Routes
 
 @Composable
 fun UiNoteItem(
-    titleColor: String,
+    titleColor: Color,
     item: NoteItem,
     onEvent: (NoteListEvent) -> Unit
 ) {
@@ -50,7 +49,7 @@ fun UiNoteItem(
         ) {
             Row(Modifier.fillMaxWidth()) {
                 Text(
-                    color = Color(android.graphics.Color.parseColor(titleColor)),
+                    color = titleColor,
                     //color = colorScheme.onBackground,
                     modifier = Modifier
                         .padding(
@@ -59,8 +58,8 @@ fun UiNoteItem(
                         )
                         .weight(1f),
                     text = item.title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    //fontWeight = FontWeight.Bold
                 )
                 Text(
                     modifier = Modifier.padding(
@@ -68,7 +67,7 @@ fun UiNoteItem(
                         end = 10.dp
                     ),
                     text = item.time,
-                    color = Color(android.graphics.Color.parseColor(titleColor)),
+                    color = titleColor,
                     fontSize = 12.sp
                 )
             }

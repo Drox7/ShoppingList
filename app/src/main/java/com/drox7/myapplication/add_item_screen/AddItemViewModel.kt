@@ -53,14 +53,14 @@ class AddItemViewModel @Inject constructor(
         itemsList = repository.getAllItemById(listId)
         //Log.d("MyLog", "List id View model $listId")
         viewModelScope.launch {
+            shoppingListItem = repository.getListItemById(listId)
+
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
                 "#FF3699E7"
             ).collect { color ->
-
                 titleColor.value = color
             }
-            shoppingListItem = repository.getListItemById(listId)
         }
         // viewModelScope.launch {
 //            dataStoreManager.getStringPreferences(

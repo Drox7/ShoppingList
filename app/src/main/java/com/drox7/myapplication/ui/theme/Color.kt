@@ -64,8 +64,9 @@ val md_theme_dark_outlineVariant = Color(0xFF3F4948)
 val md_theme_dark_scrim = Color(0xFF000000)
 
 //My Colors
-val Red = Color(0xB5D32F2F)
-val GreenLight = Color(0xFF388E3C)
+val Red = Color(0x80D32F2F)
+val YellowLight = Color(0xB3FFB74D)
+val GreenLight = Color(0xB3388E3C)
 val Pink40 = Color(0xFF7D5260)
 val BlueLight = Color(0xFF3699E7)
 val BlueLightSum = Color(0xB23699E7)

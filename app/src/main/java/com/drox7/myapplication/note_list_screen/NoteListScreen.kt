@@ -75,7 +75,7 @@ fun NoteListScreen(
 
         ) {
             items(itemsList.value) { item ->
-                UiNoteItem(item) { event ->
+                UiNoteItem(viewModel.titleColor.value, item) { event ->
                     viewModel.onEvent(event)
                 }
             }

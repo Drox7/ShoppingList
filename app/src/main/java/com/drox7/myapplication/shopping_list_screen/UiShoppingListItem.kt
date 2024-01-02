@@ -41,6 +41,7 @@ fun UiShoppingListItem(
             .padding(
             start = 0.dp, top = 5.dp, end = 0.dp
         )
+          //  .background(colorScheme.onPrimary)
     ) {
         val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
@@ -53,7 +54,6 @@ fun UiShoppingListItem(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-
                 .clickable {
                     onEvent(ShoppingListEvent.OnItemClick(
                         Routes.ADD_ITEM + "/${item.id}"
@@ -67,6 +67,7 @@ fun UiShoppingListItem(
                     .fillMaxWidth()
                     .padding(8.dp)
                     .constrainAs(col) {}
+
             ) {
                 Text(
                     text = item.name,

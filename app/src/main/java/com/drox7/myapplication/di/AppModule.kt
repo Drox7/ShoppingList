@@ -9,6 +9,7 @@ import com.drox7.myapplication.data.NoteRepoImpl
 import com.drox7.myapplication.data.NoteRepository
 import com.drox7.myapplication.data.ShoppingListImpl
 import com.drox7.myapplication.data.ShoppingListRepository
+import com.drox7.myapplication.datastore.DataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +43,11 @@ object AppModule {
     @Singleton
     fun provideNoteRepo(db: MainDb) : NoteRepository{
         return NoteRepoImpl(db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(app: Application) : DataStoreManager{
+        return DataStoreManager(app)
     }
 }

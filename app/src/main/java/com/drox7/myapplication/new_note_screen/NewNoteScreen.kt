@@ -57,6 +57,9 @@ fun NewNoteScreen(
 
         }
     }
+
+    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+
     Scaffold(
         scaffoldState = scaffoldState,
         backgroundColor = colorScheme.onPrimary,
@@ -106,15 +109,16 @@ fun NewNoteScreen(
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = colorScheme.onPrimary,
                                 focusedLabelColor = Color.Transparent,
-                                unfocusedIndicatorColor = BlueLight,
-                                focusedIndicatorColor = BlueLight,
-                                cursorColor = BlueLight
+                                unfocusedIndicatorColor = titleColor,
+                                focusedIndicatorColor = titleColor,
+                                cursorColor = titleColor
                             ),
                             singleLine = true,
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = colorScheme.onBackground
+                                //color = colorScheme.onBackground
+                                color = titleColor
                             )
 
                         )
@@ -128,7 +132,7 @@ fun NewNoteScreen(
 
                                 painter = painterResource(id = R.drawable.save),
                                 contentDescription = "Save",
-                                tint = BlueLight
+                                tint = titleColor
                             )
                         }
                     }
@@ -151,7 +155,8 @@ fun NewNoteScreen(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = colorScheme.onPrimary,
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = titleColor
                     ),
                     textStyle = TextStyle(
                         fontSize = 14.sp,

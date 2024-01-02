@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.NoteItem
 import com.drox7.myapplication.data.NoteRepository
+import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +20,16 @@ import javax.inject.Inject
 @HiltViewModel
 class NewNoteViewModel @Inject constructor(
     private val repository: NoteRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
     private var noteId = -1
     private var noteItem: NoteItem? = null
+
+    var titleColor = mutableStateOf("#FF3699E7")
 
     var title by mutableStateOf("")
         private set
@@ -35,6 +39,14 @@ class NewNoteViewModel @Inject constructor(
 
     init {
         noteId = savedStateHandle.get<String>("noteId")?.toInt() ?: -1
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.TITLE_COLOR,
+                "#FF3699E7"
+            ).collect { color ->
+                titleColor.value = color
+            }
+        }
         if (noteId != -1) {
             viewModelScope.launch {
                 repository.getNoteItemById(noteId).let { noteItem ->

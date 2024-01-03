@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -95,44 +95,52 @@ fun NoteListScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background),
+                .padding(0.dp)
         ) {
             Card(
+                elevation = 0.dp,
+                modifier = Modifier
+                    .background(colorScheme.background)
+                    .fillMaxWidth()
+                    .padding(top = 0.dp, bottom = 5.dp),
+                //shape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp),
+            ) {
+            TextField(
+                shape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 5.dp),
-                shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, 0.dp)
-            ) {
-                TextField(
-                    singleLine = true,
-                    value = viewModel.searchText,
-                    onValueChange = {text ->
-                        viewModel.onEvent(NoteListEvent.OnTextSearchChange(text))
-                    },
-                    label = {
+                    .padding(0.dp),
+                singleLine = true,
+                value = viewModel.searchText,
+                onValueChange = { text ->
+                    viewModel.onEvent(NoteListEvent.OnTextSearchChange(text))
+                },
+                label = {
 //                            Text(
 //                                text = "Search...",
 //                                color = md_theme_light_tertiary,
 //                                fontSize = 12.sp
 //                            )
-                            Icon( modifier = Modifier.size(16.dp),
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Search",
-                                tint = md_theme_light_tertiary,
-                                )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colorScheme.onPrimary,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = titleColor,
-                        textColor = titleColor,
-                    ),
-                )
-            }
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
+                        tint = md_theme_light_tertiary,
+                    )
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = colorScheme.onPrimary,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = titleColor,
+                    textColor = titleColor,
+                ),
+            )
+        }
 
             LazyColumn(
                 modifier = Modifier
+                    .background(colorScheme.background)
                     .fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 100.dp)
 

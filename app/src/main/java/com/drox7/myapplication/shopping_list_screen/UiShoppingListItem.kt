@@ -107,15 +107,15 @@ fun UiShoppingListItem(
                     )
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-//                Text(
-//                    text = "2000.98 р./10000.45 р.",
-//                    style = TextStyle(
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 13.sp,
-//                    ),
-//                    modifier = Modifier,
-//
-//                    )
+                Text(
+                    text = "${item.planSum} р./${item.actualSum} р.",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                    ),
+                    modifier = Modifier,
+
+                    )
 
 
 //                LinearProgressIndicator(

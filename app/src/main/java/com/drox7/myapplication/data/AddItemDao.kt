@@ -14,9 +14,9 @@ interface AddItemDao {
     suspend fun insertItem(item: AddItem)
     @Delete
     suspend fun deleteItem(item: AddItem)
-    @Query("SELECT * FROM add_item WHERE listId = :listId")
+    @Query("SELECT * FROM add_item_table WHERE listId = :listId")
     fun getAllItemById(listId : Int) : Flow<List<AddItem>>
-    @Query("SELECT * FROM shop_list_name WHERE id = :listId")
+    @Query("SELECT * FROM shop_list_table WHERE id = :listId")
     suspend fun getListItemById(listId: Int) : ShoppingListItem
     @Update
     suspend fun insertItem(item: ShoppingListItem)

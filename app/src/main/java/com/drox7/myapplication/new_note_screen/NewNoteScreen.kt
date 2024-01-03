@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -80,9 +79,8 @@ fun NewNoteScreen(
         ) {
             Card(
                 modifier = Modifier
-
                     .fillMaxSize()
-                    .padding(5.dp),
+                    .padding(2.dp),
                 shape = RoundedCornerShape(0.dp)
             ) {
                 Column(
@@ -115,8 +113,8 @@ fun NewNoteScreen(
                             ),
                             singleLine = true,
                             textStyle = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                //fontWeight = FontWeight.Bold,
                                 //color = colorScheme.onBackground
                                 color = titleColor
                             )
@@ -129,7 +127,6 @@ fun NewNoteScreen(
                             }
                         ) {
                             Icon(
-
                                 painter = painterResource(id = R.drawable.save),
                                 contentDescription = "Save",
                                 tint = titleColor

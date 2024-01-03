@@ -31,7 +31,9 @@ fun NavigationGraph(navController: NavHostController, onNavigate: (String) -> Un
             }
         }
         composable(Routes.SETTINGS) {
-            SettingsListScreen()
+            SettingsListScreen() {
+                navController.popBackStack()
+            }
         }
 
         composable(Routes.ABOUT) {

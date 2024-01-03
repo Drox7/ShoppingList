@@ -19,10 +19,12 @@ fun MainNavigationGraph() {
     NavHost(
         modifier = Modifier.background(colorScheme.background),
         navController = navController, startDestination = Routes.MAIN_SCREEN) {
+
         composable(Routes.ADD_ITEM + "/{listId}") {entry ->
             //Log.d("MyLog", "List id ${entry.arguments?.getString("listId")}")
-
-            AddItemScreen()
+            AddItemScreen(){
+                navController.popBackStack()
+            }
         }
         composable(Routes.NEW_NOTE +"/{noteId}") {
             NewNoteScreen(){

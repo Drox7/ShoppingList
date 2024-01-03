@@ -16,6 +16,8 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
+import com.drox7.myapplication.main_screen.UiTopBar
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
@@ -43,45 +46,57 @@ import com.drox7.myapplication.utils.UiEvent
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddItemScreen(
-    viewModel: AddItemViewModel = hiltViewModel()
+    viewModel: AddItemViewModel = hiltViewModel(),
+    onPopBackStack: () -> Unit
 ) {
     val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect{uiEven ->
-            when(uiEven){
+        viewModel.uiEvent.collect { uiEven ->
+            when (uiEven) {
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         uiEven.message
                     )
                 }
+
                 else -> {}
             }
         }
     }
-    Scaffold(scaffoldState = scaffoldState,snackbarHost = {
-        SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
-            Snackbar(
-                snackbarData = data,
-                backgroundColor = titleColor,
-                actionColor = Color.White,
-                shape = RoundedCornerShape(10.dp),
-               // shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
-            )
+    Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(hostState = scaffoldState.snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    backgroundColor = titleColor,
+                    actionColor = Color.White,
+                    shape = RoundedCornerShape(10.dp),
+                    // shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+                )
+            }
+        },
+        topBar = {
+            UiTopBar(titleColor = titleColor,
+                onClick = {
+                    onPopBackStack()
+                },
+                titleText = "Товары", iconVector = Icons.Filled.ArrowBack )
 
-        }
-    }) {
+        },
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorScheme.background)
         ) {
             Card(
-                shape = RoundedCornerShape(bottomStart = 10.dp,bottomEnd = 10.dp),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 0.dp, end = 0.dp, top = 0.dp, bottom = 30.dp)
+                    .padding(start = 0.dp, end = 0.dp, top = 5.dp, bottom = 30.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -92,8 +107,8 @@ fun AddItemScreen(
                     TextField(
                         modifier = Modifier.weight(1f),
                         value = viewModel.itemText.value,
-                        onValueChange = {text ->
-                                        viewModel.onEvent(AddItemEvent.OnTextChange(text))
+                        onValueChange = { text ->
+                            viewModel.onEvent(AddItemEvent.OnTextChange(text))
                         },
                         label = {
                             Text(
@@ -139,9 +154,9 @@ fun AddItemScreen(
                         end = 2.dp
                     )
             ) {
-                if(itemsList!=null){
-                    items(itemsList.value){item ->
-                        UiAdItem(titleColor,item = item, onEvent = {event ->
+                if (itemsList != null) {
+                    items(itemsList.value) { item ->
+                        UiAdItem(titleColor, item = item, onEvent = { event ->
                             viewModel.onEvent(event)
                         })
                     }

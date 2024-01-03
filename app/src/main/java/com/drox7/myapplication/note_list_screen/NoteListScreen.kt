@@ -12,6 +12,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.dialog.MainDialog
+import com.drox7.myapplication.main_screen.UiTopBar
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -43,30 +46,43 @@ fun NoteListScreen(
                 is UiEvent.Navigate -> {
                     onNavigate(uiEven.route)
                 }
+
                 is UiEvent.ShowSnackBar -> {
-                   val result =  scaffoldState.snackbarHostState.showSnackbar(
+                    val result = scaffoldState.snackbarHostState.showSnackbar(
                         message = uiEven.message,
                         actionLabel = "Undone"
                     )
-                    if (result==SnackbarResult.ActionPerformed) {
+                    if (result == SnackbarResult.ActionPerformed) {
                         viewModel.onEvent(NoteListEvent.UnDoneDeleteItem)
                     }
                 }
+
                 else -> {}
             }
         }
     }
-    Scaffold(scaffoldState = scaffoldState, snackbarHost = {
-        SnackbarHost(hostState = scaffoldState.snackbarHostState){data ->
-            Snackbar(
-                snackbarData = data,
-                backgroundColor = titleColor,
-                modifier = Modifier.padding(bottom = 100.dp),
-                actionColor = Color.White
-            )
+    Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(hostState = scaffoldState.snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    backgroundColor = titleColor,
+                    modifier = Modifier.padding(bottom = 100.dp),
+                    actionColor = Color.White
+                )
 
-        }
-    }) {
+            }
+        },
+        topBar = {
+            UiTopBar(
+                titleColor = titleColor,
+                onClick = { /*TODO*/ },
+                titleText = "Заметки",
+                iconVector = Icons.Filled.Menu
+            )
+        },
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

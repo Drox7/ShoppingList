@@ -70,7 +70,7 @@ val GreenLight = Color(0xB3388E3C)
 val Pink40 = Color(0xFF7D5260)
 val BlueLight = Color(0xFF3699E7)
 val BlueLightSum = Color(0xB23699E7)
-val GrayLight = Color(0xFFF1EDED)
+val GrayLight = Color(0xFFA2A0A0)
 val DarkText = Color(0xFF242424)
 val LightText = Color(0xFF5C5B5B)
 

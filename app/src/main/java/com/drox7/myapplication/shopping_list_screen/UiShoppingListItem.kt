@@ -39,6 +39,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.settings_screen.ColorUtils
+import com.drox7.myapplication.ui.theme.GrayLight
 import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.utils.ProgressHelper
 import com.drox7.myapplication.utils.Routes
@@ -101,7 +102,7 @@ fun UiShoppingListItem(
                 Text(
                     text = item.time,
                     style = TextStyle(
-                        //  color = LightText,
+                          color = GrayLight,
                         fontSize = 10.sp
                     )
                 )

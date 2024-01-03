@@ -84,12 +84,12 @@ fun NoteListScreen(
             }
         },
         topBar = {
-            UiTopBar(
-                titleColor = titleColor,
-                onClick = { /*TODO*/ },
-                titleText = "Заметки",
-                iconVector = Icons.Filled.Menu
-            )
+//            UiTopBar(
+//                titleColor = titleColor,
+//                onClick = { /*TODO*/ },
+//                titleText = "Заметки",
+//                iconVector = Icons.Filled.Menu
+//            )
         },
     ) {
         Column(

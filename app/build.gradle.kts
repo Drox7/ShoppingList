@@ -1,6 +1,3 @@
-import org.gradle.internal.component.local.model.RootConfigurationMetadata
-import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.isIncrementalKapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -23,6 +20,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        kapt {
+            arguments {
+                arg("room.schemaLocation","$projectDir")
+            }
+        }
         vectorDrawables {
             useSupportLibrary = true
         }

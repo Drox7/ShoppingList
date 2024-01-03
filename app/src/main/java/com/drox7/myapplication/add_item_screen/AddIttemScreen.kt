@@ -83,7 +83,8 @@ fun AddItemScreen(
                 onClick = {
                     onPopBackStack()
                 },
-                titleText = "Товары", iconVector = Icons.Filled.ArrowBack )
+                titleText = viewModel.shoppingListItem?.name ?: "",
+                iconVector = Icons.Filled.ArrowBack )
 
         },
     ) {
@@ -163,7 +164,9 @@ fun AddItemScreen(
                 }
             }
         }
+
         MainDialog(dialogController = viewModel)
+
         if (itemsList?.value?.isEmpty() == true) {
             Text(
                 modifier = Modifier

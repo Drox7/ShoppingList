@@ -1,10 +1,13 @@
 package com.drox7.myapplication.dialog
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.AlertDialog
@@ -17,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -50,8 +54,8 @@ fun MainDialog(
                             onValueChange = {
                                 dialogController.onDialogEvent(DialogEvent.OnTextChange(it))
                             },
-                           // label = {
-                           //     Text(text = "")
+                            // label = {
+                            //     Text(text = "")
                             //},
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = colorScheme.background,
@@ -68,6 +72,68 @@ fun MainDialog(
                                 //fontWeight = FontWeight.Bold,
                             )
                         )
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    if (dialogController.showEditSumText.value)
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            TextField( //planSum
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .weight(0.5f),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                value = dialogController.editPlanSumText.value,
+                                onValueChange = {
+                                    dialogController.onDialogEvent(
+                                        DialogEvent.OnPlanSumChange(it)
+                                    )
+                                },
+                                label = {
+                                    Text(text = "Сумма план(₽)", fontSize = 12.sp)
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = colorScheme.background,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    cursorColor = titleColor,
+                                    //focusedLabelColor = BlueLight
+                                ),
+                                shape = RoundedCornerShape(9.dp),
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    color = titleColor,
+                                    fontSize = 16.sp,
+                                    //fontWeight = FontWeight.Bold,
+                                )
+                            )
+                            TextField( //actualSum
+                                modifier = Modifier.weight(0.5f),
+                                value = dialogController.editActualSumText.value,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                onValueChange = {
+                                    dialogController.onDialogEvent(
+                                        DialogEvent.OnActualSumChange(it)
+                                    )
+                                },
+                                label = {
+                                    Text(text = "Сумма факт(₽)", fontSize = 12.sp)
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = colorScheme.background,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    cursorColor = titleColor,
+                                    //focusedLabelColor = BlueLight
+                                ),
+                                shape = RoundedCornerShape(9.dp),
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    color = titleColor,
+                                    fontSize = 16.sp,
+                                    //fontWeight = FontWeight.Bold,
+                                )
+                            )
+                        }
+
                 }
             },
             confirmButton = {

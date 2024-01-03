@@ -36,13 +36,19 @@ class AddItemViewModel @Inject constructor(
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
-    override var dialogTitle = mutableStateOf("Edit name")
+    override var dialogTitle = mutableStateOf("")
         private set
     override var editTableText = mutableStateOf("")
+        private set
+    override var editPlanSumText= mutableStateOf("")
+        private set
+    override var editActualSumText = mutableStateOf("")
         private set
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
+        private set
+    override var showEditSumText = mutableStateOf(true)
         private set
 
     override var titleColor = mutableStateOf("#FF3699E7")
@@ -107,6 +113,8 @@ class AddItemViewModel @Inject constructor(
                 addItem = event.item
                 openDialog.value = true
                 editTableText.value = addItem?.name ?: ""
+                editPlanSumText.value = "200.00"
+                editActualSumText.value = "500.00"
             }
 
             is AddItemEvent.OnTextChange -> {
@@ -149,6 +157,12 @@ class AddItemViewModel @Inject constructor(
                 editTableText.value = event.text
             }
 
+            is DialogEvent.OnActualSumChange -> {
+                editActualSumText.value = event.text
+            }
+            is DialogEvent.OnPlanSumChange -> {
+                editPlanSumText.value = event.text
+            }
         }
     }
 

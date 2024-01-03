@@ -37,9 +37,15 @@ class NoteListViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
+    override var editPlanSumText = mutableStateOf("")
+        private set
+    override var editActualSumText = mutableStateOf("")
+        private set
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(false)
+        private set
+    override var showEditSumText = mutableStateOf(false)
         private set
     override var titleColor = mutableStateOf("#FF3699E7")
         private set

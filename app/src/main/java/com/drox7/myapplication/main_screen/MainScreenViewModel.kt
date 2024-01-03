@@ -30,9 +30,15 @@ class MainScreenViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
+    override var editPlanSumText = mutableStateOf("")
+        private set
+    override var editActualSumText = mutableStateOf("")
+        private set
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
+        private set
+    override var showEditSumText = mutableStateOf(true)
         private set
     var showFloatingButton = mutableStateOf(true)
         private set
@@ -108,6 +114,8 @@ class MainScreenViewModel @Inject constructor(
             is DialogEvent.OnTextChange -> {
                 editTableText.value = event.text
             }
+
+            else -> {}
         }
     }
 

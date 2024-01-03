@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
-import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.dialog.DialogController
+import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,9 +33,14 @@ class ShoppingListViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
+    override val editPlanSumText = mutableStateOf("")
+    override var editActualSumText = mutableStateOf("")
+        private set
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(false)
+        private set
+    override var showEditSumText = mutableStateOf(false)
         private set
 
     override var titleColor = mutableStateOf("#FF3699E7")
@@ -111,6 +116,8 @@ class ShoppingListViewModel @Inject constructor(
             is DialogEvent.OnTextChange -> {
                 editTableText.value = event.text
             }
+
+            else -> {}
         }
     }
 

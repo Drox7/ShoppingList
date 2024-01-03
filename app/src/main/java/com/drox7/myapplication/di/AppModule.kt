@@ -25,8 +25,8 @@ object AppModule {
         return Room.databaseBuilder(
             app,
             MainDb::class.java,
-            "shop_list_db"
-            ).build()
+            "shop_list_db").build()
+         //   ).createFromAsset("shop_list_db.db").build() //Create intial Db with data
     }
 
     @Provides

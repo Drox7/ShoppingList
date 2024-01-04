@@ -3,6 +3,7 @@ package com.drox7.myapplication.add_item_screen
 import android.annotation.SuppressLint
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,16 +40,17 @@ class AddItemViewModel @Inject constructor(
         private set
     var planSum = mutableFloatStateOf(0.00f)
         private set
+
+    override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+
     var actualSum = mutableFloatStateOf(0.00f)
         private set
     override var dialogTitle = mutableStateOf("")
         private set
     override var editTableText = mutableStateOf("")
         private set
-    override var editPlanSumText= mutableStateOf("")
-        private set
-    override var editActualSumText = mutableStateOf("")
-        private set
+
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
@@ -114,8 +116,14 @@ class AddItemViewModel @Inject constructor(
                 addItem = event.item
                 openDialog.value = true
                 editTableText.value = addItem?.name ?: ""
-                editPlanSumText.value = addItem?.planSum.toString()
-                editActualSumText.value = addItem?.actualSum.toString()
+                planSumTextFieldValue.value = planSumTextFieldValue.value.copy(
+                    text = addItem?.planSum.toString()
+                )
+                actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
+                    text = addItem?.actualSum.toString()
+                )
+                //editPlanSumText.value = addItem?.planSum.toString()
+                //editActualSumText.value = addItem?.actualSum.toString()
             }
 
             is AddItemEvent.OnTextChange -> {
@@ -151,8 +159,8 @@ class AddItemViewModel @Inject constructor(
                 openDialog.value = false
                 addItem = addItem?.copy(
                     name = editTableText.value,
-                    planSum = editPlanSumText.value.toFloat(),
-                    actualSum = editActualSumText.value.toFloat()
+                    planSum = planSumTextFieldValue.value.text.toFloat(),
+                    actualSum = actualSumTextFieldValue.value.text.toFloat()
                 )
                 editTableText.value = ""
                 onEvent(AddItemEvent.OnItemSave)
@@ -163,10 +171,10 @@ class AddItemViewModel @Inject constructor(
             }
 
             is DialogEvent.OnActualSumChange -> {
-                editActualSumText.value = event.text
+                actualSumTextFieldValue.value = event.textFieldValue
             }
             is DialogEvent.OnPlanSumChange -> {
-                editPlanSumText.value = event.text
+                planSumTextFieldValue.value = event.textFieldValue
             }
         }
     }

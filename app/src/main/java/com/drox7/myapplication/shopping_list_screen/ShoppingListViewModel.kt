@@ -1,6 +1,7 @@
 package com.drox7.myapplication.shopping_list_screen
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
@@ -33,9 +34,6 @@ class ShoppingListViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
-    override val editPlanSumText = mutableStateOf("")
-    override var editActualSumText = mutableStateOf("")
-        private set
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(false)
@@ -45,6 +43,9 @@ class ShoppingListViewModel @Inject constructor(
 
     override var titleColor = mutableStateOf("#FF3699E7")
         private set
+
+    override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
 
     init {
         viewModelScope.launch {

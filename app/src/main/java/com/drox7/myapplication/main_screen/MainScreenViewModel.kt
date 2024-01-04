@@ -1,6 +1,7 @@
 package com.drox7.myapplication.main_screen
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
@@ -30,15 +31,14 @@ class MainScreenViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
-    override var editPlanSumText = mutableStateOf("")
-        private set
-    override var editActualSumText = mutableStateOf("")
-        private set
+    override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+
+    override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
         private set
-    override var showEditSumText = mutableStateOf(true)
+    override var showEditSumText = mutableStateOf(false)
         private set
     var showFloatingButton = mutableStateOf(true)
         private set

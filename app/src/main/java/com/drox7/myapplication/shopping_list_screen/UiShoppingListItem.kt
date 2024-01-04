@@ -62,7 +62,7 @@ fun UiShoppingListItem(
         val (card, deleteButton, editButton, counter, sum, col) = createRefs()
         Card(
             // elevation = 0.dp,
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(card) {

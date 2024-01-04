@@ -14,14 +14,14 @@ import androidx.room.migration.AutoMigrationSpec
         NoteItem::class,
         CategoryItem::class,
     ],
-//    autoMigrations = [
-//        AutoMigration(
-//            from = 3,
-//            to = 4,
-//          //  spec = MainDb.RenameShopList::class
-//        )
-//    ],
-    version = 4,
+    autoMigrations = [
+        AutoMigration(
+            from = 4,
+            to = 5,
+          //  spec = MainDb.RenameShopList::class
+        )
+    ],
+    version = 5,
     exportSchema = true
 )
 abstract class MainDb : RoomDatabase() {

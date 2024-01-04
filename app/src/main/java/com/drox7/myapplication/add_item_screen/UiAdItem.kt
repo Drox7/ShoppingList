@@ -2,6 +2,7 @@ package com.drox7.myapplication.add_item_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.AddItem
 import com.drox7.myapplication.ui.theme.Red
@@ -36,7 +40,7 @@ fun UiAdItem(
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
     Card(
-        shape = RoundedCornerShape(15.dp),
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 2.dp, bottom = 2.dp)
@@ -44,6 +48,7 @@ fun UiAdItem(
                 onEvent(AddItemEvent.OnShowEditDialog(item))
             },
     ) {
+
         Row(
             modifier = Modifier
                 .background(colorScheme.onPrimary)
@@ -51,15 +56,28 @@ fun UiAdItem(
             verticalAlignment = Alignment.CenterVertically,
 
         ) {
-            Text (
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(minPaddingText)
-                ,
-                text = item.name,
-               style = Typography.bodyLarge,
-                color = titleColor
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text (
+                    modifier = Modifier
+                       // .weight(1f)
+                        .padding(minPaddingText)
+                    ,
+                    text = item.name,
+                    style = Typography.bodyLarge,
+                    color = titleColor
+                )
+                Text(
+                    modifier = Modifier.padding(minPaddingText),
+                    text = "${item.planSum} р./${item.actualSum} р.",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                    ),
+                    )
+            }
+
+
+
 
             Checkbox(
                 checked = item.isCheck ,
@@ -83,7 +101,7 @@ fun UiAdItem(
                     contentDescription ="Delete",
                     tint = Red
                 )
-                
+
             }
         }
     }

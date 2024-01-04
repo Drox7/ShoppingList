@@ -11,12 +11,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,12 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainDialog(
     dialogController: DialogController
 ) {
     val titleColor = Color(android.graphics.Color.parseColor(dialogController.titleColor.value))
+    val regexFloat = Regex("^[0-9]+(.[0-9]{0,2})?\$")
+    //val state = remember { mutableStateOf(TextFieldValue(""))
+    //val regexFloat = Regex("^([0-9][0-9]*)+(.[0-9]{0,2})?\$")
     if (dialogController.openDialog.value) {
         AlertDialog(
             containerColor = colorScheme.onPrimary,
@@ -78,14 +80,29 @@ fun MainDialog(
                         Row(modifier = Modifier.fillMaxWidth()) {
                             TextField( //planSum
                                 modifier = Modifier
+                                    .onFocusChanged {
+                                            focusState ->
+                                        if (focusState.isFocused) {
+                                            val text = dialogController.editPlanSumText.value
+//                                            dialogController.editPlanSumText.value = dialogController.editPlanSumText.value.copy(
+//                                                selection = TextRange(0, text.length)
+//                                            )
+//                                            keepWholeSelection = true
+                                        }
+                                    }
                                     .padding(end = 5.dp)
                                     .weight(0.5f),
+
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 value = dialogController.editPlanSumText.value,
+
                                 onValueChange = {
-                                    dialogController.onDialogEvent(
-                                        DialogEvent.OnPlanSumChange(it)
-                                    )
+                                    if (it.matches(regexFloat)) {
+                                        if (!it.contains(","))
+                                            dialogController.onDialogEvent(
+                                                DialogEvent.OnPlanSumChange(it)
+                                            )
+                                    }
                                 },
                                 label = {
                                     Text(text = "Сумма план(₽)", fontSize = 12.sp)
@@ -105,14 +122,19 @@ fun MainDialog(
                                     //fontWeight = FontWeight.Bold,
                                 )
                             )
+
                             TextField( //actualSum
                                 modifier = Modifier.weight(0.5f),
                                 value = dialogController.editActualSumText.value,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 onValueChange = {
-                                    dialogController.onDialogEvent(
-                                        DialogEvent.OnActualSumChange(it)
-                                    )
+                                    if (it.matches(regexFloat)) {
+                                        if (!it.contains(","))
+                                            dialogController.onDialogEvent(
+                                                DialogEvent.OnActualSumChange(it)
+                                            )
+                                    }
+
                                 },
                                 label = {
                                     Text(text = "Сумма факт(₽)", fontSize = 12.sp)

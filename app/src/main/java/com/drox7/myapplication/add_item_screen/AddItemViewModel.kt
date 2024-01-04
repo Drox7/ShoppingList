@@ -1,6 +1,7 @@
 package com.drox7.myapplication.add_item_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -36,6 +37,10 @@ class AddItemViewModel @Inject constructor(
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
+    var planSum = mutableFloatStateOf(0.00f)
+        private set
+    var actualSum = mutableFloatStateOf(0.00f)
+        private set
     override var dialogTitle = mutableStateOf("")
         private set
     override var editTableText = mutableStateOf("")
@@ -67,16 +72,10 @@ class AddItemViewModel @Inject constructor(
             ).collect { color ->
                 titleColor.value = color
             }
+
         }
-        // viewModelScope.launch {
-//            dataStoreManager.getStringPreferences(
-//                DataStoreManager.TITLE_COLOR,
-//                "#FF3699E7"
-//            ).collect { color ->
-//
-//                titleColor.value = color
-//            }
-        // }
+        updateShoppingListCount()
+
     }
 
     fun onEvent(event: AddItemEvent) {
@@ -100,7 +99,9 @@ class AddItemViewModel @Inject constructor(
                             addItem?.id,
                             addItem?.name ?: itemText.value,
                             addItem?.isCheck ?: false,
-                            listId
+                            listId,
+                            addItem?.planSum ?:0.00f,
+                            addItem?.actualSum ?:0.00f,
                         )
                     )
                     itemText.value = ""
@@ -113,8 +114,8 @@ class AddItemViewModel @Inject constructor(
                 addItem = event.item
                 openDialog.value = true
                 editTableText.value = addItem?.name ?: ""
-                editPlanSumText.value = "200.00"
-                editActualSumText.value = "500.00"
+                editPlanSumText.value = addItem?.planSum.toString()
+                editActualSumText.value = addItem?.actualSum.toString()
             }
 
             is AddItemEvent.OnTextChange -> {
@@ -148,7 +149,11 @@ class AddItemViewModel @Inject constructor(
 
             is DialogEvent.OnConfirm -> {
                 openDialog.value = false
-                addItem = addItem?.copy(name = editTableText.value)
+                addItem = addItem?.copy(
+                    name = editTableText.value,
+                    planSum = editPlanSumText.value.toFloat(),
+                    actualSum = editActualSumText.value.toFloat()
+                )
                 editTableText.value = ""
                 onEvent(AddItemEvent.OnItemSave)
             }
@@ -170,12 +175,20 @@ class AddItemViewModel @Inject constructor(
         viewModelScope.launch {
             itemsList?.collect { list ->
                 var counter = 0
+                var planSumTemp = 0.00f
+                var actualSumTemp = 0.00f
                 list.forEach { item ->
+                    planSumTemp += item.planSum
+                    actualSumTemp += item.actualSum
                     if (item.isCheck) counter++
                 }
+                planSum.floatValue = planSumTemp
+                actualSum.floatValue = actualSumTemp
                 shoppingListItem?.copy(
                     allItemCount = list.size,
-                    allSelectedItemCount = counter
+                    allSelectedItemCount = counter,
+                    planSum = planSum.floatValue,
+                    actualSum = actualSum.floatValue
                 )?.let { shItem ->
                     repository.insertItem(
                         shItem

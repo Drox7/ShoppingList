@@ -2,6 +2,7 @@ package com.drox7.myapplication.add_item_screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
@@ -78,13 +80,42 @@ fun AddItemScreen(
                 )
             }
         },
+        bottomBar = {
+            BottomAppBar(
+                backgroundColor = colorScheme.onPrimary,
+                elevation = 10.dp
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                Row(
+                    modifier = Modifier,
+                ) {
+                    Text(
+                        text = "План: ${viewModel.planSum.floatValue} р.",
+                        modifier = Modifier.padding(5.dp),
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "Факт: ${viewModel.actualSum.floatValue} р.",
+                        modifier = Modifier.padding(5.dp),
+                        fontSize  =14.sp
+                    )
+                    }
+                }
+            }
+
+        },
         topBar = {
-            UiTopBar(titleColor = titleColor,
+            UiTopBar(
+                titleColor = titleColor,
                 onClick = {
                     onPopBackStack()
                 },
                 titleText = viewModel.shoppingListItem?.name ?: "",
-                iconVector = Icons.Filled.ArrowBack )
+                iconVector = Icons.Filled.ArrowBack
+            )
 
         },
     ) {

@@ -75,3 +75,4 @@ val DarkText = Color(0xFF242424)
 val LightText = Color(0xFF5C5B5B)
 
 val seed = Color(0xFF006A69)
+

@@ -89,6 +89,8 @@ class NoteListViewModel @Inject constructor(
                     repository.insertItem(noteItem!!)
                 }
             }
+
+            else -> {}
         }
     }
 

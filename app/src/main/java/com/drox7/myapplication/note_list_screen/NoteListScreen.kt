@@ -20,7 +20,6 @@ import androidx.compose.material.SnackbarResult
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Icon
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.dialog.MainDialog
-import com.drox7.myapplication.main_screen.UiTopBar
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
@@ -105,38 +103,41 @@ fun NoteListScreen(
                     .padding(top = 0.dp, bottom = 5.dp),
                 //shape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp),
             ) {
-            TextField(
-                shape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp),
-                singleLine = true,
-                value = viewModel.searchText,
-                onValueChange = { text ->
-                    viewModel.onEvent(NoteListEvent.OnTextSearchChange(text))
-                },
-                label = {
-//                            Text(
-//                                text = "Search...",
-//                                color = md_theme_light_tertiary,
-//                                fontSize = 12.sp
-//                            )
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = md_theme_light_tertiary,
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorScheme.onPrimary,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = titleColor,
-                    textColor = titleColor,
-                ),
-            )
-        }
+                TextField(
+                    shape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp),
+                    singleLine = true,
+                    value = viewModel.searchText,
+                    onValueChange = { text ->
+                        viewModel.onEvent(NoteListEvent.OnTextSearchChange(text))
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Search...",
+                            color = md_theme_light_tertiary,
+                            fontSize = 12.sp
+                        )
+                    },
+
+                    leadingIcon = {
+                        Icon(
+                            modifier = Modifier.size(16.dp),
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = md_theme_light_tertiary,
+                        )
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = colorScheme.onPrimary,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = titleColor,
+                        textColor = titleColor,
+                    ),
+                )
+            }
 
             LazyColumn(
                 modifier = Modifier

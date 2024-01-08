@@ -1,9 +1,15 @@
 package com.drox7.myapplication.shopping_list_screen
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.drox7.myapplication.data.CategoryItem
+import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
@@ -20,12 +26,24 @@ import javax.inject.Inject
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
     private val repository: ShoppingListRepository,
+    private val categoryRepository: CategoryListRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     val list = repository.getAllItem()
 
-    private val _uiEvent = Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
+    val listCategoryFlow = categoryRepository.getAllItem()
+    var originCategoryList = mutableListOf(CategoryItem(0,"Все"," ",""))
+    var selectedTextCategory   = mutableStateOf(originCategoryList[0].name)
+    var expandedCategory = mutableStateOf(false)
+    var categoryId by mutableIntStateOf(0)
+
+
+    var originShopList = listOf<ShoppingListItem>()
+    var shopList by mutableStateOf(listOf<ShoppingListItem>())
+
+    private val _uiEvent =
+        Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
     val uiEvent = _uiEvent.receiveAsFlow() //receiver
 
     private var listItem: ShoppingListItem? = null
@@ -54,6 +72,22 @@ class ShoppingListViewModel @Inject constructor(
                 "#FF3699E7"
             ).collect { color ->
                 titleColor.value = color
+            }
+        }
+
+        viewModelScope.launch {
+            list.collect { list ->
+                originShopList = list
+                shopList = originShopList
+                onEvent(ShoppingListEvent.OnGroupByCategory(categoryId))
+                Log.d("MyLog","INIT")
+            }
+        }
+        viewModelScope.launch {
+            listCategoryFlow.collect { list ->
+               originCategoryList= list.toMutableList()
+                originCategoryList.add(originCategoryList.size,
+                    CategoryItem(0,"Все"," ",""))
             }
         }
     }
@@ -94,6 +128,14 @@ class ShoppingListViewModel @Inject constructor(
                 dialogTitle.value = "Delete this item?"
                 showEditTableText.value = false
             }
+
+            is ShoppingListEvent.OnGroupByCategory -> {
+                if(event.groupId != 0) {
+                    shopList = originShopList. filter { shopListItem ->
+                        shopListItem.categoryId == event.groupId
+                    }
+                } else shopList = originShopList
+            }
         }
     }
 
@@ -123,8 +165,8 @@ class ShoppingListViewModel @Inject constructor(
     }
 
     private fun sendUiEvent(event: UiEvent) {
-    viewModelScope.launch {
-        _uiEvent.send(event)
-    }
+        viewModelScope.launch {
+            _uiEvent.send(event)
+        }
     }
 }

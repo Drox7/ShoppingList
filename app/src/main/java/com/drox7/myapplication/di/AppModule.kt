@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.drox7.myapplication.data.AddItemRepoImpl
 import com.drox7.myapplication.data.AddItemRepository
+import com.drox7.myapplication.data.CategoryListImpl
+import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.MainDb
 import com.drox7.myapplication.data.NoteRepoImpl
 import com.drox7.myapplication.data.NoteRepository
@@ -33,6 +35,12 @@ object AppModule {
     @Singleton
     fun provideShopRepo(db: MainDb) : ShoppingListRepository{
         return ShoppingListImpl(db.shoppingListDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepo(db: MainDb) : CategoryListRepository{
+        return CategoryListImpl(db.categoryListDao)
     }
     @Provides
     @Singleton

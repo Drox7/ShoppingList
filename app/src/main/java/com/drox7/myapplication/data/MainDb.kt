@@ -39,6 +39,7 @@ abstract class MainDb : RoomDatabase() {
    // class RenameShopList : AutoMigrationSpec
 
     abstract val shoppingListDao: ShoppingListDao
+    abstract val categoryListDao: CategoryListDao
     abstract val noteDao: NoteDao
     abstract val addItemDao: AddItemDao
 }

@@ -71,9 +71,8 @@ fun ShoppingListScreen(
                             tint = titleColor
                         )
                     }
-                    UiExposedDropdownMenuBox(viewModel
-                    )
-                    UiDropDownMenu()
+                    UiExposedDropdownMenuBox(viewModel)
+                    UiDropDownMenu(viewModel)
 
                     IconButton(onClick = { }) {
                         Icon(imageVector = Icons.Filled.Search,

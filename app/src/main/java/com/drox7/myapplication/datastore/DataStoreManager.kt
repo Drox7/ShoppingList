@@ -24,5 +24,8 @@ class DataStoreManager (val context: Context) {
 
     companion object {
         const val TITLE_COLOR = "title_color"
+        const val SORT_ID = "sortId"
+        const val CATEGORY_ID = "CategoryId"
+        const val CATEGORY_NAME = "categoryName"
     }
 }

@@ -32,7 +32,7 @@ fun UiExposedDropdownMenuBox(
     //dropDownMenuController: DropDownMenuController,
     //onClick: (ShoppingListEvent) -> Unit,
 ) {
-    val context = LocalContext.current
+    //val context = LocalContext.current
 
    // var expandedCategory by remember { mutableStateOf(false) }
 //    var selectedTextCategory by remember { mutableStateOf("All") }
@@ -46,13 +46,13 @@ fun UiExposedDropdownMenuBox(
     ) {
         ExposedDropdownMenuBox(
             modifier = Modifier,
-            expanded = viewModel.expandedCategory.value,
+            expanded = viewModel.expandedCategory,
             onExpandedChange = {
-                viewModel.expandedCategory.value = !viewModel.expandedCategory.value
+                viewModel.expandedCategory = !viewModel.expandedCategory
             }
         ) {
             TextField(
-                value = viewModel.selectedTextCategory.value,
+                value = viewModel.selectedTextCategory,
                 onValueChange = {},
                 readOnly = true,
                 textStyle = TextStyle(
@@ -68,7 +68,7 @@ fun UiExposedDropdownMenuBox(
 //                },
                 maxLines =1,
                // overflow = TextOverflow.Ellipsis,
-                leadingIcon = { TrailingIcon(expanded = viewModel.expandedCategory.value) },
+                leadingIcon = { TrailingIcon(expanded = viewModel.expandedCategory) },
                 //trailingIcon = { TrailingIcon(expanded = expanded) },
                 modifier = Modifier
 
@@ -85,8 +85,8 @@ fun UiExposedDropdownMenuBox(
             ExposedDropdownMenu(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.onPrimary),
-                expanded = viewModel.expandedCategory.value,
-                onDismissRequest = { viewModel.expandedCategory.value = false }
+                expanded = viewModel.expandedCategory,
+                onDismissRequest = { viewModel.expandedCategory = false }
             ) {
                 viewModel.originCategoryList.forEach { item ->
                     DropdownMenuItem(
@@ -98,10 +98,10 @@ fun UiExposedDropdownMenuBox(
                             )
                         ) },
                         onClick = {
-                            viewModel.selectedTextCategory.value = item.name
+                            viewModel.expandedCategory = false
+                            viewModel.onEvent(ShoppingListEvent.OnGroupByCategory(item.id?:0, item.name ))
+                            viewModel.selectedTextCategory = item.name
                             viewModel.categoryId= item.id?:0
-                            viewModel.expandedCategory.value = false
-                            viewModel.onEvent(ShoppingListEvent.OnGroupByCategory(item.id?:0))
                            // Toast.makeText(context, item.id.toString(), Toast.LENGTH_SHORT).show()
                         }
                     )

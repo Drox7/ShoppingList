@@ -1,6 +1,5 @@
 package com.drox7.myapplication.dropdown_menu
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
@@ -20,10 +19,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.drox7.myapplication.R
+import com.drox7.myapplication.shopping_list_screen.ShoppingListViewModel
+import com.drox7.myapplication.utils.sortList
 
 @Composable
-fun UiDropDownMenu() {
-    val context = LocalContext.current
+fun UiDropDownMenu(
+    viewModel: ShoppingListViewModel
+) {
+    //val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
 
     Box(
@@ -44,16 +49,46 @@ fun UiDropDownMenu() {
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("A-Z") },
-                onClick = { Toast.makeText(context, "A-z", Toast.LENGTH_SHORT).show() }
+                text = { Text(stringResource(R.string.orderA_zText)) },
+                onClick = {
+                    viewModel.shopList = sortList(viewModel.shopList, 1)
+                    viewModel.sortId = 1
+                    viewModel.setSortIdToDataManager()
+                    expanded = false
+                }
             )
             DropdownMenuItem(
-                text = { Text("Date") },
-                onClick = { Toast.makeText(context, "Date", Toast.LENGTH_SHORT).show() }
+                text = { Text(stringResource(R.string.orderDateText)) },
+                onClick = {
+                    viewModel.shopList = sortList(viewModel.shopList, 0)
+                    viewModel.sortId = 0
+                    viewModel.setSortIdToDataManager()
+                    expanded = false
+                },
+//                leadingIcon = {
+//                    Icon(imageVector = Icons.Default.Check, contentDescription ="" )
+//                }
             )
             DropdownMenuItem(
-                text = { Text("Manual") },
-                onClick = { Toast.makeText(context, "Manual", Toast.LENGTH_SHORT).show() }
+                text = { Text(stringResource(R.string.orderfinishedText)) },
+                onClick = {
+//                    Toast.makeText(context,
+//                        stringResource(R.string.orderfinishedText), Toast.LENGTH_SHORT).show()
+                    viewModel.shopList = sortList(viewModel.shopList, 3)
+                    viewModel.sortId = 3
+                    viewModel.setSortIdToDataManager()
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.orderEmptyText)) },
+                onClick = {
+                    //Toast.makeText(context, "Finished", Toast.LENGTH_SHORT).show()
+                    viewModel.shopList = sortList(viewModel.shopList, 2)
+                    viewModel.sortId = 2
+                    viewModel.setSortIdToDataManager()
+                    expanded = false
+                }
             )
         }
     }

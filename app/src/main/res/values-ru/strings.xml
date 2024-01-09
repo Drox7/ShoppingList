@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Покупки</string>
+    <string name="orderDateText">По дате</string>
+    <string name="orderA_zText">А - Я</string>
+    <string name="orderfinishedText">По завершенным</string>
+    <string name="orderEmptyText">По пустым</string>
 </resources>

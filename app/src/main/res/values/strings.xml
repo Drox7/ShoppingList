@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ShoppingList</string>
+    <string name="orderDateText">date</string>
+    <string name="orderA_zText">A-Z</string>
+    <string name="orderfinishedText">Finished</string>
+    <string name="orderEmptyText">Empty</string>
 </resources>

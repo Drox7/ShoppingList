@@ -1,5 +1,6 @@
 package com.drox7.myapplication.shopping_list_screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -17,29 +18,32 @@ import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
+import com.drox7.myapplication.utils.groupByCategory
+import com.drox7.myapplication.utils.sortList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@SuppressLint("MutableCollectionMutableState")
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
     private val repository: ShoppingListRepository,
-    private val categoryRepository: CategoryListRepository,
-    dataStoreManager: DataStoreManager
+    categoryRepository: CategoryListRepository,
+    private var dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     val list = repository.getAllItem()
 
-    val listCategoryFlow = categoryRepository.getAllItem()
-    var originCategoryList = mutableListOf(CategoryItem(0,"Все"," ",""))
-    var selectedTextCategory   = mutableStateOf(originCategoryList[0].name)
-    var expandedCategory = mutableStateOf(false)
-    var categoryId by mutableIntStateOf(0)
+    private val listCategoryFlow = categoryRepository.getAllItem()
+    var originCategoryList = mutableListOf(CategoryItem(0, "Все", " ", ""))
+    var selectedTextCategory : String = "Все"
+    var expandedCategory by mutableStateOf(false)
+    var categoryId =0
+    var sortId by mutableIntStateOf(0)
 
-
-    var originShopList = listOf<ShoppingListItem>()
+    private var originShopList = listOf<ShoppingListItem>()
     var shopList by mutableStateOf(listOf<ShoppingListItem>())
 
     private val _uiEvent =
@@ -58,7 +62,6 @@ class ShoppingListViewModel @Inject constructor(
         private set
     override var showEditSumText = mutableStateOf(false)
         private set
-
     override var titleColor = mutableStateOf("#FF3699E7")
         private set
 
@@ -74,20 +77,67 @@ class ShoppingListViewModel @Inject constructor(
                 titleColor.value = color
             }
         }
+       getCategoryFromDataManager()
+        getOrderId()
 
         viewModelScope.launch {
             list.collect { list ->
                 originShopList = list
-                shopList = originShopList
-                onEvent(ShoppingListEvent.OnGroupByCategory(categoryId))
-                Log.d("MyLog","INIT")
+                shopList = groupByCategory(originShopList, categoryId)
+                shopList = sortList(shopList, sortId)
+                Log.d("MyLog", "catId ${categoryId} sortId ${sortId} INIT")
             }
         }
+
         viewModelScope.launch {
             listCategoryFlow.collect { list ->
-               originCategoryList= list.toMutableList()
+                originCategoryList= list.toMutableList()
                 originCategoryList.add(originCategoryList.size,
                     CategoryItem(0,"Все"," ",""))
+            }
+        }
+
+    }
+
+    fun setSortIdToDataManager() {
+        viewModelScope.launch {
+            dataStoreManager.saveStringPreferences(
+                sortId.toString(),
+                DataStoreManager.SORT_ID
+            )
+            Log.d("Mylog", " setSortIdDM $sortId.toString()")
+        }
+    }
+    private fun getCategoryFromDataManager() {
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.CATEGORY_ID,
+                "0"
+            ).collect { id ->
+                categoryId = id.toInt()
+                Log.d("Mylog", "get DM $id")
+            }
+        }
+
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.CATEGORY_NAME,
+                "Все"
+            ).collect { catName ->
+                selectedTextCategory = catName
+                Log.d("Mylog", "get DM $catName")
+            }
+        }
+    }
+
+    private fun getOrderId() {
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.SORT_ID,
+                "0"
+            ).collect { id ->
+                sortId = id.toInt()
+               // Log.d("Mylog", "id ${id}")
             }
         }
     }
@@ -130,11 +180,23 @@ class ShoppingListViewModel @Inject constructor(
             }
 
             is ShoppingListEvent.OnGroupByCategory -> {
-                if(event.groupId != 0) {
-                    shopList = originShopList. filter { shopListItem ->
-                        shopListItem.categoryId == event.groupId
-                    }
-                } else shopList = originShopList
+
+                viewModelScope.launch {
+                    dataStoreManager.saveStringPreferences(
+                        event.groupId.toString(),
+                        DataStoreManager.CATEGORY_ID
+                    )
+                    Log.d("MyLog"," Save ${event.groupId}")
+                }
+                viewModelScope.launch {
+                    dataStoreManager.saveStringPreferences(
+                        event.categoryName,
+                        DataStoreManager.CATEGORY_NAME
+                    )
+                    Log.d("MyLog"," Save ${event.categoryName}")
+                }
+                shopList = groupByCategory(originShopList, event.groupId)
+                shopList = sortList(shopList, sortId)
             }
         }
     }

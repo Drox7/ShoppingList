@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,7 +65,10 @@ fun ShoppingListScreen(
                     .background(colorScheme.onPrimary)
                     .fillMaxWidth()
                 ) {
-                    IconButton(onClick = { }) {
+                    IconButton(
+                        modifier = Modifier.padding(top = 4.dp),
+                        onClick = { }
+                    ) {
                         Icon(imageVector = Icons.Filled.Menu,
                             contentDescription = "Menu",
                             tint = titleColor
@@ -74,12 +77,12 @@ fun ShoppingListScreen(
                     UiExposedDropdownMenuBox(viewModel)
                     UiDropDownMenu(viewModel)
 
-                    IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Filled.Search,
-                            contentDescription = "Search",
-                            tint = titleColor
-                        )
-                    }
+//                    IconButton(onClick = { }) {
+//                        Icon(imageVector = Icons.Filled.Search,
+//                            contentDescription = "Search",
+//                            tint = titleColor
+//                        )
+//                    }
 
                 }
             }

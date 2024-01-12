@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
-import com.drox7.myapplication.main_screen.UiTopBar
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
@@ -89,33 +88,76 @@ fun AddItemScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                Row(
-                    modifier = Modifier,
-                ) {
-                    Text(
-                        text = "План: ${viewModel.planSum.floatValue} р.",
-                        modifier = Modifier.padding(5.dp),
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = "Факт: ${viewModel.actualSum.floatValue} р.",
-                        modifier = Modifier.padding(5.dp),
-                        fontSize  =14.sp
-                    )
+                    Row(
+                        modifier = Modifier,
+                    ) {
+                        Text(
+                            text = "План: ${viewModel.planSum.floatValue} р.",
+                            modifier = Modifier.padding(5.dp),
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = "Факт: ${viewModel.actualSum.floatValue} р.",
+                            modifier = Modifier.padding(5.dp),
+                            fontSize = 14.sp
+                        )
                     }
                 }
             }
 
         },
         topBar = {
-            UiTopBar(
-                titleColor = titleColor,
-                onClick = {
-                    onPopBackStack()
-                },
-                titleText = viewModel.shoppingListItem?.name ?: "",
-                iconVector = Icons.Filled.ArrowBack
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(0.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .background(colorScheme.onPrimary)
+                        .fillMaxWidth()
+                ) {
+                    IconButton(onClick = { onPopBackStack() }
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(top = 14.dp),
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = titleColor
+                        )
+                    }
+
+                    Text(
+                        modifier = Modifier
+                            //.weight(2f)
+                            .padding(top = 16.dp, start = 10.dp, end = 20.dp),
+                        text = viewModel.shoppingListItem?.name ?: "",
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 18.sp
+                        )
+                    )
+
+
+                    UiDropdownMenuBoxAddItem(viewModel)
+
+//                    IconButton(onClick = { }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Search,
+//                            contentDescription = "Search",
+//                            tint = titleColor
+//                        )
+//                    }
+
+                }
+            }
+//            UiTopBar(
+//                titleColor = titleColor,
+//                onClick = {
+//                    onPopBackStack()
+//                },
+//                titleText = viewModel.shoppingListItem?.name ?: "",
+//                iconVector = Icons.Filled.ArrowBack
+//            )
 
         },
     ) {

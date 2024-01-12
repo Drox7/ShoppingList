@@ -2,6 +2,7 @@ package com.drox7.myapplication.dropdown_menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -18,8 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.shopping_list_screen.ShoppingListViewModel
 import com.drox7.myapplication.utils.sortList
@@ -33,7 +34,7 @@ fun UiDropDownMenu(
 
     Box(
         modifier = Modifier
-            //.fillMaxWidth()
+            .padding(top = 4.dp, end = 10.dp)
             .wrapContentSize(Alignment.TopEnd)
     ) {
         IconButton(onClick = { expanded = !expanded }) {

@@ -40,10 +40,10 @@ fun UiAdItem(
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
     Card(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 2.dp, bottom = 2.dp)
+            .padding(top = 2.dp, bottom = 0.dp, start = 10.dp, end = 10.dp)
             .clickable {
                 onEvent(AddItemEvent.OnShowEditDialog(item))
             },

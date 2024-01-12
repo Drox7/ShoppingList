@@ -1,14 +1,18 @@
 package com.drox7.myapplication.add_item_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.AddItem
 import com.drox7.myapplication.data.AddItemRepository
+import com.drox7.myapplication.data.CategoryItem
+import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
@@ -25,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddItemViewModel @Inject constructor(
     private val repository: AddItemRepository,
+    categoryRepository: CategoryListRepository,
     savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
@@ -35,6 +40,13 @@ class AddItemViewModel @Inject constructor(
     var itemsList: Flow<List<AddItem>>? = null
     var addItem: AddItem? = null
     var shoppingListItem: ShoppingListItem? = null
+
+    val listCategoryFlow = categoryRepository.getAllItem()
+    var expandedCategory by mutableStateOf(false)
+    var selectedTextCategory = ""
+    var categoryId = 0
+    var categoryList: List<CategoryItem> = emptyList()
+
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
@@ -67,7 +79,7 @@ class AddItemViewModel @Inject constructor(
         //Log.d("MyLog", "List id View model $listId")
         viewModelScope.launch {
             shoppingListItem = repository.getListItemById(listId)
-
+            categoryId = shoppingListItem!!.categoryId
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
                 "#FF3699E7"
@@ -76,6 +88,16 @@ class AddItemViewModel @Inject constructor(
             }
 
         }
+
+        viewModelScope.launch {
+            listCategoryFlow.collect { list ->
+                categoryList= list
+            }
+            selectedTextCategory = categoryList.find{
+                it.id == categoryId
+            }?.name ?: ""
+        }
+
         updateShoppingListCount()
 
     }
@@ -179,7 +201,7 @@ class AddItemViewModel @Inject constructor(
         }
     }
 
-    private fun updateShoppingListCount() {
+     fun updateShoppingListCount() {
         viewModelScope.launch {
             itemsList?.collect { list ->
                 var counter = 0
@@ -196,7 +218,8 @@ class AddItemViewModel @Inject constructor(
                     allItemCount = list.size,
                     allSelectedItemCount = counter,
                     planSum = planSum.floatValue,
-                    actualSum = actualSum.floatValue
+                    actualSum = actualSum.floatValue,
+                    categoryId = categoryId
                 )?.let { shItem ->
                     repository.insertItem(
                         shItem

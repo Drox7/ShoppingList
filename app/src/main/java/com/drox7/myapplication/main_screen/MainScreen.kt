@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,7 +53,7 @@ fun MainScreen(
             }
         },
         floatingActionButton = {
-            if (viewModel.showFloatingButton.value) SmallFloatingActionButton(
+            if (viewModel.showFloatingButton.value) FloatingActionButton(
                 onClick = {
                     viewModel.onEvent(
                         MainScreenEvent.OnNewItemClick(
@@ -72,8 +72,8 @@ fun MainScreen(
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true
+        floatingActionButtonPosition = FabPosition.End,
+        // isFloatingActionButtonDocked = true
     ) {
         NavigationGraph(navController) { route ->
             viewModel.onEvent(MainScreenEvent.NavigateMain(route))

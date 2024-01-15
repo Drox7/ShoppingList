@@ -34,7 +34,7 @@ fun UiDropDownMenu(
 
     Box(
         modifier = Modifier
-            .padding(top = 4.dp, end = 10.dp)
+            .padding(top = 4.dp, end = 0.dp)
             .wrapContentSize(Alignment.TopEnd)
     ) {
         IconButton(onClick = { expanded = !expanded }) {

@@ -51,7 +51,7 @@ fun UiDropdownMenuBoxAddItem(
                 onValueChange = {},
                 readOnly = true,
                 textStyle = TextStyle(
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     textAlign = TextAlign.End
                 ),
 //                label = {
@@ -90,7 +90,7 @@ fun UiDropdownMenuBoxAddItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = item.name,
                                 style = TextStyle(
-                                    fontSize = 18.sp,
+                                    fontSize = 16.sp,
                                     //textAlign = TextAlign.start
                                 )
                             )

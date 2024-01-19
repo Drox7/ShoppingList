@@ -85,7 +85,7 @@ class ShoppingListViewModel @Inject constructor(
                 originShopList = list
                 shopList = groupByCategory(originShopList, categoryId)
                 shopList = sortList(shopList, sortId)
-                Log.d("MyLog", "catId ${categoryId} sortId ${sortId} INIT")
+                //Log.d("MyLog", "catId ${categoryId} sortId ${sortId} INIT")
             }
         }
 
@@ -105,7 +105,7 @@ class ShoppingListViewModel @Inject constructor(
                 sortId.toString(),
                 DataStoreManager.SORT_ID
             )
-            Log.d("Mylog", " setSortIdDM $sortId.toString()")
+            //Log.d("Mylog", " setSortIdDM $sortId.toString()")
         }
     }
     private fun getCategoryFromDataManager() {
@@ -115,7 +115,7 @@ class ShoppingListViewModel @Inject constructor(
                 "0"
             ).collect { id ->
                 categoryId = id.toInt()
-                Log.d("Mylog", "get DM $id")
+                //Log.d("Mylog", "get DM $id")
             }
         }
 
@@ -125,7 +125,7 @@ class ShoppingListViewModel @Inject constructor(
                 "Все"
             ).collect { catName ->
                 selectedTextCategory = catName
-                Log.d("Mylog", "get DM $catName")
+                //Log.d("Mylog", "get DM $catName")
             }
         }
     }
@@ -153,10 +153,13 @@ class ShoppingListViewModel @Inject constructor(
                             editTableText.value,
                             listItem?.time ?: getCurrentTime(),
                             listItem?.allItemCount ?: 0,
-                            listItem?.allSelectedItemCount ?: 0
+                            listItem?.allSelectedItemCount ?: 0,
+                            categoryId = listItem?.categoryId ?: 0
                         )
                     )
+
                 }
+
             }
 
             is ShoppingListEvent.OnItemClick -> {
@@ -186,18 +189,20 @@ class ShoppingListViewModel @Inject constructor(
                         event.groupId.toString(),
                         DataStoreManager.CATEGORY_ID
                     )
-                    Log.d("MyLog"," Save ${event.groupId}")
+                   // Log.d("MyLog"," Save ${event.groupId}")
                 }
                 viewModelScope.launch {
                     dataStoreManager.saveStringPreferences(
                         event.categoryName,
                         DataStoreManager.CATEGORY_NAME
                     )
-                    Log.d("MyLog"," Save ${event.categoryName}")
+                   // Log.d("MyLog"," Save ${event.categoryName}")
                 }
                 shopList = groupByCategory(originShopList, event.groupId)
                 shopList = sortList(shopList, sortId)
             }
+
+            else -> {}
         }
     }
 

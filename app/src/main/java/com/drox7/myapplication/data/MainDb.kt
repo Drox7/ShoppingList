@@ -16,12 +16,12 @@ import androidx.room.migration.AutoMigrationSpec
     ],
     autoMigrations = [
         AutoMigration(
-            from = 4,
-            to = 5,
+            from = 5,
+            to = 6,
           //  spec = MainDb.RenameShopList::class
         )
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class MainDb : RoomDatabase() {

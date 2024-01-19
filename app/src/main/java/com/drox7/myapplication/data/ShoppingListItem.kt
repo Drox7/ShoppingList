@@ -18,6 +18,8 @@ data class ShoppingListItem(
     val actualSum: Float =0.00f ,
     @ColumnInfo(defaultValue = "0")
     val categoryId: Int =0,
+    @ColumnInfo(defaultValue = "0")
+    val description: String ="",
     //val planQuantity: Float,
     //val actualQuantity: Float,
 )

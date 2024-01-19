@@ -17,6 +17,7 @@ import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.new_note_screen.NewNoteEvent
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -50,6 +51,8 @@ class AddItemViewModel @Inject constructor(
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
+    var description by mutableStateOf("")
+        private set
     var planSum = mutableFloatStateOf(0.00f)
         private set
 
@@ -80,6 +83,8 @@ class AddItemViewModel @Inject constructor(
         viewModelScope.launch {
             shoppingListItem = repository.getListItemById(listId)
             categoryId = shoppingListItem!!.categoryId
+            description = shoppingListItem!!.description
+
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
                 "#FF3699E7"
@@ -166,6 +171,10 @@ class AddItemViewModel @Inject constructor(
                 updateShoppingListCount()
             }
 
+            is AddItemEvent.OnDescriptionChange -> {
+                description = event.description
+            }
+
         }
 
     }
@@ -214,12 +223,14 @@ class AddItemViewModel @Inject constructor(
                 }
                 planSum.floatValue = planSumTemp
                 actualSum.floatValue = actualSumTemp
+
                 shoppingListItem?.copy(
                     allItemCount = list.size,
                     allSelectedItemCount = counter,
                     planSum = planSum.floatValue,
                     actualSum = actualSum.floatValue,
-                    categoryId = categoryId
+                    categoryId = categoryId,
+                    description = description
                 )?.let { shItem ->
                     repository.insertItem(
                         shItem

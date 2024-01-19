@@ -1,5 +1,6 @@
 package com.drox7.myapplication.main_screen
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ class MainScreenViewModel @Inject constructor(
 ) : ViewModel(), DialogController {
 
     private val _uiEvent = Channel<UiEvent>()
+    var categoryId = 0
     val uiEvent = _uiEvent.receiveAsFlow()
     //var titleColor = mutableStateOf("#FF3699E7")
     override var dialogTitle = mutableStateOf("List name:")
@@ -55,6 +57,16 @@ class MainScreenViewModel @Inject constructor(
                 titleColor.value = color
             }
         }
+
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.CATEGORY_ID,
+                "0"
+            ).collect { id ->
+                categoryId = id.toInt()
+               // Log.d("Mylog", "get DM $id")
+            }
+        }
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -68,7 +80,8 @@ class MainScreenViewModel @Inject constructor(
                             editTableText.value,
                             getCurrentTime(),
                             0,
-                            0
+                            0,
+                            categoryId = categoryId
                         )
                     )
                 }

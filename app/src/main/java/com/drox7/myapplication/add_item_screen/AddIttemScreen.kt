@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
@@ -24,11 +22,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.expandableElements.ExpandableCard
-import com.drox7.myapplication.new_note_screen.NewNoteEvent
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
@@ -126,7 +120,7 @@ fun AddItemScreen(
                     IconButton(
                         onClick = {
                             onPopBackStack()
-                            viewModel.updateShoppingListCount()
+                            viewModel.updateShoppingList()
                         }
                     ) {
                         Icon(
@@ -181,7 +175,7 @@ fun AddItemScreen(
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 0.dp, end = 0.dp, top = 5.dp, bottom = 10.dp)
+                    .padding(start = 0.dp, end = 0.dp, top = 5.dp, bottom = 4.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -249,38 +243,6 @@ fun AddItemScreen(
                 }
             }
             ExpandableCard(viewModel ,title = "Описание...", )
-//            Card(modifier = Modifier
-//                .weight(0.4f)
-//                .padding(end = 10.dp, start = 10.dp, bottom = 70.dp, top = 10.dp)
-//                .fillMaxWidth(),
-//                //colors = CardColors(conte)
-//
-//            ) {
-//                TextField(
-//                    modifier = Modifier
-//
-//                        //.weight(0.4f)
-//                        .fillMaxWidth(),
-//                    textStyle = TextStyle(
-//                        color= colorScheme.onBackground
-//                    ),
-//                    //maxLines = 4,
-//                    colors = TextFieldDefaults.textFieldColors(
-//                        backgroundColor = Color.Transparent,
-//                        focusedIndicatorColor = Color.Transparent,
-//                        unfocusedIndicatorColor = Color.Transparent,
-//                        cursorColor = titleColor
-//                    ),
-//                    placeholder = {Text("Description...", color = md_theme_light_tertiary)},
-//                    value = viewModel.description,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-//                    onValueChange = {text ->
-//                        viewModel.onEvent(AddItemEvent.OnDescriptionChange(text))
-//                    }
-//                )
-//            }
-
-
         }
 
 

@@ -7,6 +7,5 @@ sealed class AddItemEvent {
     data class OnShowEditDialog(val item: AddItem): AddItemEvent()
     data class OnTextChange(val text: String): AddItemEvent()
     data class OnCheckedChange(val item: AddItem): AddItemEvent()
-    data class OnDescriptionChange(val description: String) : AddItemEvent()
     object OnItemSave: AddItemEvent()
 }

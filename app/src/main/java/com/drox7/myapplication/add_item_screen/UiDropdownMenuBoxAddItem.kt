@@ -101,7 +101,7 @@ fun UiDropdownMenuBoxAddItem(
 //                            viewModel.onEvent(ShoppingListEvent.OnGroupByCategory(item.id?:0, item.name ))
                             viewModel.selectedTextCategory = item.name
                             viewModel.categoryId = item.id ?: 0
-                            viewModel.updateShoppingListCount()
+                            viewModel.updateShoppingList()
                             // Toast.makeText(context, item.id.toString(), Toast.LENGTH_SHORT).show()
                         }
                     )

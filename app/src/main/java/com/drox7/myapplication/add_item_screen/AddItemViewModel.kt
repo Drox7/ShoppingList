@@ -17,7 +17,8 @@ import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.new_note_screen.NewNoteEvent
+import com.drox7.myapplication.expandableElements.ExpandableCardController
+import com.drox7.myapplication.expandableElements.ExpandableCardEvent
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -33,7 +34,7 @@ class AddItemViewModel @Inject constructor(
     categoryRepository: CategoryListRepository,
     savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
-) : ViewModel(), DialogController {
+) : ViewModel(), DialogController, ExpandableCardController {
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -51,7 +52,7 @@ class AddItemViewModel @Inject constructor(
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
-    var description by mutableStateOf("")
+    override var description = mutableStateOf("")
         private set
     var planSum = mutableFloatStateOf(0.00f)
         private set
@@ -65,14 +66,12 @@ class AddItemViewModel @Inject constructor(
         private set
     override var editTableText = mutableStateOf("")
         private set
-
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
         private set
     override var showEditSumText = mutableStateOf(true)
         private set
-
     override var titleColor = mutableStateOf("#FF3699E7")
         private set
 
@@ -83,7 +82,7 @@ class AddItemViewModel @Inject constructor(
         viewModelScope.launch {
             shoppingListItem = repository.getListItemById(listId)
             categoryId = shoppingListItem!!.categoryId
-            description = shoppingListItem!!.description
+            description.value = shoppingListItem!!.description
 
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
@@ -96,14 +95,14 @@ class AddItemViewModel @Inject constructor(
 
         viewModelScope.launch {
             listCategoryFlow.collect { list ->
-                categoryList= list
+                categoryList = list
             }
-            selectedTextCategory = categoryList.find{
+            selectedTextCategory = categoryList.find {
                 it.id == categoryId
             }?.name ?: ""
         }
 
-        updateShoppingListCount()
+        updateShoppingList()
 
     }
 
@@ -129,14 +128,14 @@ class AddItemViewModel @Inject constructor(
                             addItem?.name ?: itemText.value,
                             addItem?.isCheck ?: false,
                             listId,
-                            addItem?.planSum ?:0.00f,
-                            addItem?.actualSum ?:0.00f,
+                            addItem?.planSum ?: 0.00f,
+                            addItem?.actualSum ?: 0.00f,
                         )
                     )
                     itemText.value = ""
                     addItem = null
                 }
-                updateShoppingListCount()
+                updateShoppingList()
             }
 
             is AddItemEvent.OnShowEditDialog -> {
@@ -161,22 +160,26 @@ class AddItemViewModel @Inject constructor(
                 viewModelScope.launch {
                     repository.deleteItem(event.item)
                 }
-                updateShoppingListCount()
+                updateShoppingList()
             }
 
             is AddItemEvent.OnCheckedChange -> {
                 viewModelScope.launch {
                     repository.insertItem(event.item)
                 }
-                updateShoppingListCount()
+                updateShoppingList()
             }
-
-            is AddItemEvent.OnDescriptionChange -> {
-                description = event.description
-            }
-
         }
 
+    }
+
+    override fun onCardEvent(event: ExpandableCardEvent) {
+        when (event) {
+            is ExpandableCardEvent.OnTextChange -> {
+                description.value = event.text
+                updateShoppingList()
+            }
+        }
     }
 
     override fun onDialogEvent(event: DialogEvent) {
@@ -204,13 +207,14 @@ class AddItemViewModel @Inject constructor(
             is DialogEvent.OnActualSumChange -> {
                 actualSumTextFieldValue.value = event.textFieldValue
             }
+
             is DialogEvent.OnPlanSumChange -> {
                 planSumTextFieldValue.value = event.textFieldValue
             }
         }
     }
 
-     fun updateShoppingListCount() {
+    fun updateShoppingList() {
         viewModelScope.launch {
             itemsList?.collect { list ->
                 var counter = 0
@@ -230,7 +234,7 @@ class AddItemViewModel @Inject constructor(
                     planSum = planSum.floatValue,
                     actualSum = actualSum.floatValue,
                     categoryId = categoryId,
-                    description = description
+                    description = description.value
                 )?.let { shItem ->
                     repository.insertItem(
                         shItem

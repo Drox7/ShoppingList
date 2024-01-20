@@ -4,14 +4,16 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,22 +38,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.drox7.myapplication.add_item_screen.AddItemEvent
-import com.drox7.myapplication.add_item_screen.AddItemViewModel
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpandableCard(
-    viewModel: AddItemViewModel,
+    expandableCardController: ExpandableCardController,
     title: String,
     titleFontSize: TextUnit = MaterialTheme.typography.titleMedium.fontSize,
     titleFontWeight: FontWeight = FontWeight.Bold,
-    //description: String,
     descriptionFontSize: TextUnit = MaterialTheme.typography.titleSmall.fontSize,
     descriptionFontWeight: FontWeight = FontWeight.Normal,
     descriptionMaxLines: Int = 15,
-    //shape: Shape =
+    shape: Shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
     padding: Dp = 5.dp
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -62,22 +60,23 @@ fun ExpandableCard(
 
     Card(
         modifier = Modifier
-            // .weight(0.4f)
             .fillMaxWidth()
-            .padding(end = 10.dp, start = 10.dp, bottom = 60.dp, top = 0.dp)
+            .alpha(0.7f)
+            .padding(end = 0.dp, start = 0.dp, bottom = 55.dp, top = 0.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
             ),
-        //shape = shape,
+        shape = shape,
         onClick = {
             expandedState = !expandedState
         }
     ) {
         Column(
             modifier = Modifier
+                .background(colorScheme.onPrimary)
                 .fillMaxWidth()
                 .padding(padding)
         ) {
@@ -87,7 +86,7 @@ fun ExpandableCard(
                 Text(
                     modifier = Modifier
                         .weight(6f),
-                    text = viewModel.description,
+                    text = expandableCardController.description.value,
                     fontSize = titleFontSize,
                     //fontWeight = titleFontWeight,
                     maxLines = 1,
@@ -96,23 +95,22 @@ fun ExpandableCard(
                 IconButton(
                     modifier = Modifier
                         .weight(1f)
-                        .alpha(0.2f)
+                        .alpha(1f)
                         .rotate(rotationState),
                     onClick = {
                         expandedState = !expandedState
-                        viewModel.updateShoppingListCount()
                     }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
+                        imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = "Drop-Down Arrow"
                     )
                 }
             }
             if (expandedState) {
                 TextField(
-                    value = viewModel.description,
-                    onValueChange = { it ->
-                        viewModel.onEvent(AddItemEvent.OnDescriptionChange(it))
+                    value = expandableCardController.description.value,
+                    onValueChange = {
+                        expandableCardController.onCardEvent(ExpandableCardEvent.OnTextChange(it))
                     },
                     textStyle = TextStyle(
                         color = colorScheme.onBackground

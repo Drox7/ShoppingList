@@ -40,10 +40,10 @@ fun UiAdItem(
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
     Card(
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(0.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 2.dp, bottom = 0.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 0.dp, bottom = 1.dp, start = 0.dp, end = 0.dp)
             .clickable {
                 onEvent(AddItemEvent.OnShowEditDialog(item))
             },
@@ -60,24 +60,21 @@ fun UiAdItem(
                 Text (
                     modifier = Modifier
                        // .weight(1f)
-                        .padding(minPaddingText)
+                        .padding(start = 5.dp)
                     ,
                     text = item.name,
                     style = Typography.bodyLarge,
                     color = titleColor
                 )
                 Text(
-                    modifier = Modifier.padding(minPaddingText),
+                    modifier = Modifier.padding(start = 5.dp),
                     text = "${item.planSum} р./${item.actualSum} р.",
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp,
+                        //fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
                     ),
                     )
             }
-
-
-
 
             Checkbox(
                 checked = item.isCheck ,

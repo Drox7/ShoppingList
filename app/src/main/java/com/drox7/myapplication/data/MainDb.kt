@@ -2,10 +2,8 @@ package com.drox7.myapplication.data
 
 import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.RenameColumn
-import androidx.room.RenameTable
 import androidx.room.RoomDatabase
-import androidx.room.migration.AutoMigrationSpec
+import androidx.room.TypeConverters
 
 @Database(
     entities = [
@@ -13,17 +11,24 @@ import androidx.room.migration.AutoMigrationSpec
         AddItem::class,
         NoteItem::class,
         CategoryItem::class,
+        TransactionItem::class,
+        CurrencyItem::class,
+        UnitItem::class,
+        AccountBalancesItem::class,
+        AssetLiabilityItem::class,
+        AccountItem::class
     ],
     autoMigrations = [
         AutoMigration(
-            from = 5,
-            to = 6,
+            from = 6,
+            to = 7,
           //  spec = MainDb.RenameShopList::class
         )
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
+@TypeConverters(Converters::class)
 abstract class MainDb : RoomDatabase() {
     // @RenameTable(fromTableName = "shop_list_name", toTableName ="shop_list_table") Rename one Table
 //    @RenameTable.Entries( // Rename several tables

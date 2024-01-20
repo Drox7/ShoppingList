@@ -1,14 +1,20 @@
 package com.drox7.myapplication.utils
 
 import com.drox7.myapplication.data.ShoppingListItem
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 fun getCurrentTime(): String {
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-    val cv = Calendar.getInstance()
+    val cv = Calendar.getInstance().time
     return formatter.format(cv.time)
+}
+
+fun getCurrentTimeStamp(): Timestamp {
+    val currentTimeMillis = System.currentTimeMillis()
+    return Timestamp(currentTimeMillis)
 }
 
 fun groupByCategory(

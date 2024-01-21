@@ -1,7 +1,7 @@
 package com.drox7.myapplication.shopping_list_screen
 
 import android.annotation.SuppressLint
-import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +16,7 @@ import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
 import com.drox7.myapplication.utils.groupByCategory
@@ -67,6 +68,8 @@ class ShoppingListViewModel @Inject constructor(
 
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val uiStateDialog: MutableState<UiStateDialog>
+        get() = TODO("Not yet implemented")
 
     init {
         viewModelScope.launch {

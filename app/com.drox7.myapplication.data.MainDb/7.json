@@ -1,0 +1,582 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 7,
+    "identityHash": "8fa41777ccfa6dcc1f0c5bbe8d1158f5",
+    "entities": [
+      {
+        "tableName": "shop_list_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT NOT NULL, `time` TEXT NOT NULL, `allItemCount` INTEGER NOT NULL, `allSelectedItemCount` INTEGER NOT NULL, `planSum` REAL NOT NULL DEFAULT 0.00, `actualSum` REAL NOT NULL DEFAULT 0.00, `categoryId` INTEGER NOT NULL DEFAULT 0, `description` TEXT NOT NULL DEFAULT '0', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allItemCount",
+            "columnName": "allItemCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allSelectedItemCount",
+            "columnName": "allSelectedItemCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "planSum",
+            "columnName": "planSum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "actualSum",
+            "columnName": "actualSum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'0'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "add_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT NOT NULL, `isCheck` INTEGER NOT NULL, `listId` INTEGER NOT NULL, `planSum` REAL NOT NULL DEFAULT 0.00, `actualSum` REAL NOT NULL DEFAULT 0.00, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCheck",
+            "columnName": "isCheck",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "listId",
+            "columnName": "listId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "planSum",
+            "columnName": "planSum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "actualSum",
+            "columnName": "actualSum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "note_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `time` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "category_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `time` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "transaction_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `dateTime` INTEGER, `name` TEXT NOT NULL, `isExpense` INTEGER NOT NULL, `categoryId` INTEGER NOT NULL DEFAULT 0, `typeTransaction` TEXT NOT NULL DEFAULT 'Expense', `typeAccountId` INTEGER NOT NULL DEFAULT 0, `assetLiabilityId` INTEGER NOT NULL DEFAULT 0, `currencyId` INTEGER NOT NULL DEFAULT 0, `unitId` INTEGER NOT NULL DEFAULT 0, `quantity` REAL NOT NULL DEFAULT 0.00, `price` REAL NOT NULL DEFAULT 0.00, `sum` REAL NOT NULL DEFAULT 0.00, `description` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTime",
+            "columnName": "dateTime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isExpense",
+            "columnName": "isExpense",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "typeTransaction",
+            "columnName": "typeTransaction",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'Expense'"
+          },
+          {
+            "fieldPath": "typeAccountId",
+            "columnName": "typeAccountId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "assetLiabilityId",
+            "columnName": "assetLiabilityId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "currencyId",
+            "columnName": "currencyId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "unitId",
+            "columnName": "unitId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "sum",
+            "columnName": "sum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "currency_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `symbol` TEXT NOT NULL, `isLocal` INTEGER NOT NULL, `localName` TEXT NOT NULL, `internationalName` TEXT NOT NULL, `currentRateToDollar` REAL NOT NULL DEFAULT 0.00000, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLocal",
+            "columnName": "isLocal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localName",
+            "columnName": "localName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "internationalName",
+            "columnName": "internationalName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentRateToDollar",
+            "columnName": "currentRateToDollar",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00000"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "unit_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `localName` TEXT NOT NULL, `internationalName` TEXT NOT NULL, `coefficientToBase` REAL NOT NULL DEFAULT 1.00000, `typeUnit` TEXT NOT NULL DEFAULT 'piece', `isBase` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localName",
+            "columnName": "localName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "internationalName",
+            "columnName": "internationalName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coefficientToBase",
+            "columnName": "coefficientToBase",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "1.00000"
+          },
+          {
+            "fieldPath": "typeUnit",
+            "columnName": "typeUnit",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'piece'"
+          },
+          {
+            "fieldPath": "isBase",
+            "columnName": "isBase",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "accountBalances_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `dateTime` INTEGER, `nameAccount` TEXT NOT NULL, `typeAccountId` INTEGER NOT NULL DEFAULT 0, `assetLiabilityId` INTEGER NOT NULL DEFAULT 0, `currencyAccountId` INTEGER NOT NULL DEFAULT 0, `balanceSum` REAL NOT NULL DEFAULT 0.00, `balanceQuantity` REAL NOT NULL DEFAULT 0.00, `description` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTime",
+            "columnName": "dateTime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameAccount",
+            "columnName": "nameAccount",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "typeAccountId",
+            "columnName": "typeAccountId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "assetLiabilityId",
+            "columnName": "assetLiabilityId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "currencyAccountId",
+            "columnName": "currencyAccountId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "balanceSum",
+            "columnName": "balanceSum",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "balanceQuantity",
+            "columnName": "balanceQuantity",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.00"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "assetLiability_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `isAsset` INTEGER NOT NULL, `localName` TEXT NOT NULL, `internationalName` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isAsset",
+            "columnName": "isAsset",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localName",
+            "columnName": "localName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "internationalName",
+            "columnName": "internationalName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "AccountItem_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `isDebit` INTEGER NOT NULL, `localName` TEXT NOT NULL, `internationalName` TEXT NOT NULL, `description` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isDebit",
+            "columnName": "isDebit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localName",
+            "columnName": "localName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "internationalName",
+            "columnName": "internationalName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8fa41777ccfa6dcc1f0c5bbe8d1158f5')"
+    ]
+  }
+}

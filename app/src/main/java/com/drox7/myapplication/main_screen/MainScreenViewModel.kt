@@ -1,6 +1,6 @@
 package com.drox7.myapplication.main_screen
 
-import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -12,6 +12,7 @@ import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
@@ -41,6 +42,8 @@ class MainScreenViewModel @Inject constructor(
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
 
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val uiStateDialog: MutableState<UiStateDialog>
+        get() = TODO("Not yet implemented")
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)

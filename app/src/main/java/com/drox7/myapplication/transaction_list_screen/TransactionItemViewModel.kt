@@ -1,6 +1,7 @@
 package com.drox7.myapplication.transaction_list_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
 import com.drox7.myapplication.utils.UiEvent
@@ -55,6 +57,8 @@ class TransactionItemViewModel @Inject constructor(
 
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val uiStateDialog: MutableState<UiStateDialog>
+        get() = TODO("Not yet implemented")
 
     override var dialogTitle = mutableStateOf("")
         private set
@@ -121,6 +125,7 @@ class TransactionItemViewModel @Inject constructor(
                 actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
                     text = transactionItem?.sum.toString()
                 )
+                UiStateDialog(null, null,transactionItem = transactionItem)
             }
 
             is TransactionItemEvent.OnTextChange -> {

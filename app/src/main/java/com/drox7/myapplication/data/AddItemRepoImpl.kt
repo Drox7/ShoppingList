@@ -13,6 +13,10 @@ class AddItemRepoImpl(
         dao.insertItem(item)
     }
 
+    override suspend fun insertItem(item: TransactionItem) {
+        dao.insertItem(item)
+    }
+
     override suspend fun deleteItem(item: AddItem) {
         dao.deleteItem(item)
     }

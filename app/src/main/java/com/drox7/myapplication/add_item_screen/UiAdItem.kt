@@ -1,5 +1,6 @@
 package com.drox7.myapplication.add_item_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
@@ -19,16 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.AddItem
+import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.Typography
+import com.drox7.myapplication.utils.getCurrentTimeStamp
 
 @Composable
 
@@ -36,9 +41,10 @@ fun UiAdItem(
     titleColor: Color,
     item: AddItem,
     onEvent:(AddItemEvent) -> Unit
+
 ) {
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
-
+    val context = LocalContext.current
     Card(
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier
@@ -76,6 +82,38 @@ fun UiAdItem(
                     )
             }
 
+            IconButton(
+                onClick = {
+                    if (item.actualSum != 0f) {
+                        onEvent(
+                            AddItemEvent.OnAddToTransactionList(
+                                TransactionItem(
+                                    null,
+                                    getCurrentTimeStamp(), item.name, true, sum = item.actualSum
+                                )
+                            )
+                        )
+                        Toast.makeText(
+                            context,
+                            "${item.name} - добавлен в расход",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else  Toast.makeText(
+                        context,
+                        "${item.name} - не заполнена сумма факт",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.alpha(0.7f),
+                  //  painter = painterResource(id = R.drawable.baseline_difference_icon),
+                    imageVector = Icons.Default.AddCircle,
+                    contentDescription ="Save to Transaction list",
+                    tint = titleColor
+                )
+
+            }
             Checkbox(
                 checked = item.isCheck ,
                 colors = CheckboxDefaults.colors(

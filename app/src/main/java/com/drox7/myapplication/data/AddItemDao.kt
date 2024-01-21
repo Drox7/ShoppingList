@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 interface AddItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(item: AddItem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertItem(item: TransactionItem)
     @Delete
     suspend fun deleteItem(item: AddItem)
     @Query("SELECT * FROM add_item_table WHERE listId = :listId")

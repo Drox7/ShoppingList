@@ -1,5 +1,6 @@
 package com.drox7.myapplication.note_list_screen
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,6 +12,7 @@ import com.drox7.myapplication.data.NoteRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -40,6 +42,8 @@ class NoteListViewModel @Inject constructor(
         private set
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val uiStateDialog: MutableState<UiStateDialog>
+        get() = TODO("Not yet implemented")
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(false)

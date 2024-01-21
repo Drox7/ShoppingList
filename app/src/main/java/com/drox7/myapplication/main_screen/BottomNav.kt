@@ -19,9 +19,10 @@ fun BottomNav(
 ) {
     val listItems = listOf(
         BottomNavItem.ListItem,
+        BottomNavItem.TransactionListItem,
         BottomNavItem.NoteItem,
         BottomNavItem.SettingsItem,
-        BottomNavItem.AboutItem,
+       // BottomNavItem.AboutItem,
     )
     BottomNavigation(backgroundColor = colorScheme.onPrimary) {
         listItems.forEach { bottomNavItem ->

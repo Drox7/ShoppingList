@@ -11,6 +11,8 @@ import com.drox7.myapplication.data.NoteRepoImpl
 import com.drox7.myapplication.data.NoteRepository
 import com.drox7.myapplication.data.ShoppingListImpl
 import com.drox7.myapplication.data.ShoppingListRepository
+import com.drox7.myapplication.data.TransactionItemImpl
+import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import dagger.Module
 import dagger.Provides
@@ -41,6 +43,11 @@ object AppModule {
     @Singleton
     fun provideCategoryRepo(db: MainDb) : CategoryListRepository{
         return CategoryListImpl(db.categoryListDao)
+    }
+    @Provides
+    @Singleton
+    fun provideTransactionRepo(db: MainDb) : TransactionItemRepository{
+        return TransactionItemImpl(db.transactionItemDao)
     }
     @Provides
     @Singleton

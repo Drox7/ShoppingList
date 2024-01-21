@@ -11,6 +11,7 @@ import com.drox7.myapplication.about_screen.AboutListScreen
 import com.drox7.myapplication.note_list_screen.NoteListScreen
 import com.drox7.myapplication.settings_screen.SettingsListScreen
 import com.drox7.myapplication.shopping_list_screen.ShoppingListScreen
+import com.drox7.myapplication.transaction_list_screen.TransactionListScreen
 import com.drox7.myapplication.utils.Routes
 
 @Composable
@@ -22,6 +23,11 @@ fun NavigationGraph(navController: NavHostController, onNavigate: (String) -> Un
         navController = navController, startDestination = Routes.SHOPPING_LIST) {
         composable(Routes.SHOPPING_LIST) {
             ShoppingListScreen() { route ->
+                onNavigate(route)
+            }
+        }
+        composable(Routes.TRANSACTION_LIST) {
+            TransactionListScreen() { route ->
                 onNavigate(route)
             }
         }

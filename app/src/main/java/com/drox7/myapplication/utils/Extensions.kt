@@ -4,6 +4,7 @@ import com.drox7.myapplication.data.ShoppingListItem
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 fun getCurrentTime(): String {
@@ -11,7 +12,10 @@ fun getCurrentTime(): String {
     val cv = Calendar.getInstance().time
     return formatter.format(cv.time)
 }
-
+fun formatDate(date: Date?):String {
+    val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    return formatter.format(date!!)
+}
 fun getCurrentTimeStamp(): Timestamp {
     val currentTimeMillis = System.currentTimeMillis()
     return Timestamp(currentTimeMillis)

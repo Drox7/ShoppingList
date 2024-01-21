@@ -47,4 +47,5 @@ abstract class MainDb : RoomDatabase() {
     abstract val categoryListDao: CategoryListDao
     abstract val noteDao: NoteDao
     abstract val addItemDao: AddItemDao
+    abstract val transactionItemDao: TransactionItemDao
 }

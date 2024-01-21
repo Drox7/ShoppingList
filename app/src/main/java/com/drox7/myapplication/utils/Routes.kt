@@ -2,6 +2,7 @@ package com.drox7.myapplication.utils
 
 object Routes {
     const val SHOPPING_LIST = "shopping_list"
+    const val TRANSACTION_LIST = "transaction_list"
     const val NOTE_LIST = "note_list"
     const val ABOUT = "about"
     const val SETTINGS = "settings"

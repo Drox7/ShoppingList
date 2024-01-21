@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
+import com.drox7.myapplication.data.TransactionItem
+import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
+import com.drox7.myapplication.utils.getCurrentTimeStamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -22,12 +25,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val repository: ShoppingListRepository,
+    val repositoryTransaction: TransactionItemRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
     private val _uiEvent = Channel<UiEvent>()
     var categoryId = 0
     val uiEvent = _uiEvent.receiveAsFlow()
+
     //var titleColor = mutableStateOf("#FF3699E7")
     override var dialogTitle = mutableStateOf("List name:")
         private set
@@ -64,7 +69,7 @@ class MainScreenViewModel @Inject constructor(
                 "0"
             ).collect { id ->
                 categoryId = id.toInt()
-               // Log.d("Mylog", "get DM $id")
+                // Log.d("Mylog", "get DM $id")
             }
         }
     }
@@ -87,12 +92,35 @@ class MainScreenViewModel @Inject constructor(
                 }
             }
 
+            is MainScreenEvent.OnItemSaveTransaction -> {
+                if (editTableText.value.isEmpty()) return
+                viewModelScope.launch {
+                    repositoryTransaction.insertItem(
+                        TransactionItem(
+                            null,
+                            getCurrentTimeStamp(),
+                            editTableText.value,
+                            true,
+                            0,
+                            sum = actualSumTextFieldValue.value.text.toFloat()
+                        )
+                    )
+                }
+            }
+
+
             is MainScreenEvent.OnNewItemClick -> {
-                if(event.route == Routes.SHOPPING_LIST){
+                if (event.route == Routes.SHOPPING_LIST) {
                     openDialog.value = true
-                } else{
+                }
+                if (event.route == Routes.NOTE_LIST) {
                     sendUiEvent(UiEvent.NavigateMain(Routes.NEW_NOTE + "/-1"))
                 }
+                if (event.route == Routes.TRANSACTION_LIST) {
+                    openDialog.value = true
+                    showEditSumText.value = true
+                }
+
 
             }
 
@@ -117,17 +145,28 @@ class MainScreenViewModel @Inject constructor(
             }
 
             is DialogEvent.OnConfirm -> {
-                if (showEditTableText.value) {
+                if (showEditTableText.value&&(!showEditSumText.value)) {
                     onEvent(MainScreenEvent.OnItemSave)
                     editTableText.value = ""
                 }
+
+                if (showEditTableText.value&&(showEditSumText.value)) {
+                    onEvent(MainScreenEvent.OnItemSaveTransaction)
+                    editTableText.value = ""
+                    actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
+                        text = "0.00"
+                    )
+                }
+
                 openDialog.value = false
             }
 
             is DialogEvent.OnTextChange -> {
                 editTableText.value = event.text
             }
-
+            is DialogEvent.OnActualSumChange -> {
+                actualSumTextFieldValue.value =event.textFieldValue
+            }
             else -> {}
         }
     }

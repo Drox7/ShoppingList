@@ -8,6 +8,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +56,7 @@ fun MainScreen(
         },
         floatingActionButton = {
             if (viewModel.showFloatingButton.value) FloatingActionButton(
+                modifier = Modifier.alpha(1f),
                 onClick = {
                     viewModel.onEvent(
                         MainScreenEvent.OnNewItemClick(

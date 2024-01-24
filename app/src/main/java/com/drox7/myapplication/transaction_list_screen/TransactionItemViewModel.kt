@@ -26,6 +26,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @SuppressLint("SuspiciousIndentation")
@@ -52,14 +55,19 @@ class TransactionItemViewModel @Inject constructor(
     override var description = mutableStateOf("")
         private set
     var sum = mutableFloatStateOf(0.00f)
+
     var summarySum = mutableFloatStateOf(0.00f)
-        private set
+    var summarySumToday = mutableFloatStateOf(0.00f)
+    var summarySumMonth = mutableFloatStateOf(0.00f)
+
 
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override val uiStateDialog: MutableState<UiStateDialog>
         get() = TODO("Not yet implemented")
 
+    override var quantity = mutableStateOf(TextFieldValue("0.00"))
+        private set
     override var dialogTitle = mutableStateOf("")
         private set
     override var editTableText = mutableStateOf("")
@@ -73,6 +81,9 @@ class TransactionItemViewModel @Inject constructor(
     override var titleColor = mutableStateOf("#FF3699E7")
         private set
 
+    private val formatterDay = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    private val formatterMonth = SimpleDateFormat("MM.yyyy", Locale.getDefault())
+
     init {
 
         viewModelScope.launch {
@@ -85,7 +96,7 @@ class TransactionItemViewModel @Inject constructor(
             }
 
         }
-      //  updateShoppingList()
+        updateTransactionList()
     }
 
     fun onEvent(event: TransactionItemEvent) {
@@ -106,26 +117,34 @@ class TransactionItemViewModel @Inject constructor(
                     repository.insertItem(
                         TransactionItem(
                             transactionItem?.id,
-                            getCurrentTimeStamp(),
+                            transactionItem?.dateTime ?: getCurrentTimeStamp(),
                             transactionItem?.name ?: itemText.value,
                             true,
-                            sum = transactionItem?.sum ?: actualSumTextFieldValue.value.text.toFloat()
+                            sum = transactionItem?.sum
+                                ?: actualSumTextFieldValue.value.text.toFloat(),
+                            quantity = transactionItem?.quantity ?: quantity.value.text.toFloat()
                         )
                     )
                     itemText.value = ""
                     transactionItem = null
                 }
-              //  updateShoppingList()
+                updateTransactionList()
             }
 
             is TransactionItemEvent.OnShowEditDialog -> {
                 transactionItem = event.item
                 openDialog.value = true
+                dialogTitle.value = ""
+                showEditTableText.value = true
+                showEditSumText.value = true
+
                 editTableText.value = transactionItem?.name ?: ""
                 actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
                     text = transactionItem?.sum.toString()
                 )
-                UiStateDialog(null, null,transactionItem = transactionItem)
+                quantity.value = quantity.value.copy(
+                    text = transactionItem?.quantity.toString()
+                )
             }
 
             is TransactionItemEvent.OnTextChange -> {
@@ -136,14 +155,22 @@ class TransactionItemViewModel @Inject constructor(
                 viewModelScope.launch {
                     repository.deleteItem(event.item)
                 }
-                //updateShoppingList()
+                updateTransactionList()
             }
 
             is TransactionItemEvent.OnCheckedChange -> {
                 viewModelScope.launch {
                     repository.insertItem(event.item)
                 }
-               // updateShoppingList()
+                // updateShoppingList()
+            }
+
+            is TransactionItemEvent.OnShowDeleteDialog -> {
+                transactionItem = event.item
+                openDialog.value = true
+                dialogTitle.value = "Удалить ${event.item.name}?"
+                showEditTableText.value = false
+                showEditSumText.value = false
             }
         }
 
@@ -153,7 +180,7 @@ class TransactionItemViewModel @Inject constructor(
         when (event) {
             is ExpandableCardEvent.OnTextChange -> {
                 description.value = event.text
-               // updateShoppingList()
+                // updateShoppingList()
             }
         }
     }
@@ -166,13 +193,20 @@ class TransactionItemViewModel @Inject constructor(
             }
 
             is DialogEvent.OnConfirm -> {
+                if (showEditTableText.value) {
+                    transactionItem = transactionItem?.copy(
+                        name = editTableText.value,
+                        sum = actualSumTextFieldValue.value.text.toFloat(),
+                        quantity = quantity.value.text.toFloat()
+                    )
+                    editTableText.value = ""
+                    onEvent(TransactionItemEvent.OnItemSave)
+                } else {
+                    viewModelScope.launch {
+                        transactionItem?.let { repository.deleteItem(it) }
+                    }
+                }
                 openDialog.value = false
-                transactionItem = transactionItem?.copy(
-                    name = editTableText.value,
-                    sum = actualSumTextFieldValue.value.text.toFloat()
-                )
-                editTableText.value = ""
-                onEvent(TransactionItemEvent.OnItemSave)
             }
 
             is DialogEvent.OnTextChange -> {
@@ -186,38 +220,40 @@ class TransactionItemViewModel @Inject constructor(
             is DialogEvent.OnPlanSumChange -> {
                 planSumTextFieldValue.value = event.textFieldValue
             }
+
+            is DialogEvent.OnQuantityChange -> {
+                quantity.value = event.textFieldValue
+            }
+
+
         }
     }
 
-//    fun updateTransactionList() {
-//        viewModelScope.launch {
-//            itemsList?.collect { list ->
-//                var counter = 0
-//                var planSumTemp = 0.00f
-//                var actualSumTemp = 0.00f
-//                list.forEach { item ->
-//                    planSumTemp += item.planSum
-//                    actualSumTemp += item.actualSum
-//                    if (item.isCheck) counter++
-//                }
-//                planSum.floatValue = planSumTemp
-//                actualSum.floatValue = actualSumTemp
-//
-//                shoppingListItem?.copy(
-//                    allItemCount = list.size,
-//                    allSelectedItemCount = counter,
-//                    planSum = planSum.floatValue,
-//                    actualSum = actualSum.floatValue,
-//                    categoryId = categoryId,
-//                    description = description.value
-//                )?.let { shItem ->
-//                    repository.insertItem(
-//                        shItem
-//                    )
-//                }
-//            }
-//        }
-//    }
+    private fun updateTransactionList() {
+        viewModelScope.launch {
+            itemsList?.collect { list ->
+                var sumTemp = 0f
+                var sumTempToday = 0f
+                var sumTempMonth = 0f
+                val listToday = list.filter { formatterDay.format(it.dateTime?.time) == formatterDay.format(Calendar.getInstance().time)}
+                val listMonth = list.filter { formatterMonth.format(it.dateTime?.time) == formatterMonth.format(Calendar.getInstance().time)}
+                //val listPreviousMonth = list.filter { it.dateTime?.}
+                list.forEach { item ->
+                    sumTemp += item.sum
+                }
+
+                listToday.forEach{item ->
+                    sumTempToday += item.sum
+                }
+                listMonth.forEach{item ->
+                    sumTempMonth += item.sum
+                }
+                summarySum.floatValue = sumTemp
+                summarySumToday.floatValue = sumTempToday
+                summarySumMonth.floatValue = sumTempMonth
+            }
+        }
+    }
 
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {

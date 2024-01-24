@@ -81,7 +81,7 @@ fun MainDialog(
                         )
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    if (dialogController.showEditSumText.value)
+                    if (dialogController.showEditSumText.value){
                         Row(modifier = Modifier.fillMaxWidth()) {
                             TextField( //planSum
                                 value = dialogController.planSumTextFieldValue.value,
@@ -95,26 +95,25 @@ fun MainDialog(
                                     }
                                 },
                                 modifier = Modifier
-                                    .onFocusChanged {
-                                            focusState ->
+                                    .onFocusChanged { focusState ->
                                         if (focusState.isFocused) {
                                             scope.launch {
                                                 delay(10)
-                                                val text = dialogController.planSumTextFieldValue.value.text
+                                                val text =
+                                                    dialogController.planSumTextFieldValue.value.text
                                                 dialogController.planSumTextFieldValue.value =
                                                     dialogController.planSumTextFieldValue.value.copy(
                                                         selection = TextRange(0, text.length)
                                                     )
                                             }
-                                           // keepWholeSelection = true
+                                            // keepWholeSelection = true
                                         }
                                     }
                                     .padding(end = 5.dp)
                                     .weight(0.5f),
 
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                               // value = dialogController.editPlanSumText.value,
-
+                                // value = dialogController.editPlanSumText.value,
 
 
                                 label = {
@@ -138,12 +137,12 @@ fun MainDialog(
 
                             TextField( //actualSum
                                 modifier = Modifier
-                                    .onFocusChanged {
-                                            focusState ->
+                                    .onFocusChanged { focusState ->
                                         if (focusState.isFocused) {
                                             scope.launch {
                                                 delay(10)
-                                                val text = dialogController.actualSumTextFieldValue.value.text
+                                                val text =
+                                                    dialogController.actualSumTextFieldValue.value.text
                                                 dialogController.actualSumTextFieldValue.value =
                                                     dialogController.actualSumTextFieldValue.value.copy(
                                                         selection = TextRange(0, text.length)
@@ -183,7 +182,9 @@ fun MainDialog(
                                 )
                             )
                         }
-
+                        Spacer(modifier = Modifier.height(10.dp))
+                        UiGroupQuantity(titleColor = titleColor , dialogController = dialogController)
+                    }
                 }
             },
             confirmButton = {
@@ -219,4 +220,113 @@ fun MainDialog(
             shape = RoundedCornerShape(20.dp),
         )
     }
+}
+
+@Composable
+fun UiGroupQuantity(
+    //modifier: Modifier,
+    titleColor: Color,
+    dialogController: DialogController
+) {
+    val regexFloat = Regex("^[0-9]+(.[0-9]{0,2})?\$")
+    val scope = rememberCoroutineScope()
+    Row(modifier = Modifier.fillMaxWidth()) {
+        TextField( //quantity
+            value = dialogController.quantity.value,
+            //value = "12",
+
+            onValueChange = {
+                if (it.text.matches(regexFloat)) {
+                    if (!it.text.contains(","))
+                        dialogController.onDialogEvent(
+                            DialogEvent.OnQuantityChange(it)
+                        )
+                }
+            },
+            modifier = Modifier
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        scope.launch {
+                            delay(10)
+                            val text = dialogController.quantity.value.text
+                            dialogController.quantity.value =
+                                dialogController.quantity.value.copy(
+                                    selection = TextRange(0, text.length)
+                                )
+                        }
+                        // keepWholeSelection = true
+                    }
+                }
+                .padding(end = 5.dp)
+                .weight(0.5f),
+
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            // value = dialogController.editPlanSumText.value,
+
+
+            label = {
+                Text(text = "Количество", fontSize = 12.sp)
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorScheme.background,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = titleColor,
+                //focusedLabelColor = BlueLight
+            ),
+            shape = RoundedCornerShape(9.dp),
+            singleLine = true,
+            textStyle = TextStyle(
+                color = titleColor,
+                fontSize = 16.sp,
+                //fontWeight = FontWeight.Bold,
+            )
+        )
+
+        TextField( //actualSum
+            modifier = Modifier
+//                .onFocusChanged { focusState ->
+//                    if (focusState.isFocused) {
+//                        scope.launch {
+//                            delay(10)
+//                            val text = dialogController.actualSumTextFieldValue.value.text
+//                            dialogController.actualSumTextFieldValue.value =
+//                                dialogController.actualSumTextFieldValue.value.copy(
+//                                    selection = TextRange(0, text.length)
+//                                )
+//                        }
+//                        // keepWholeSelection = true
+//                    }
+//                }
+                .weight(0.5f),
+            value = "шт.",
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = {
+//                if (it.text.matches(regexFloat)) {
+//                    if (!it.text.contains(","))
+//                        dialogController.onDialogEvent(
+//                            DialogEvent.OnActualSumChange(it)
+//                        )
+//                }
+            },
+            label = {
+                Text(text = "Ед. измерения", fontSize = 12.sp)
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorScheme.background,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = titleColor,
+                //focusedLabelColor = BlueLight
+            ),
+            shape = RoundedCornerShape(9.dp),
+            singleLine = true,
+            textStyle = TextStyle(
+                color = titleColor,
+                fontSize = 16.sp,
+                //fontWeight = FontWeight.Bold,
+            )
+        )
+    }
+
 }

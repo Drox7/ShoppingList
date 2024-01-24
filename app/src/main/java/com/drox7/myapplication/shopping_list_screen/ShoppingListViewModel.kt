@@ -68,6 +68,8 @@ class ShoppingListViewModel @Inject constructor(
 
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val quantity: MutableState<TextFieldValue>
+        get() = TODO("Not yet implemented")
     override val uiStateDialog: MutableState<UiStateDialog>
         get() = TODO("Not yet implemented")
 
@@ -157,7 +159,11 @@ class ShoppingListViewModel @Inject constructor(
                             listItem?.time ?: getCurrentTime(),
                             listItem?.allItemCount ?: 0,
                             listItem?.allSelectedItemCount ?: 0,
-                            categoryId = listItem?.categoryId ?: 0
+                            listItem?.planSum ?: 0.00f,
+                            listItem?.actualSum ?: 0.00f,
+                            categoryId = listItem?.categoryId ?: 0,
+                            description = listItem?.description ?: ""
+
                         )
                     )
 
@@ -181,7 +187,7 @@ class ShoppingListViewModel @Inject constructor(
             is ShoppingListEvent.OnShowDeleteDialog -> {
                 listItem = event.item
                 openDialog.value = true
-                dialogTitle.value = "Delete this item?"
+                dialogTitle.value = "Удалить ${event.item.name}?"
                 showEditTableText.value = false
             }
 

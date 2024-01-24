@@ -61,6 +61,8 @@ class AddItemViewModel @Inject constructor(
 
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override var quantity = mutableStateOf(TextFieldValue("0.00"))
+
     override val uiStateDialog: MutableState<UiStateDialog>
         get() = TODO("Not yet implemented")
 
@@ -152,6 +154,10 @@ class AddItemViewModel @Inject constructor(
                 actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
                     text = addItem?.actualSum.toString()
                 )
+
+                quantity.value = quantity.value.copy(
+                    text = "1"
+                )
                 //editPlanSumText.value = addItem?.planSum.toString()
                 //editActualSumText.value = addItem?.actualSum.toString()
             }
@@ -221,6 +227,9 @@ class AddItemViewModel @Inject constructor(
 
             is DialogEvent.OnPlanSumChange -> {
                 planSumTextFieldValue.value = event.textFieldValue
+            }
+            is DialogEvent.OnQuantityChange -> {
+                quantity.value = event.textFieldValue
             }
         }
     }

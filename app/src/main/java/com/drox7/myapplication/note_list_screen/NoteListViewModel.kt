@@ -42,6 +42,8 @@ class NoteListViewModel @Inject constructor(
         private set
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val quantity: MutableState<TextFieldValue>
+        get() = TODO("Not yet implemented")
     override val uiStateDialog: MutableState<UiStateDialog>
         get() = TODO("Not yet implemented")
     override var openDialog = mutableStateOf(false)

@@ -108,9 +108,9 @@ fun UiShoppingListItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${item.planSum} р./${item.actualSum} р.",
+                    text = "${item.planSum}₽ / ${item.actualSum}₽",
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
+                        //fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                     ),
                     modifier = Modifier,
@@ -233,26 +233,4 @@ fun UiShoppingListItem(
 
     }
 
-}
-
-@Composable
-fun CircularProgressAnimated(progress: Float, titleColor: Color) {
-    //val progressValue = 0.75f
-    val infiniteTransition = rememberInfiniteTransition(label = "test")
-    val progressAnimationValue by infiniteTransition.animateFloat(
-        initialValue = 0.0f,
-        targetValue = progress,
-        animationSpec = infiniteRepeatable(
-            animation = tween(4000),
-            //repeatMode = RepeatMode.Restart,
-        ),
-        label = "1111"
-    )
-
-    CircularProgressIndicator(
-        progress = progressAnimationValue,
-        strokeWidth = 3.dp,
-        color = titleColor,
-        modifier = Modifier.background(colorScheme.onPrimary)
-    )
 }

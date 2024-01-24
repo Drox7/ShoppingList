@@ -242,7 +242,7 @@ fun AddItemScreen(
                     }
                 }
             }
-            ExpandableCard(viewModel ,title = "Описание...", )
+            ExpandableCard(viewModel ,title = "Описание...", showDescription = true )
         }
 
 

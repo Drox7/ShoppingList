@@ -10,8 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -26,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.TransactionItem
+import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.Typography
 import com.drox7.myapplication.utils.formatDate
@@ -69,36 +68,39 @@ fun UiTransactionItem(
 
                 Text(
                     modifier = Modifier.padding(start = 5.dp, top = 2.dp, bottom = 3.dp),
-                    text = "${item.sum} р.",
+                    text = "${item.sum}₽ (${item.quantity} шт.)",
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     ),
                     )
             }
-            Text (
-                modifier = Modifier
-                    // .weight(1f)
-                    .padding(start = 5.dp)
-                ,
-                text = formatDate(item.dateTime),
-                style = Typography.labelSmall,
-               // color = titleColor
-            )
-            Checkbox(
-                checked = item.isExpense ,
-                colors = CheckboxDefaults.colors(
-                    checkedColor = Color.Transparent,
-                    uncheckedColor = titleColor,
-                    checkmarkColor = titleColor
-                ),
-                onCheckedChange = {isChecked ->
-                    onEvent(TransactionItemEvent.OnCheckedChange(item.copy(isExpense = isChecked)))
-                }
-            )
+            Column {
+                Text (
+                    modifier = Modifier
+                        // .weight(1f)
+                        .padding(start = 5.dp)
+                    ,
+                    text = formatDate(item.dateTime),
+                    style = Typography.labelSmall,
+
+                    // color = titleColor
+                )
+                Text (
+                    modifier = Modifier
+                        // .weight(1f)
+                        .padding(start = 5.dp, top = 3.dp)
+                    ,
+                    text = if(item.isExpense) "Расход" else "Доход",
+                    style = Typography.labelSmall,
+                    color = if(item.isExpense) Red else GreenLight
+                )
+            }
+
             IconButton(
                 onClick = {
-                    onEvent(TransactionItemEvent.OnDelete(item))
+                   // onEvent(TransactionItemEvent.OnDelete(item))
+                    onEvent(TransactionItemEvent.OnShowDeleteDialog(item))
                  }
             ) {
                 Icon(

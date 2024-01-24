@@ -42,6 +42,7 @@ class MainScreenViewModel @Inject constructor(
     override val planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
 
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
+    override val quantity = mutableStateOf(TextFieldValue("0.00"))
     override val uiStateDialog: MutableState<UiStateDialog>
         get() = TODO("Not yet implemented")
     override var openDialog = mutableStateOf(false)
@@ -89,7 +90,11 @@ class MainScreenViewModel @Inject constructor(
                             getCurrentTime(),
                             0,
                             0,
-                            categoryId = categoryId
+                            planSumTextFieldValue.value.text.toFloat(),
+                            actualSumTextFieldValue.value.text.toFloat(),
+                            categoryId = categoryId,
+
+
                         )
                     )
                 }
@@ -105,7 +110,8 @@ class MainScreenViewModel @Inject constructor(
                             editTableText.value,
                             true,
                             0,
-                            sum = actualSumTextFieldValue.value.text.toFloat()
+                            sum = actualSumTextFieldValue.value.text.toFloat(),
+                            quantity = quantity.value.text.toFloat()
                         )
                     )
                 }
@@ -169,6 +175,10 @@ class MainScreenViewModel @Inject constructor(
             }
             is DialogEvent.OnActualSumChange -> {
                 actualSumTextFieldValue.value =event.textFieldValue
+            }
+
+            is DialogEvent.OnQuantityChange -> {
+                quantity.value =event.textFieldValue
             }
             else -> {}
         }

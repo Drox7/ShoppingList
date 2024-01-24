@@ -12,6 +12,7 @@ interface DialogController {
     val titleColor: MutableState<String>
     val planSumTextFieldValue: MutableState<TextFieldValue>
     val actualSumTextFieldValue: MutableState<TextFieldValue>
+    val quantity: MutableState<TextFieldValue>
     val uiStateDialog : MutableState<UiStateDialog>
     fun onDialogEvent(event: DialogEvent)
 }

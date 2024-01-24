@@ -74,7 +74,7 @@ fun UiAdItem(
                 )
                 Text(
                     modifier = Modifier.padding(start = 5.dp),
-                    text = "${item.planSum} р./${item.actualSum} р.",
+                    text = "${item.planSum}₽ / ${item.actualSum}₽",
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
@@ -96,12 +96,12 @@ fun UiAdItem(
                         Toast.makeText(
                             context,
                             "${item.name} - добавлен в расход",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                         ).show()
                     } else  Toast.makeText(
                         context,
                         "${item.name} - не заполнена сумма факт",
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             ) {

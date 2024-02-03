@@ -1,9 +1,9 @@
 package com.drox7.myapplication.add_item_screen
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
@@ -18,7 +18,6 @@ import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
 import com.drox7.myapplication.utils.UiEvent
@@ -62,9 +61,8 @@ class AddItemViewModel @Inject constructor(
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var quantity = mutableStateOf(TextFieldValue("0.00"))
+    override var dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
 
-    override val uiStateDialog: MutableState<UiStateDialog>
-        get() = TODO("Not yet implemented")
 
     var actualSum = mutableFloatStateOf(0.00f)
         private set
@@ -186,6 +184,8 @@ class AddItemViewModel @Inject constructor(
                 }
 
             }
+
+            else -> {}
         }
 
     }

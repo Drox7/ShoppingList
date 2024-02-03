@@ -13,6 +13,6 @@ interface DialogController {
     val planSumTextFieldValue: MutableState<TextFieldValue>
     val actualSumTextFieldValue: MutableState<TextFieldValue>
     val quantity: MutableState<TextFieldValue>
-    val uiStateDialog : MutableState<UiStateDialog>
+    val dateTimeItemMillis: MutableState<Long>
     fun onDialogEvent(event: DialogEvent)
 }

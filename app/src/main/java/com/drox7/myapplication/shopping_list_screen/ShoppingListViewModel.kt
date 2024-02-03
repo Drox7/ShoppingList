@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
@@ -16,7 +17,6 @@ import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
 import com.drox7.myapplication.utils.groupByCategory
@@ -70,8 +70,7 @@ class ShoppingListViewModel @Inject constructor(
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override val quantity: MutableState<TextFieldValue>
         get() = TODO("Not yet implemented")
-    override val uiStateDialog: MutableState<UiStateDialog>
-        get() = TODO("Not yet implemented")
+    override var dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
 
     init {
         viewModelScope.launch {

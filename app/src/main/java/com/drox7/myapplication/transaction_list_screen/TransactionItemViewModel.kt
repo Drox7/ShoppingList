@@ -1,9 +1,9 @@
 package com.drox7.myapplication.transaction_list_screen
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
@@ -16,16 +16,15 @@ import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
-import com.drox7.myapplication.dialog.UiStateDialog
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
 import com.drox7.myapplication.utils.UiEvent
-import com.drox7.myapplication.utils.getCurrentTimeStamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -48,7 +47,8 @@ class TransactionItemViewModel @Inject constructor(
     var selectedTextCategory = ""
     var categoryId = 0
     var categoryList: List<CategoryItem> = emptyList()
-
+    override var dateTimeItemMillis = mutableLongStateOf (System.currentTimeMillis())
+    private set
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
@@ -63,8 +63,6 @@ class TransactionItemViewModel @Inject constructor(
 
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
-    override val uiStateDialog: MutableState<UiStateDialog>
-        get() = TODO("Not yet implemented")
 
     override var quantity = mutableStateOf(TextFieldValue("0.00"))
         private set
@@ -117,7 +115,7 @@ class TransactionItemViewModel @Inject constructor(
                     repository.insertItem(
                         TransactionItem(
                             transactionItem?.id,
-                            transactionItem?.dateTime ?: getCurrentTimeStamp(),
+                            transactionItem?.dateTime ?: Timestamp(dateTimeItemMillis.value),
                             transactionItem?.name ?: itemText.value,
                             true,
                             sum = transactionItem?.sum
@@ -145,6 +143,7 @@ class TransactionItemViewModel @Inject constructor(
                 quantity.value = quantity.value.copy(
                     text = transactionItem?.quantity.toString()
                 )
+                dateTimeItemMillis.value= transactionItem?.dateTime?.time ?: System.currentTimeMillis()
             }
 
             is TransactionItemEvent.OnTextChange -> {
@@ -197,7 +196,8 @@ class TransactionItemViewModel @Inject constructor(
                     transactionItem = transactionItem?.copy(
                         name = editTableText.value,
                         sum = actualSumTextFieldValue.value.text.toFloat(),
-                        quantity = quantity.value.text.toFloat()
+                        quantity = quantity.value.text.toFloat(),
+                        dateTime = Timestamp(dateTimeItemMillis.value)
                     )
                     editTableText.value = ""
                     onEvent(TransactionItemEvent.OnItemSave)

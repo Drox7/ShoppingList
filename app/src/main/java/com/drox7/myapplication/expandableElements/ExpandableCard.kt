@@ -66,8 +66,13 @@ fun ExpandableCard(
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f, label = ""
     )
+    val summaryText :String = if(summarySum.value!=0.0f){summarySum.value.toString()+"₽"} else ""
+
 
     Card(
+//        elevation = CardDefaults.cardElevation(
+//            defaultElevation = 4.dp
+//        ),
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
@@ -86,7 +91,7 @@ fun ExpandableCard(
     ) {
         Column(
             modifier = Modifier
-                .background(colorScheme.background)
+                .background(colorScheme.onPrimary)
                 .fillMaxWidth()
                 .padding(padding)
         ) {
@@ -110,7 +115,7 @@ fun ExpandableCard(
                     modifier = Modifier
                         .weight(6f),
                    // text = expandableCardController.description.value,
-                    text = title+" "+summarySum.value.toString()+"₽",
+                    text = "$title $summaryText",
                     fontSize = titleFontSize,
                     //fontWeight = titleFontWeight,
                     maxLines = 1,
@@ -127,19 +132,25 @@ fun ExpandableCard(
 
                     ) {
                         Text(modifier = Modifier
+                            .padding(bottom = 7.dp)
                             .alpha(1f),
                             text = "Сегодня:", color = titleColor)
-                        Text(text = "Текущий месяц:", color = titleColor)
-                        Text(text = "Предыдущий месяц:", color = titleColor)
+                        Text(text = "Текущий месяц:", modifier = Modifier
+                            .padding(bottom = 7.dp),color = titleColor)
+                        Text(text = "Предыдущий месяц:", modifier = Modifier
+                            .padding(bottom = 7.dp),color = titleColor)
                     }
                     Column(
                         modifier = Modifier
                             .weight(1f)
                             .padding(padding)
                     ) {
-                        Text(text = "${summarySumToday.value}₽")
-                        Text(text = "${summarySumMonth.value}₽")
-                        Text(text = "5 000 000 р. ")
+                        Text(text = "${summarySumToday.value}₽",modifier = Modifier
+                            .padding(bottom = 7.dp))
+                        Text(text = "${summarySumMonth.value}₽",modifier = Modifier
+                            .padding(bottom = 7.dp))
+                        Text(text = "5 000 000 р. ",modifier = Modifier
+                            .padding(bottom = 7.dp))
                     }
 
                 }

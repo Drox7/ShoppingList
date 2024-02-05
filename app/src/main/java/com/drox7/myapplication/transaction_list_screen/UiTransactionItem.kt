@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -39,10 +40,13 @@ fun UiTransactionItem(
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
     Card(
-        shape = RoundedCornerShape(0.dp),
+        shape = RoundedCornerShape(5.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 2.dp, bottom = 0.dp, start = 0.dp, end = 0.dp)
+            .padding(top = 4.dp, bottom = 0.dp, start = 10.dp, end = 10.dp)
             .clickable {
                 onEvent(TransactionItemEvent.OnShowEditDialog(item))
             },

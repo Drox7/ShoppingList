@@ -26,13 +26,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.date_picker.UiDatePicker
+import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
+import com.drox7.myapplication.ui_drop_down_menu_box.UiDropdownMenuCategory
+import com.drox7.myapplication.ui_drop_down_menu_box.UiDropdownMenuUnit
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun MainDialog(
-    dialogController: DialogController
+    dialogController: DialogController,
+    showDropDownMenu: Boolean = false
 ) {
     val titleColor = Color(android.graphics.Color.parseColor(dialogController.titleColor.value))
     val regexFloat = Regex("^[0-9]+(.[0-9]{0,2})?\$")
@@ -48,15 +52,16 @@ fun MainDialog(
             title = null,
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
+                   if (dialogController.dialogTitle.value != "") {
+                    Text(modifier = Modifier.padding(bottom = 10.dp),
                         text = dialogController.dialogTitle.value,
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
+                    )}
+                    if (showDropDownMenu) UiDropdownMenuCategory(dropDownMenuState = dialogController.dropDownMenuStateCategory.value)
+                    //Spacer(modifier = Modifier.height(10.dp))
                     if (dialogController.showEditTableText.value)
                         TextField(
                             value = dialogController.editTableText.value,
@@ -119,7 +124,7 @@ fun MainDialog(
 
 
                                 label = {
-                                    Text(text = "Сумма план(₽)", fontSize = 12.sp)
+                                    Text(text = "Сумма план(₽)", fontSize = 12.sp,color = md_theme_light_tertiary)
                                 },
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = colorScheme.background,
@@ -166,7 +171,7 @@ fun MainDialog(
 
                                 },
                                 label = {
-                                    Text(text = "Сумма факт(₽)", fontSize = 12.sp)
+                                    Text(text = "Сумма факт(₽)", fontSize = 12.sp,color = md_theme_light_tertiary)
                                 },
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = colorScheme.background,
@@ -187,6 +192,7 @@ fun MainDialog(
                         Spacer(modifier = Modifier.height(10.dp))
                         UiGroupQuantity(titleColor = titleColor , dialogController = dialogController)
                         UiDatePicker(dialogController)
+
                     }
                 }
             },
@@ -268,7 +274,10 @@ fun UiGroupQuantity(
 
 
             label = {
-                Text(text = "Количество", fontSize = 12.sp)
+                Text(text = "Количество",
+                    fontSize = 12.sp,
+                    color = md_theme_light_tertiary
+                )
             },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = colorScheme.background,
@@ -285,51 +294,32 @@ fun UiGroupQuantity(
                 //fontWeight = FontWeight.Bold,
             )
         )
-
-        TextField( //actualSum
-            modifier = Modifier
-//                .onFocusChanged { focusState ->
-//                    if (focusState.isFocused) {
-//                        scope.launch {
-//                            delay(10)
-//                            val text = dialogController.actualSumTextFieldValue.value.text
-//                            dialogController.actualSumTextFieldValue.value =
-//                                dialogController.actualSumTextFieldValue.value.copy(
-//                                    selection = TextRange(0, text.length)
-//                                )
-//                        }
-//                        // keepWholeSelection = true
-//                    }
-//                }
-                .weight(0.5f),
-            value = "шт.",
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = {
-//                if (it.text.matches(regexFloat)) {
-//                    if (!it.text.contains(","))
-//                        dialogController.onDialogEvent(
-//                            DialogEvent.OnActualSumChange(it)
-//                        )
-//                }
-            },
-            label = {
-                Text(text = "Ед. измерения", fontSize = 12.sp)
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = colorScheme.background,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = titleColor,
-                //focusedLabelColor = BlueLight
-            ),
-            shape = RoundedCornerShape(9.dp),
-            singleLine = true,
-            textStyle = TextStyle(
-                color = titleColor,
-                fontSize = 16.sp,
-                //fontWeight = FontWeight.Bold,
-            )
-        )
+        UiDropdownMenuUnit(titleColor,dropDownMenuState = dialogController.dropDownMenuStateUnit.value)
+//        TextField( //actualSum
+//            modifier = Modifier
+//                .weight(0.5f),
+//            value = "шт.",
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//            onValueChange = {
+//            },
+//            label = {
+//                Text(text = "Ед. измерения", fontSize = 12.sp)
+//            },
+//            colors = TextFieldDefaults.textFieldColors(
+//                backgroundColor = colorScheme.background,
+//                focusedIndicatorColor = Color.Transparent,
+//                unfocusedIndicatorColor = Color.Transparent,
+//                cursorColor = titleColor,
+//                //focusedLabelColor = BlueLight
+//            ),
+//            shape = RoundedCornerShape(9.dp),
+//            singleLine = true,
+//            textStyle = TextStyle(
+//                color = titleColor,
+//                fontSize = 16.sp,
+//                //fontWeight = FontWeight.Bold,
+//            )
+//        )
     }
 
 }

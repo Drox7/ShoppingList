@@ -1,23 +1,26 @@
 package com.drox7.myapplication.transaction_list_screen
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.CategoryItem
+import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.data.TransactionItemRepository
+import com.drox7.myapplication.data.UnitItem
+import com.drox7.myapplication.data.UnitItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateCategory
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateUnit
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -34,21 +37,33 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionItemViewModel @Inject constructor(
     private val repository: TransactionItemRepository,
+    categoryRepository: CategoryListRepository,
+    unitRepository: UnitItemRepository,
     savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController, ExpandableCardController {
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
-
+    private val listCategoryFlow = categoryRepository.getAllItem()
+    private val listUnitFlow = unitRepository.getAllItem()
     var itemsList: Flow<List<TransactionItem>>? = null
-    var transactionItem: TransactionItem? = null
-    var expandedCategory by mutableStateOf(false)
-    var selectedTextCategory = ""
-    var categoryId = 0
-    var categoryList: List<CategoryItem> = emptyList()
+    private var transactionItem: TransactionItem? = null
+    //var categoryId = 0
+    private var categoryList: List<CategoryItem> = emptyList()
+    private var unitList: List<UnitItem> = emptyList()
     override var dateTimeItemMillis = mutableLongStateOf (System.currentTimeMillis())
     private set
+
+    override var dropDownMenuStateCategory = mutableStateOf(DropDownMenuStateCategory(
+        mutableStateOf(false), categoryList, CategoryItem(0,"","","")))
+        //private set
+    override var dropDownMenuStateUnit = mutableStateOf(
+            DropDownMenuStateUnit(
+            mutableStateOf(false), unitList, UnitItem(1,"шт.","pc.",1.00f,"pice",true)
+        )
+        )
+
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
@@ -94,6 +109,17 @@ class TransactionItemViewModel @Inject constructor(
             }
 
         }
+        viewModelScope.launch {
+            listCategoryFlow.collect { list ->
+                //categoryList = list
+                dropDownMenuStateCategory.value.listItemsMenu=list
+            }
+        }
+        viewModelScope.launch {
+            listUnitFlow.collect { list ->
+                dropDownMenuStateUnit.value.listItemsMenu=list
+            }
+        }
         updateTransactionList()
     }
 
@@ -115,9 +141,11 @@ class TransactionItemViewModel @Inject constructor(
                     repository.insertItem(
                         TransactionItem(
                             transactionItem?.id,
-                            transactionItem?.dateTime ?: Timestamp(dateTimeItemMillis.value),
+                            transactionItem?.dateTime ?: Timestamp(dateTimeItemMillis.longValue),
                             transactionItem?.name ?: itemText.value,
                             true,
+                            categoryId = transactionItem?.categoryId ?: 0,
+                            unitId = transactionItem?.unitId ?: 0,
                             sum = transactionItem?.sum
                                 ?: actualSumTextFieldValue.value.text.toFloat(),
                             quantity = transactionItem?.quantity ?: quantity.value.text.toFloat()
@@ -143,7 +171,9 @@ class TransactionItemViewModel @Inject constructor(
                 quantity.value = quantity.value.copy(
                     text = transactionItem?.quantity.toString()
                 )
-                dateTimeItemMillis.value= transactionItem?.dateTime?.time ?: System.currentTimeMillis()
+                dropDownMenuStateCategory.value.selectedItem = dropDownMenuStateCategory.value.listItemsMenu.find { it.id == transactionItem?.categoryId} ?: CategoryItem(0,"","","")
+                dropDownMenuStateUnit.value.selectedItem = dropDownMenuStateUnit.value.listItemsMenu.find { it.id == transactionItem?.unitId} ?: UnitItem(1,"шт.","pc.",1f,"pice",true)
+                dateTimeItemMillis.longValue= transactionItem?.dateTime?.time ?: System.currentTimeMillis()
             }
 
             is TransactionItemEvent.OnTextChange -> {
@@ -197,7 +227,9 @@ class TransactionItemViewModel @Inject constructor(
                         name = editTableText.value,
                         sum = actualSumTextFieldValue.value.text.toFloat(),
                         quantity = quantity.value.text.toFloat(),
-                        dateTime = Timestamp(dateTimeItemMillis.value)
+                        dateTime = Timestamp(dateTimeItemMillis.longValue),
+                        categoryId = dropDownMenuStateCategory.value.selectedItem.id ?:0,
+                        unitId = dropDownMenuStateUnit.value.selectedItem.id ?:0
                     )
                     editTableText.value = ""
                     onEvent(TransactionItemEvent.OnItemSave)

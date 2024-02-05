@@ -5,13 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.drox7.myapplication.data.CategoryItem
+import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.data.TransactionItemRepository
+import com.drox7.myapplication.data.UnitItem
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateCategory
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateUnit
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
@@ -25,7 +30,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val repository: ShoppingListRepository,
-    val repositoryTransaction: TransactionItemRepository,
+    categoryRepository: CategoryListRepository,
+    private val repositoryTransaction: TransactionItemRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
 
@@ -34,7 +40,7 @@ class MainScreenViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     //var titleColor = mutableStateOf("#FF3699E7")
-    override var dialogTitle = mutableStateOf("List name:")
+    override var dialogTitle = mutableStateOf("")
         private set
     override var editTableText = mutableStateOf("")
         private set
@@ -43,6 +49,15 @@ class MainScreenViewModel @Inject constructor(
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override val quantity = mutableStateOf(TextFieldValue("0.00"))
     override val dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
+    val listCategoryFlow = categoryRepository.getAllItem()
+    private var categoryList: List<CategoryItem> = emptyList()
+    private var unitList: List<UnitItem> = emptyList()
+    override var dropDownMenuStateCategory = mutableStateOf(DropDownMenuStateCategory(
+        mutableStateOf(false), categoryList, CategoryItem(0,"","","")
+    ))
+    override var dropDownMenuStateUnit = mutableStateOf(DropDownMenuStateUnit(
+        mutableStateOf(false), unitList, UnitItem(1,"шт.","pc.",1.00f,"pice",true)
+    ))
 
     override var openDialog = mutableStateOf(false)
         private set
@@ -57,6 +72,12 @@ class MainScreenViewModel @Inject constructor(
         private set
 
     init {
+        viewModelScope.launch {
+            listCategoryFlow.collect { list ->
+                //categoryList = list
+                dropDownMenuStateCategory.value.listItemsMenu=list
+            }
+        }
         viewModelScope.launch {
             dataStoreManager.getStringPreferences(
                 DataStoreManager.TITLE_COLOR,
@@ -108,7 +129,7 @@ class MainScreenViewModel @Inject constructor(
                             getCurrentTimeStamp(),
                             editTableText.value,
                             true,
-                            0,
+                            dropDownMenuStateCategory.value.selectedItem.id ?:0,
                             sum = actualSumTextFieldValue.value.text.toFloat(),
                             quantity = quantity.value.text.toFloat()
                         )
@@ -119,14 +140,19 @@ class MainScreenViewModel @Inject constructor(
 
             is MainScreenEvent.OnNewItemClick -> {
                 if (event.route == Routes.SHOPPING_LIST) {
+                    dialogTitle.value ="Новый список"
                     openDialog.value = true
+                    showEditSumText.value = false
+
                 }
                 if (event.route == Routes.NOTE_LIST) {
                     sendUiEvent(UiEvent.NavigateMain(Routes.NEW_NOTE + "/-1"))
                 }
                 if (event.route == Routes.TRANSACTION_LIST) {
+                    dialogTitle.value ="Новый расход"
                     openDialog.value = true
                     showEditSumText.value = true
+                    dropDownMenuStateCategory.value.selectedItem = CategoryItem(0,"","","")
                 }
 
 

@@ -13,6 +13,8 @@ import com.drox7.myapplication.data.ShoppingListImpl
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.data.TransactionItemImpl
 import com.drox7.myapplication.data.TransactionItemRepository
+import com.drox7.myapplication.data.UnitItemImpl
+import com.drox7.myapplication.data.UnitItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import dagger.Module
 import dagger.Provides
@@ -48,6 +50,11 @@ object AppModule {
     @Singleton
     fun provideTransactionRepo(db: MainDb) : TransactionItemRepository{
         return TransactionItemImpl(db.transactionItemDao)
+    }
+    @Provides
+    @Singleton
+    fun provideUnitRepo(db: MainDb) : UnitItemRepository {
+        return UnitItemImpl(db.unitItemDao)
     }
     @Provides
     @Singleton

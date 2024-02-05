@@ -15,11 +15,15 @@ import com.drox7.myapplication.data.AddItemRepository
 import com.drox7.myapplication.data.CategoryItem
 import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.ShoppingListItem
+import com.drox7.myapplication.data.UnitItem
+import com.drox7.myapplication.data.UnitItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateCategory
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateUnit
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -33,6 +37,7 @@ import javax.inject.Inject
 class AddItemViewModel @Inject constructor(
     private val repository: AddItemRepository,
     categoryRepository: CategoryListRepository,
+    unitRepository: UnitItemRepository,
     savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController, ExpandableCardController {
@@ -45,11 +50,12 @@ class AddItemViewModel @Inject constructor(
     var shoppingListItem: ShoppingListItem? = null
 
     val listCategoryFlow = categoryRepository.getAllItem()
+    private val listUnitFlow = unitRepository.getAllItem()
     var expandedCategory by mutableStateOf(false)
     var selectedTextCategory = ""
     var categoryId = 0
     var categoryList: List<CategoryItem> = emptyList()
-
+    private var unitList: List<UnitItem> = emptyList()
     var listId: Int = -1
     var itemText = mutableStateOf("")
         private set
@@ -63,6 +69,13 @@ class AddItemViewModel @Inject constructor(
     override var quantity = mutableStateOf(TextFieldValue("0.00"))
     override var dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
 
+    override var dropDownMenuStateCategory = mutableStateOf(DropDownMenuStateCategory(
+        mutableStateOf(false), categoryList, CategoryItem(0,"","","")))
+    override var dropDownMenuStateUnit = mutableStateOf(
+        DropDownMenuStateUnit(
+        mutableStateOf(false), unitList, UnitItem(1,"шт.","pc.",1.00f,"pice",true)
+    )
+    )
 
     var actualSum = mutableFloatStateOf(0.00f)
         private set
@@ -96,15 +109,22 @@ class AddItemViewModel @Inject constructor(
             }
 
         }
-
+        viewModelScope.launch {
+            listUnitFlow.collect { list ->
+                dropDownMenuStateUnit.value.listItemsMenu=list
+            }
+        }
         viewModelScope.launch {
             listCategoryFlow.collect { list ->
                 categoryList = list
             }
-            selectedTextCategory = categoryList.find {
-                it.id == categoryId
-            }?.name ?: ""
+            dropDownMenuStateCategory.value.selectedItem = categoryList.find { it.id == categoryId} ?: CategoryItem(0,"","","")
+            selectedTextCategory = dropDownMenuStateCategory.value.selectedItem.name
+//            selectedTextCategory = categoryList.find {
+//                it.id == categoryId
+//            }?.name ?: ""
         }
+
 
         updateShoppingList()
 
@@ -152,7 +172,8 @@ class AddItemViewModel @Inject constructor(
                 actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
                     text = addItem?.actualSum.toString()
                 )
-
+                dropDownMenuStateCategory.value.selectedItem = categoryList.find { it.id == categoryId} ?: CategoryItem(0,"","","")
+               // dropDownMenuStateUnit.value.selectedItem = dropDownMenuStateUnit.value.listItemsMenu.find { it.id == transactionItem?.unitId} ?: UnitItem(1,"шт.","pc.",1f,"pice",true)
                 quantity.value = quantity.value.copy(
                     text = "1"
                 )

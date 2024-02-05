@@ -4,4 +4,6 @@
     <string name="orderA_zText">A-Z</string>
     <string name="orderfinishedText">Finished</string>
     <string name="orderEmptyText">Empty</string>
+    <string name="categoryTitle">Category</string>
+    <string name="list_nameTitle">List name:</string>
 </resources>

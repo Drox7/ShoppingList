@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
@@ -40,16 +41,20 @@ import com.drox7.myapplication.utils.getCurrentTimeStamp
 fun UiAdItem(
     titleColor: Color,
     item: AddItem,
+    categoryId : Int = 0,
     onEvent:(AddItemEvent) -> Unit
 
 ) {
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
     val context = LocalContext.current
     Card(
-        shape = RoundedCornerShape(0.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 0.dp, bottom = 1.dp, start = 0.dp, end = 0.dp)
+            .padding(top = 0.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
             .clickable {
                 onEvent(AddItemEvent.OnShowEditDialog(item))
             },
@@ -73,7 +78,7 @@ fun UiAdItem(
                     color = titleColor
                 )
                 Text(
-                    modifier = Modifier.padding(start = 5.dp),
+                    modifier = Modifier.padding(start = 5.dp, bottom = 3.dp),
                     text = "${item.planSum}₽ / ${item.actualSum}₽",
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
@@ -89,7 +94,7 @@ fun UiAdItem(
                             AddItemEvent.OnAddToTransactionList(
                                 TransactionItem(
                                     null,
-                                    getCurrentTimeStamp(), item.name, true, sum = item.actualSum
+                                    getCurrentTimeStamp(), item.name, true, sum = item.actualSum, categoryId = categoryId
                                 )
                             )
                         )

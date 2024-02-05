@@ -136,7 +136,7 @@ fun AddItemScreen(
                             //.weight(2f)
                             .padding(top = 16.dp, start = 10.dp, end = 20.dp),
                         text = viewModel.shoppingListItem?.name ?: "",
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Start,
                         style = TextStyle(
                             fontSize = 18.sp
                         )
@@ -172,10 +172,10 @@ fun AddItemScreen(
                 .background(colorScheme.background)
         ) {
             Card(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(bottomEnd = 5.dp, bottomStart = 5.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 0.dp, end = 0.dp, top = 5.dp, bottom = 4.dp)
+                    .padding(start = 0.dp, end = 0.dp, top = 0.dp, bottom = 4.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -232,11 +232,12 @@ fun AddItemScreen(
                         // top = 3.dp,
                         start = 2.dp,
                         end = 2.dp
+
                     )
             ) {
                 if (itemsList != null) {
                     items(itemsList.value) { item ->
-                        UiAdItem(titleColor, item = item, onEvent = { event ->
+                        UiAdItem(titleColor, item = item, categoryId = viewModel.categoryId, onEvent = { event ->
                             viewModel.onEvent(event)
                         })
                     }

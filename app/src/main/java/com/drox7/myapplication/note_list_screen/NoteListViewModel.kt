@@ -13,6 +13,7 @@ import com.drox7.myapplication.data.NoteRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuState
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -45,6 +46,8 @@ class NoteListViewModel @Inject constructor(
     override val quantity: MutableState<TextFieldValue>
         get() = TODO("Not yet implemented")
     override var dateTimeItemMillis = mutableLongStateOf(1)
+    override val dropDownMenuState: MutableState<DropDownMenuState>
+        get() = TODO("Not yet implemented")
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(false)

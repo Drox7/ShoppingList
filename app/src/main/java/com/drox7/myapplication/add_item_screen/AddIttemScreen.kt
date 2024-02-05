@@ -236,7 +236,7 @@ fun AddItemScreen(
             ) {
                 if (itemsList != null) {
                     items(itemsList.value) { item ->
-                        UiAdItem(titleColor, item = item, onEvent = { event ->
+                        UiAdItem(titleColor, item = item, categoryId = viewModel.categoryId, onEvent = { event ->
                             viewModel.onEvent(event)
                         })
                     }

@@ -5,4 +5,6 @@
     <string name="orderA_zText">А - Я</string>
     <string name="orderfinishedText">По завершенным</string>
     <string name="orderEmptyText">По пустым</string>
+    <string name="categoryTitle">Категория</string>
+    <string name="list_nameTitle">Наименование:</string>
 </resources>

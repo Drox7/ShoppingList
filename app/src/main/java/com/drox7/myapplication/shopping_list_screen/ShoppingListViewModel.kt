@@ -17,6 +17,7 @@ import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuState
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
 import com.drox7.myapplication.utils.groupByCategory
@@ -47,8 +48,7 @@ class ShoppingListViewModel @Inject constructor(
     private var originShopList = listOf<ShoppingListItem>()
     var shopList by mutableStateOf(listOf<ShoppingListItem>())
 
-    private val _uiEvent =
-        Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
+    private val _uiEvent = Channel<UiEvent>() // transmitter for Broadcasting Events to View model and Compose
     val uiEvent = _uiEvent.receiveAsFlow() //receiver
 
     private var listItem: ShoppingListItem? = null
@@ -71,6 +71,8 @@ class ShoppingListViewModel @Inject constructor(
     override val quantity: MutableState<TextFieldValue>
         get() = TODO("Not yet implemented")
     override var dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
+    override val dropDownMenuState: MutableState<DropDownMenuState>
+        get() = TODO("Not yet implemented")
 
     init {
         viewModelScope.launch {
@@ -178,7 +180,7 @@ class ShoppingListViewModel @Inject constructor(
                 listItem = event.item
                 openDialog.value = true
                 editTableText.value = listItem?.name ?: ""
-                dialogTitle.value = "List name"
+                dialogTitle.value = ""
                 showEditTableText.value = true
 
             }

@@ -20,6 +20,7 @@ import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.expandableElements.ExpandableCardController
 import com.drox7.myapplication.expandableElements.ExpandableCardEvent
+import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuState
 import com.drox7.myapplication.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -63,6 +64,9 @@ class AddItemViewModel @Inject constructor(
     override var quantity = mutableStateOf(TextFieldValue("0.00"))
     override var dateTimeItemMillis = mutableLongStateOf(System.currentTimeMillis())
 
+    override var dropDownMenuState = mutableStateOf(DropDownMenuState(
+        mutableStateOf(false), categoryList, CategoryItem(0,"","","")))
+
 
     var actualSum = mutableFloatStateOf(0.00f)
         private set
@@ -101,9 +105,11 @@ class AddItemViewModel @Inject constructor(
             listCategoryFlow.collect { list ->
                 categoryList = list
             }
-            selectedTextCategory = categoryList.find {
-                it.id == categoryId
-            }?.name ?: ""
+            dropDownMenuState.value.selectedItem = categoryList.find { it.id == categoryId} ?: CategoryItem(0,"","","")
+            selectedTextCategory = dropDownMenuState.value.selectedItem.name
+//            selectedTextCategory = categoryList.find {
+//                it.id == categoryId
+//            }?.name ?: ""
         }
 
         updateShoppingList()
@@ -152,7 +158,7 @@ class AddItemViewModel @Inject constructor(
                 actualSumTextFieldValue.value = actualSumTextFieldValue.value.copy(
                     text = addItem?.actualSum.toString()
                 )
-
+                dropDownMenuState.value.selectedItem = categoryList.find { it.id == categoryId} ?: CategoryItem(0,"","","")
                 quantity.value = quantity.value.copy(
                     text = "1"
                 )

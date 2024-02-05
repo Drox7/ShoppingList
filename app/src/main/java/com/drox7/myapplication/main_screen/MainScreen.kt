@@ -81,6 +81,6 @@ fun MainScreen(
         NavigationGraph(navController) { route ->
             viewModel.onEvent(MainScreenEvent.NavigateMain(route))
         }
-        MainDialog(dialogController = viewModel)
+        MainDialog(dialogController = viewModel,showDropDownMenu = viewModel.showEditSumText.value)
     }
 }

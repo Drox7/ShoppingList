@@ -164,6 +164,6 @@ fun TransactionListScreen(
 //                }
 //            }
         }
-        MainDialog(dialogController = viewModel)
+        MainDialog(dialogController = viewModel, showDropDownMenu = true)
     }
 }

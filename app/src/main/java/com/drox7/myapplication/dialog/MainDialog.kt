@@ -26,13 +26,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.date_picker.UiDatePicker
+import com.drox7.myapplication.ui_drop_down_menu_box.UiDropdownMenuBox
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun MainDialog(
-    dialogController: DialogController
+    dialogController: DialogController,
+    showDropDownMenu: Boolean = false
 ) {
     val titleColor = Color(android.graphics.Color.parseColor(dialogController.titleColor.value))
     val regexFloat = Regex("^[0-9]+(.[0-9]{0,2})?\$")
@@ -48,15 +50,16 @@ fun MainDialog(
             title = null,
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
+                   if (dialogController.dialogTitle.value != "") {
+                    Text(modifier = Modifier.padding(bottom = 10.dp),
                         text = dialogController.dialogTitle.value,
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
+                    )}
+                    if (showDropDownMenu) UiDropdownMenuBox(dropDownMenuState = dialogController.dropDownMenuState.value)
+                    //Spacer(modifier = Modifier.height(10.dp))
                     if (dialogController.showEditTableText.value)
                         TextField(
                             value = dialogController.editTableText.value,
@@ -187,6 +190,7 @@ fun MainDialog(
                         Spacer(modifier = Modifier.height(10.dp))
                         UiGroupQuantity(titleColor = titleColor , dialogController = dialogController)
                         UiDatePicker(dialogController)
+
                     }
                 }
             },

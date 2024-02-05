@@ -40,6 +40,7 @@ import com.drox7.myapplication.utils.getCurrentTimeStamp
 fun UiAdItem(
     titleColor: Color,
     item: AddItem,
+    categoryId : Int = 0,
     onEvent:(AddItemEvent) -> Unit
 
 ) {
@@ -89,7 +90,7 @@ fun UiAdItem(
                             AddItemEvent.OnAddToTransactionList(
                                 TransactionItem(
                                     null,
-                                    getCurrentTimeStamp(), item.name, true, sum = item.actualSum
+                                    getCurrentTimeStamp(), item.name, true, sum = item.actualSum, categoryId = categoryId
                                 )
                             )
                         )

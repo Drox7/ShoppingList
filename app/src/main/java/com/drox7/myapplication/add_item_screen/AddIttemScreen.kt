@@ -1,6 +1,7 @@
 package com.drox7.myapplication.add_item_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,19 +43,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.expandableElements.ExpandableCard
+import com.drox7.myapplication.ui.theme.GreenLight
+import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.UiEvent
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddItemScreen(
     viewModel: AddItemViewModel = hiltViewModel(),
     onPopBackStack: () -> Unit
 ) {
+
     val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
+    val dateList = itemsList?.value?.groupBy(
+        keySelector = { if (it.isCheck) "Завершено" else "В работе" },
+        valueTransform = { it }
+    )
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEven ->
             when (uiEven) {
@@ -236,14 +246,42 @@ fun AddItemScreen(
                     )
             ) {
                 if (itemsList != null) {
-                    items(itemsList.value) { item ->
-                        UiAdItem(titleColor, item = item, categoryId = viewModel.categoryId, onEvent = { event ->
-                            viewModel.onEvent(event)
-                        })
+                    dateList?.forEach { category ->
+                        stickyHeader() {
+                            Card(
+                                shape = RoundedCornerShape(5.dp),
+                                modifier = Modifier
+                                    //.fillMaxWidth()
+                                    .padding(start = 10.dp, end = 10.dp, bottom = 4.dp)
+                                // .background(Color.Red)
+
+                            ) {
+                                Text(
+                                    text = category.key,
+                                    modifier = Modifier
+                                        //.fillMaxWidth()
+                                        .padding(5.dp)
+                                        .background(Color.Transparent),
+                                    color = if (category.key == "В работе") Red else GreenLight,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        items(category.value) { item ->
+                            UiAdItem(
+                                titleColor,
+                                item = item,
+                                categoryId = viewModel.categoryId,
+                                onEvent = { event ->
+                                    viewModel.onEvent(event)
+                                })
+                        }
                     }
                 }
             }
-            ExpandableCard(viewModel ,title = "Описание...", showDescription = true )
+            ExpandableCard(viewModel, title = "Описание...", showDescription = true)
         }
 
 

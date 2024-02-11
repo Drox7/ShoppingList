@@ -12,6 +12,7 @@ import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.data.UnitItem
+import com.drox7.myapplication.data.UnitItemRepository
 import com.drox7.myapplication.datastore.DataStoreManager
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
@@ -20,17 +21,18 @@ import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateUnit
 import com.drox7.myapplication.utils.Routes
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.getCurrentTime
-import com.drox7.myapplication.utils.getCurrentTimeStamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val repository: ShoppingListRepository,
     categoryRepository: CategoryListRepository,
+    unitRepository: UnitItemRepository,
     private val repositoryTransaction: TransactionItemRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel(), DialogController {
@@ -58,7 +60,7 @@ class MainScreenViewModel @Inject constructor(
     override var dropDownMenuStateUnit = mutableStateOf(DropDownMenuStateUnit(
         mutableStateOf(false), unitList, UnitItem(1,"шт.","pc.",1.00f,"pice",true)
     ))
-
+    private val listUnitFlow = unitRepository.getAllItem()
     override var openDialog = mutableStateOf(false)
         private set
     override var showEditTableText = mutableStateOf(true)
@@ -96,6 +98,11 @@ class MainScreenViewModel @Inject constructor(
                 // Log.d("Mylog", "get DM $id")
             }
         }
+        viewModelScope.launch {
+            listUnitFlow.collect { list ->
+                dropDownMenuStateUnit.value.listItemsMenu=list
+            }
+        }
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -126,10 +133,11 @@ class MainScreenViewModel @Inject constructor(
                     repositoryTransaction.insertItem(
                         TransactionItem(
                             null,
-                            getCurrentTimeStamp(),
+                            Timestamp(dateTimeItemMillis.longValue),
                             editTableText.value,
                             true,
-                            dropDownMenuStateCategory.value.selectedItem.id ?:0,
+                            unitId = dropDownMenuStateUnit.value.selectedItem.id ?:0,
+                            categoryId =  dropDownMenuStateCategory.value.selectedItem.id ?:0,
                             sum = actualSumTextFieldValue.value.text.toFloat(),
                             quantity = quantity.value.text.toFloat()
                         )
@@ -151,6 +159,7 @@ class MainScreenViewModel @Inject constructor(
                 if (event.route == Routes.TRANSACTION_LIST) {
                     dialogTitle.value ="Новый расход"
                     openDialog.value = true
+                    dateTimeItemMillis.longValue =System.currentTimeMillis()
                     showEditSumText.value = true
                     dropDownMenuStateCategory.value.selectedItem = CategoryItem(0,"","","")
                 }

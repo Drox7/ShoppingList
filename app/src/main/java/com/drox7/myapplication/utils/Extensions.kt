@@ -12,8 +12,16 @@ fun getCurrentTime(): String {
     val cv = Calendar.getInstance().time
     return formatter.format(cv.time)
 }
-fun formatDate(date: Date?):String {
+fun formatDateTime(date: Date?):String {
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    return formatter.format(date!!)
+}
+fun formatDate(date: Date?):String {
+    val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    return formatter.format(date!!)
+}
+fun formatTime(date: Date?):String {
+    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
     return formatter.format(date!!)
 }
 fun getCurrentTimeStamp(): Timestamp {

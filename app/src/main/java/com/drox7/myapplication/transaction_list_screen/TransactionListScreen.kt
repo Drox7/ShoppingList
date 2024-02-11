@@ -2,6 +2,7 @@ package com.drox7.myapplication.transaction_list_screen
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,17 +36,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.expandableElements.ExpandableCard
 import com.drox7.myapplication.utils.UiEvent
+import com.drox7.myapplication.utils.formatDate
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TransactionListScreen(
     viewModel: TransactionItemViewModel = hiltViewModel(),
-   // onPopBackStack: () -> Unit,
+    // onPopBackStack: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
+
     val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
+
+    val dateList = itemsList?.value?.groupBy(
+        keySelector = { formatDate(it.dateTime) },
+        valueTransform = { it }
+    )
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEven ->
             when (uiEven) {
@@ -54,6 +64,7 @@ fun TransactionListScreen(
                         uiEven.message
                     )
                 }
+
                 is UiEvent.Navigate -> {
                     onNavigate(uiEven.route)
                 }
@@ -87,7 +98,7 @@ fun TransactionListScreen(
                 ) {
                     IconButton(
                         onClick = {
-                           // onPopBackStack()
+                            // onPopBackStack()
                             //viewModel.updateShoppingList()
                         }
                     ) {
@@ -130,18 +141,42 @@ fun TransactionListScreen(
                     )
             ) {
                 if (itemsList != null) {
-                    items(itemsList.value) { item ->
-                        UiTransactionItem(titleColor, item = item, onEvent = { event ->
-                            viewModel.onEvent(event)
-                        })
+                    dateList?.forEach { category ->
+                        stickyHeader {
+                            Card(
+                                shape = RoundedCornerShape(0.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 0.dp)
+                                    .background(MaterialTheme.colorScheme.background)
+
+                            ) {
+                                Text(
+                                    text = category.key,
+                                    modifier = Modifier
+                                        //.fillMaxWidth()
+                                        .padding(start = 5.dp, top = 8.dp, bottom = 8.dp)
+                                    //.background(MaterialTheme.colorScheme.background)
+                                    ,
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
+
+                        items(category.value) { item ->
+                            UiTransactionItem(titleColor, item = item, onEvent = { event ->
+                                viewModel.onEvent(event)
+                            })
+                        }
                     }
                 }
             }
             ExpandableCard(
-                viewModel ,
+                viewModel,
                 title = "Всего расходов:",
                 bottomPadding = 55.dp,
-                showSummary = true ,
+                showSummary = true,
                 summarySum = viewModel.summarySum,
                 summarySumToday = viewModel.summarySumToday,
                 summarySumMonth = viewModel.summarySumMonth,

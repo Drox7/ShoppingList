@@ -28,7 +28,7 @@ import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.Typography
-import com.drox7.myapplication.utils.formatDate
+import com.drox7.myapplication.utils.formatTime
 
 @Composable
 
@@ -40,13 +40,13 @@ fun UiTransactionItem(
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
     Card(
-        shape = RoundedCornerShape(5.dp),
+        shape = RoundedCornerShape(0.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 4.dp, bottom = 0.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 0.dp, bottom = 0.dp, start = 0.dp, end = 0.dp)
             .clickable {
                 onEvent(TransactionItemEvent.OnShowEditDialog(item))
             },
@@ -63,7 +63,7 @@ fun UiTransactionItem(
                 Text (
                     modifier = Modifier
                        // .weight(1f)
-                        .padding(start = 5.dp)
+                        .padding(start = 5.dp, top = 3.dp)
                     ,
                     text = item.name,
                     style = Typography.bodyLarge,
@@ -71,8 +71,10 @@ fun UiTransactionItem(
                 )
 
                 Text(
-                    modifier = Modifier.padding(start = 5.dp, top = 2.dp, bottom = 3.dp),
+                    modifier = Modifier.padding(start = 5.dp, top = 3.dp, bottom = 4.dp),
+
                     text = "${item.sum}₽ (${item.quantity} шт.)",
+                    color = colorScheme.tertiary,
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
@@ -85,8 +87,9 @@ fun UiTransactionItem(
                         // .weight(1f)
                         .padding(start = 5.dp)
                     ,
-                    text = formatDate(item.dateTime),
+                    text = formatTime(item.dateTime),
                     style = Typography.labelSmall,
+                    color = colorScheme.tertiary,
 
                     // color = titleColor
                 )

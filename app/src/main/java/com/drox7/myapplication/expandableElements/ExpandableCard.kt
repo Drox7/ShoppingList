@@ -40,6 +40,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.drox7.myapplication.charts.UiDonutPieChart
+import com.drox7.myapplication.data.SummaryItem
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,22 +53,26 @@ fun ExpandableCard(
     summarySum: MutableState<Float> = mutableFloatStateOf(0f),
     summarySumToday: MutableState<Float> = mutableFloatStateOf(0f),
     summarySumMonth: MutableState<Float> = mutableFloatStateOf(0f),
+    summaryItemList: List<SummaryItem> = emptyList(),
     titleFontWeight: FontWeight = FontWeight.Bold,
     descriptionFontSize: TextUnit = MaterialTheme.typography.titleSmall.fontSize,
     descriptionFontWeight: FontWeight = FontWeight.Normal,
     descriptionMaxLines: Int = 15,
     shape: Shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
     bottomPadding: Dp = 55.dp,
-    padding : Dp = 5.dp,
+    padding: Dp = 5.dp,
     showSummary: Boolean = false,
     showDescription: Boolean = false
 ) {
-    val titleColor = Color(android.graphics.Color.parseColor(expandableCardController.titleColor.value))
+    val titleColor =
+        Color(android.graphics.Color.parseColor(expandableCardController.titleColor.value))
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f, label = ""
     )
-    val summaryText :String = if(summarySum.value!=0.0f){summarySum.value.toString()+"₽"} else ""
+    val summaryText: String = if (summarySum.value != 0.0f) {
+        summarySum.value.toString() + "₽"
+    } else ""
 
 
     Card(
@@ -114,46 +120,65 @@ fun ExpandableCard(
                 Text(
                     modifier = Modifier
                         .weight(6f),
-                   // text = expandableCardController.description.value,
+                    // text = expandableCardController.description.value,
                     text = "$title $summaryText",
                     fontSize = titleFontSize,
-                    //fontWeight = titleFontWeight,
+                    fontWeight = titleFontWeight,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
 
             }
             if (expandedState && showSummary) {
-                Row () {
-                    Column(
-                        modifier = Modifier
-                            .weight(1.2f)
-                            .padding(padding)
+                Column(modifier = Modifier) {
+                    Row() {
+                        Column(
+                            modifier = Modifier
+                                .weight(1.2f)
+                                .padding(padding)
 
-                    ) {
-                        Text(modifier = Modifier
-                            .padding(bottom = 7.dp)
-                            .alpha(1f),
-                            text = "Сегодня:", color = titleColor)
-                        Text(text = "Текущий месяц:", modifier = Modifier
-                            .padding(bottom = 7.dp),color = titleColor)
-                        Text(text = "Предыдущий месяц:", modifier = Modifier
-                            .padding(bottom = 7.dp),color = titleColor)
-                    }
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(padding)
-                    ) {
-                        Text(text = "${summarySumToday.value}₽",modifier = Modifier
-                            .padding(bottom = 7.dp))
-                        Text(text = "${summarySumMonth.value}₽",modifier = Modifier
-                            .padding(bottom = 7.dp))
-                        Text(text = "5 000 000 р. ",modifier = Modifier
-                            .padding(bottom = 7.dp))
-                    }
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(bottom = 7.dp)
+                                    .alpha(1f),
+                                text = "Сегодня:", color = titleColor,
+                                fontWeight = titleFontWeight,
+                            )
+                            Text(
+                                text = "Текущий месяц:", modifier = Modifier
+                                    .padding(bottom = 7.dp), color = titleColor,
+                                fontWeight = titleFontWeight,
+                            )
+                            Text(
+                                text = "Предыдущий месяц:", modifier = Modifier
+                                    .padding(bottom = 7.dp), color = titleColor,
+                                fontWeight = titleFontWeight,
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(padding)
+                        ) {
+                            Text(
+                                text = "${summarySumToday.value} ₽", modifier = Modifier
+                                    .padding(bottom = 7.dp)
+                            )
+                            Text(
+                                text = "${summarySumMonth.value} ₽", modifier = Modifier
+                                    .padding(bottom = 7.dp)
+                            )
+                            Text(
+                                text = "5 000 000 р. ", modifier = Modifier
+                                    .padding(bottom = 7.dp)
+                            )
+                        }
 
+                    }
+                    UiDonutPieChart(summaryItemList)
                 }
+
             }
 
             if (expandedState && showDescription) {

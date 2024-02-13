@@ -6,4 +6,5 @@ interface TransactionItemRepository {
     suspend fun insertItem(item: TransactionItem)
     suspend fun deleteItem(item: TransactionItem)
     fun getAllItem() : Flow<List<TransactionItem>>
+    fun getSummaryItems() : Flow<List<SummaryItem>>
 }

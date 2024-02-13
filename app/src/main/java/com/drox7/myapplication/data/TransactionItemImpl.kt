@@ -14,4 +14,7 @@ private val dao: TransactionItemDao
     override fun getAllItem(): Flow<List<TransactionItem>> {
         return dao.getAllItem()
     }
+    override fun getSummaryItems(): Flow<List<SummaryItem>> {
+        return dao.getSummaryItems()
+    }
 }

@@ -180,6 +180,7 @@ fun TransactionListScreen(
                 summarySum = viewModel.summarySum,
                 summarySumToday = viewModel.summarySumToday,
                 summarySumMonth = viewModel.summarySumMonth,
+                summaryItemList = viewModel.summaryList
             )
 //            Box(
 //                contentAlignment = Alignment.Center,

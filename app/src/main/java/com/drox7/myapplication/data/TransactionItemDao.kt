@@ -15,4 +15,6 @@ interface TransactionItemDao {
 
     @Query("SELECT * FROM transaction_item_table ORDER BY dateTime DESC")
     fun getAllItem() : Flow<List<TransactionItem>>
+    @Query("SELECT ifnull(category_table.name,\"Без категории\") as category, sum(sum) as sum FROM transaction_item_table left join category_table on transaction_item_table.categoryId = category_table.id group BY category_table.name,transaction_item_table.categoryId")
+    fun getSummaryItems() : Flow<List<SummaryItem>>
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drox7.myapplication.data.CategoryItem
 import com.drox7.myapplication.data.CategoryListRepository
+import com.drox7.myapplication.data.SummaryItem
 import com.drox7.myapplication.data.TransactionItem
 import com.drox7.myapplication.data.TransactionItemRepository
 import com.drox7.myapplication.data.UnitItem
@@ -47,11 +48,13 @@ class TransactionItemViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
     private val listCategoryFlow = categoryRepository.getAllItem()
     private val listUnitFlow = unitRepository.getAllItem()
+    private val summaryItemsFlow = repository.getSummaryItems()
     var itemsList: Flow<List<TransactionItem>>? = null
     private var transactionItem: TransactionItem? = null
     //var categoryId = 0
     private var categoryList: List<CategoryItem> = emptyList()
     private var unitList: List<UnitItem> = emptyList()
+    var summaryList: List<SummaryItem> = emptyList()
     override var dateTimeItemMillis = mutableLongStateOf (System.currentTimeMillis())
     private set
 
@@ -118,6 +121,12 @@ class TransactionItemViewModel @Inject constructor(
         viewModelScope.launch {
             listUnitFlow.collect { list ->
                 dropDownMenuStateUnit.value.listItemsMenu=list
+            }
+        }
+
+        viewModelScope.launch {
+            summaryItemsFlow.collect { list ->
+                summaryList=list
             }
         }
         updateTransactionList()

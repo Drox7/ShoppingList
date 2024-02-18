@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -32,8 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.AddItem
 import com.drox7.myapplication.data.TransactionItem
-import com.drox7.myapplication.ui.theme.Red
-import com.drox7.myapplication.ui.theme.Typography
+import com.drox7.myapplication.di.AppModule.scaleTextValue
 import com.drox7.myapplication.utils.getCurrentTimeStamp
 
 @Composable
@@ -54,7 +53,7 @@ fun UiAdItem(
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 0.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
+            .padding(top = 0.dp, bottom = 4.dp, start = 1.dp, end = 1.dp)
             .clickable {
                 onEvent(AddItemEvent.OnShowEditDialog(item))
             },
@@ -74,7 +73,8 @@ fun UiAdItem(
                         .padding(start = 5.dp)
                     ,
                     text = item.name,
-                    style = Typography.bodyLarge,
+                    fontSize = 12.sp*scaleTextValue,
+                    //style = Typography.bodyLarge*scaleTextValue,
                     color = titleColor
                 )
                 Text(
@@ -82,7 +82,7 @@ fun UiAdItem(
                     text = "${item.planSum}₽ / ${item.actualSum}₽",
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
+                        fontSize = 12.sp*scaleTextValue,
                     ),
                     )
             }
@@ -132,14 +132,14 @@ fun UiAdItem(
             )
             IconButton(
                 onClick = {
-                    onEvent(AddItemEvent.OnDelete(item))
+                    //onEvent(AddItemEvent.OnDelete(item))
                  }
             ) {
                 Icon(
                     //painter = painterResource(id = R.drawable.delete_icon),
-                    imageVector = Icons.Default.Delete,
-                    contentDescription ="Delete",
-                    tint = Red
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription ="Add Alert",
+                    tint = Color.LightGray
                 )
 
             }

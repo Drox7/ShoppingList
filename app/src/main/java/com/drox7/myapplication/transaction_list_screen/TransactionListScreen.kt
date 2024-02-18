@@ -2,6 +2,7 @@ package com.drox7.myapplication.transaction_list_screen
 
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.expandableElements.ExpandableCard
+import com.drox7.myapplication.utils.SwipeToDeleteContainer
 import com.drox7.myapplication.utils.UiEvent
 import com.drox7.myapplication.utils.formatDate
+import com.drox7.myapplication.utils.getScaleText
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -47,7 +47,7 @@ fun TransactionListScreen(
     onNavigate: (String) -> Unit
 ) {
 
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
 
@@ -96,24 +96,24 @@ fun TransactionListScreen(
                         .background(MaterialTheme.colorScheme.onPrimary)
                         .fillMaxWidth()
                 ) {
-                    IconButton(
-                        onClick = {
-                            // onPopBackStack()
-                            //viewModel.updateShoppingList()
-                        }
-                    ) {
-                        Icon(
-                            modifier = Modifier.padding(top = 14.dp),
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = titleColor
-                        )
-                    }
+//                    IconButton(
+//                        onClick = {
+//                            // onPopBackStack()
+//                            //viewModel.updateShoppingList()
+//                        }
+//                    ) {
+//                        Icon(
+//                            modifier = Modifier.padding(top = 14.dp),
+//                            imageVector = Icons.Filled.ArrowBack,
+//                            contentDescription = "Back",
+//                            tint = titleColor
+//                        )
+//                    }
 
                     Text(
                         modifier = Modifier
                             //.weight(2f)
-                            .padding(top = 16.dp, start = 10.dp, end = 20.dp),
+                            .padding(top = 16.dp, start = 10.dp, end = 20.dp, bottom = 10.dp),
                         text = "Расходы",
                         textAlign = TextAlign.Center,
                         style = TextStyle(
@@ -129,6 +129,10 @@ fun TransactionListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .animateContentSize(
+
+
+                )
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -138,6 +142,13 @@ fun TransactionListScreen(
                         // top = 3.dp,
                         start = 2.dp,
                         end = 2.dp
+                    )
+                    .animateContentSize(
+                       // animationSpec = spring(1f,200f,)
+//                animationSpec = tween(
+//                    durationMillis = 200,
+//                    easing = LinearEasing
+//                )
                     )
             ) {
                 if (itemsList != null) {
@@ -159,15 +170,31 @@ fun TransactionListScreen(
                                     //.background(MaterialTheme.colorScheme.background)
                                     ,
                                     color = MaterialTheme.colorScheme.tertiary,
-                                    fontSize = 14.sp
+                                    fontSize = 14.sp*(getScaleText(viewModel.scaleText))
                                 )
                             }
                         }
 
-                        items(category.value) { item ->
-                            UiTransactionItem(titleColor, item = item, onEvent = { event ->
-                                viewModel.onEvent(event)
-                            })
+                        items(
+                            category.value,
+                            key = {it.id ?:0}
+                        ) { item ->
+                            SwipeToDeleteContainer(
+                                item = item,
+                                onDelete = {
+                                    viewModel.onEvent(TransactionItemEvent.OnDelete(item))
+                                })
+                            {
+                                UiTransactionItem(
+                                    viewModel.scaleText,
+                                    viewModel.categoryList.find { it.id == item.categoryId }?.name
+                                        ?: "",
+                                    titleColor,
+                                    item = item,
+                                    onEvent = { event ->
+                                        viewModel.onEvent(event)
+                                    })
+                            }
                         }
                     }
                 }
@@ -178,9 +205,10 @@ fun TransactionListScreen(
                 bottomPadding = 55.dp,
                 showSummary = true,
                 summarySum = viewModel.summarySum,
-                summarySumToday = viewModel.summarySumToday,
-                summarySumMonth = viewModel.summarySumMonth,
-                summaryItemList = viewModel.summaryList
+                summarySumToday = viewModel.summarySumToday.value,
+                //summarySumMonth = viewModel.summarySumMonth,
+                summaryItemList = viewModel.summaryList,
+                summaryMonthMap = viewModel.mapSummaryMonth.value
             )
 //            Box(
 //                contentAlignment = Alignment.Center,

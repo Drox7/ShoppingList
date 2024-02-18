@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,21 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.TransactionItem
-import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.Red
-import com.drox7.myapplication.ui.theme.Typography
 import com.drox7.myapplication.utils.formatTime
+import com.drox7.myapplication.utils.getScaleText
 
 @Composable
 
 fun UiTransactionItem(
+    scaleText: Float,
+    categoryName: String = "",
     titleColor: Color,
     item: TransactionItem,
-    onEvent:(TransactionItemEvent) -> Unit
+    onEvent: (TransactionItemEvent) -> Unit
 ) {
     val minPaddingText = dimensionResource(R.dimen.padding_minimum_text)
 
@@ -58,66 +56,88 @@ fun UiTransactionItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
 
-        ) {
+            ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text (
+                Text(
                     modifier = Modifier
-                       // .weight(1f)
-                        .padding(start = 5.dp, top = 3.dp)
-                    ,
-                    text = item.name,
-                    style = Typography.bodyLarge,
-                    color = titleColor
+                        .padding(start = 5.dp, top = 2.dp),
+                    text = categoryName,
+
+                    style = TextStyle(
+                        //fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp * (getScaleText(scaleText)),
+                    ),
+                    color = colorScheme.tertiary
                 )
+                Text(
+                    modifier = Modifier
+                        // .weight(1f)
+                        .padding(start = 5.dp, top = 0.dp),
+                    text = item.name,
+                    style = TextStyle(
+                        //fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp * (getScaleText(scaleText))
+                    ),
+                    color = titleColor,
+
+                    )
 
                 Text(
                     modifier = Modifier.padding(start = 5.dp, top = 3.dp, bottom = 4.dp),
 
-                    text = "${item.sum}₽ (${item.quantity} шт.)",
+                    text = "${String.format("%.2f", item.sum)} ₽ (${item.quantity} шт.)",
                     color = colorScheme.tertiary,
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
+                        fontSize = 12.sp * (getScaleText(scaleText)),
                     ),
-                    )
+                )
             }
             Column {
-                Text (
+                Text(
                     modifier = Modifier
                         // .weight(1f)
-                        .padding(start = 5.dp)
-                    ,
+                        //.fillMaxWidth()
+                        .padding(start = 5.dp, end = 5.dp),
+                    textAlign = TextAlign.Right,
                     text = formatTime(item.dateTime),
-                    style = Typography.labelSmall,
+                    style = TextStyle(
+                        //fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp * (getScaleText(scaleText)),
+                    ),
                     color = colorScheme.tertiary,
 
                     // color = titleColor
                 )
-                Text (
+                Text(
                     modifier = Modifier
                         // .weight(1f)
-                        .padding(start = 5.dp, top = 3.dp)
-                    ,
-                    text = if(item.isExpense) "Расход" else "Доход",
-                    style = Typography.labelSmall,
-                    color = if(item.isExpense) Red else GreenLight
+                        .padding(start = 5.dp, top = 3.dp, end = 5.dp),
+                    text = if (item.isExpense) "Расход" else "Доход",
+                    //text = categoryName,
+
+                    style = TextStyle(
+                        //fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp * (getScaleText(scaleText)),
+                    ),
+                    color = if (item.isExpense) Red else titleColor
                 )
             }
 
-            IconButton(
-                onClick = {
-                   // onEvent(TransactionItemEvent.OnDelete(item))
-                    onEvent(TransactionItemEvent.OnShowDeleteDialog(item))
-                 }
-            ) {
-                Icon(
-                    //painter = painterResource(id = R.drawable.delete_icon),
-                    imageVector = Icons.Default.Delete,
-                    contentDescription ="Delete",
-                    tint = Red
-                )
-
-            }
+//            IconButton(
+//                onClick = {
+//                   // onEvent(TransactionItemEvent.OnDelete(item))
+//                    onEvent(TransactionItemEvent.OnShowDeleteDialog(item))
+//                 }
+//            ) {
+//                Icon(
+//                    //painter = painterResource(id = R.drawable.delete_icon),
+//                    imageVector = Icons.Default.Delete,
+//                    contentDescription ="Delete",
+//                    tint = Red
+//                )
+//
+//            }
         }
     }
 }

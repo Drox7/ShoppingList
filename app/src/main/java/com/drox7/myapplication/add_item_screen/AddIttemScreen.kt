@@ -41,11 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.expandableElements.ExpandableCard
 import com.drox7.myapplication.ui.theme.GreenLight
 import com.drox7.myapplication.ui.theme.Red
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
+import com.drox7.myapplication.utils.SwipeToDeleteContainer
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -57,7 +59,7 @@ fun AddItemScreen(
     onPopBackStack: () -> Unit
 ) {
 
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     val scaffoldState = rememberScaffoldState()
     val itemsList = viewModel.itemsList?.collectAsState(initial = emptyList())
     val dateList = itemsList?.value?.groupBy(
@@ -269,14 +271,24 @@ fun AddItemScreen(
                             }
                         }
 
-                        items(category.value) { item ->
-                            UiAdItem(
-                                titleColor,
+                        items(
+                            items = category.value,
+                            key = { it.id?.toInt() ?: 0 }
+                        ) { item ->
+                            SwipeToDeleteContainer(
                                 item = item,
-                                categoryId = viewModel.categoryId,
-                                onEvent = { event ->
-                                    viewModel.onEvent(event)
-                                })
+                                onDelete = {
+                                    viewModel.onEvent(AddItemEvent.OnDelete(item))
+                                }) {
+                                UiAdItem(
+                                    titleColor,
+                                    item = item,
+                                    categoryId = viewModel.categoryId,
+                                    onEvent = { event ->
+                                        viewModel.onEvent(event)
+                                    }
+                                )
+                            }
                         }
                     }
                 }

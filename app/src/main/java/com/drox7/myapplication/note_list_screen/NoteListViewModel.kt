@@ -88,8 +88,11 @@ class NoteListViewModel @Inject constructor(
                 }
             }
             is NoteListEvent.OnShowDeleteDialog -> {
-                openDialog.value = true
-                noteItem = event.item
+                viewModelScope.launch {
+                    repository.deleteItem(event.item)
+                }
+                //openDialog.value = true
+               // noteItem = event.item
             }
 
             is NoteListEvent.OnItemClick -> {

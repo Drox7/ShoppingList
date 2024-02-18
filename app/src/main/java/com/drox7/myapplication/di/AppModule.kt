@@ -72,4 +72,10 @@ object AppModule {
     fun provideDataStoreManager(app: Application) : DataStoreManager{
         return DataStoreManager(app)
     }
+
+    @Singleton
+    var scaleTextValue : Float = 1f
+        set(value) {field = value+0.5f}
+    @Singleton
+    var MainColor : String ="#FF3699E7"
 }

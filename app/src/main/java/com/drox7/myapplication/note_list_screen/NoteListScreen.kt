@@ -33,8 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
+import com.drox7.myapplication.utils.SwipeToDeleteContainer
 import com.drox7.myapplication.utils.UiEvent
 
 
@@ -46,7 +48,7 @@ fun NoteListScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     //val itemsList = viewModel.noteList.collectAsState(initial = emptyList())
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEven ->
             when (uiEven) {
@@ -146,9 +148,19 @@ fun NoteListScreen(
                 contentPadding = PaddingValues(bottom = 100.dp)
 
             ) {
-                items(viewModel.noteList) { item ->
-                    UiNoteItem(titleColor, item) { event ->
-                        viewModel.onEvent(event)
+                items(
+                    viewModel.noteList,
+                    key = {it.id ?: 0}
+                ) { item ->
+                    SwipeToDeleteContainer(
+                        item = item,
+                        onDelete = {
+                            viewModel.onEvent(NoteListEvent.OnShowDeleteDialog(item))
+                        })
+                    {
+                        UiNoteItem(titleColor, item) { event ->
+                            viewModel.onEvent(event)
+                        }
                     }
                 }
             }

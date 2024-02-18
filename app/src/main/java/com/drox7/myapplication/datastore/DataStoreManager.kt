@@ -27,5 +27,6 @@ class DataStoreManager (val context: Context) {
         const val SORT_ID = "sortId"
         const val CATEGORY_ID = "CategoryId"
         const val CATEGORY_NAME = "categoryName"
+        const val SCALE_TEXT_VALUE = "ScaleTextValue"
     }
 }

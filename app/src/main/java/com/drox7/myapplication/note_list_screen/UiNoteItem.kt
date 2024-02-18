@@ -8,11 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.data.NoteItem
-import com.drox7.myapplication.ui.theme.Red
+import com.drox7.myapplication.di.AppModule.scaleTextValue
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.utils.Routes
 
@@ -58,7 +54,7 @@ fun UiNoteItem(
                         )
                         .weight(1f),
                     text = item.title,
-                    fontSize = 17.sp,
+                    fontSize = 17.sp*scaleTextValue,
                     //fontWeight = FontWeight.Bold
                 )
                 Text(
@@ -68,7 +64,7 @@ fun UiNoteItem(
                     ),
                     text = item.time,
                     color = titleColor,
-                    fontSize = 12.sp
+                    fontSize = 12.sp*scaleTextValue
                 )
             }
             Row(Modifier.fillMaxWidth()) {
@@ -81,21 +77,22 @@ fun UiNoteItem(
                         )
                         .weight(1f),
                     text = item.description,
+                    fontSize = 14.sp*scaleTextValue,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     color = md_theme_light_tertiary
                 )
-                IconButton(
-                    onClick = {
-                        onEvent(NoteListEvent.OnShowDeleteDialog(item))
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "delete",
-                        tint = Red
-                    )
-                }
+//                IconButton(
+//                    onClick = {
+//                        onEvent(NoteListEvent.OnShowDeleteDialog(item))
+//                    }
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.Delete,
+//                        contentDescription = "delete",
+//                        tint = Red
+//                    )
+//                }
             }
         }
     }

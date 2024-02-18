@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.drox7.myapplication.date_picker.UiDatePicker
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 import com.drox7.myapplication.ui_drop_down_menu_box.UiDropdownMenuCategory
 import com.drox7.myapplication.ui_drop_down_menu_box.UiDropdownMenuUnit
@@ -38,7 +39,7 @@ fun MainDialog(
     dialogController: DialogController,
     showDropDownMenu: Boolean = false
 ) {
-    val titleColor = Color(android.graphics.Color.parseColor(dialogController.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     val regexFloat = Regex("^[0-9]+(.[0-9]{0,2})?\$")
     val scope = rememberCoroutineScope()
     //val state = remember { mutableStateOf(TextFieldValue(""))

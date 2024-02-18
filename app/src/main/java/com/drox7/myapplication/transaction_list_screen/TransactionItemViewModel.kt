@@ -46,13 +46,14 @@ class TransactionItemViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+    var scaleText :Float= 0.5f
     private val listCategoryFlow = categoryRepository.getAllItem()
     private val listUnitFlow = unitRepository.getAllItem()
     private val summaryItemsFlow = repository.getSummaryItems()
     var itemsList: Flow<List<TransactionItem>>? = null
     private var transactionItem: TransactionItem? = null
     //var categoryId = 0
-    private var categoryList: List<CategoryItem> = emptyList()
+    var categoryList: List<CategoryItem> = emptyList()
     private var unitList: List<UnitItem> = emptyList()
     var summaryList: List<SummaryItem> = emptyList()
     override var dateTimeItemMillis = mutableLongStateOf (System.currentTimeMillis())
@@ -72,12 +73,12 @@ class TransactionItemViewModel @Inject constructor(
         private set
     override var description = mutableStateOf("")
         private set
-    var sum = mutableFloatStateOf(0.00f)
+    //var sum = mutableFloatStateOf(0.00f)
 
     var summarySum = mutableFloatStateOf(0.00f)
     var summarySumToday = mutableFloatStateOf(0.00f)
-    var summarySumMonth = mutableFloatStateOf(0.00f)
-
+    //var summarySumMonth = mutableFloatStateOf(0.00f)
+    var mapSummaryMonth = mutableStateOf(mapOf(Pair("",0f)))
 
     override var planSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
     override var actualSumTextFieldValue = mutableStateOf(TextFieldValue("0.00"))
@@ -110,11 +111,18 @@ class TransactionItemViewModel @Inject constructor(
             ).collect { color ->
                 titleColor.value = color
             }
-
+        }
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.SCALE_TEXT_VALUE,
+                "0.5"
+            ).collect { selectedScaleText ->
+                scaleText = selectedScaleText.toFloat()
+            }
         }
         viewModelScope.launch {
             listCategoryFlow.collect { list ->
-                //categoryList = list
+                categoryList = list
                 dropDownMenuStateCategory.value.listItemsMenu=list
             }
         }
@@ -275,10 +283,9 @@ class TransactionItemViewModel @Inject constructor(
             itemsList?.collect { list ->
                 var sumTemp = 0f
                 var sumTempToday = 0f
-                var sumTempMonth = 0f
                 val listToday = list.filter { formatterDay.format(it.dateTime?.time) == formatterDay.format(Calendar.getInstance().time)}
-                val listMonth = list.filter { formatterMonth.format(it.dateTime?.time) == formatterMonth.format(Calendar.getInstance().time)}
-                //val listPreviousMonth = list.filter { it.dateTime?.}
+                mapSummaryMonth.value= list.groupingBy{formatterMonth.format(it.dateTime?.time)}.fold(0f) {total, it ->total+it.sum}
+
                 list.forEach { item ->
                     sumTemp += item.sum
                 }
@@ -286,12 +293,8 @@ class TransactionItemViewModel @Inject constructor(
                 listToday.forEach{item ->
                     sumTempToday += item.sum
                 }
-                listMonth.forEach{item ->
-                    sumTempMonth += item.sum
-                }
                 summarySum.floatValue = sumTemp
                 summarySumToday.floatValue = sumTempToday
-                summarySumMonth.floatValue = sumTempMonth
             }
         }
     }

@@ -87,7 +87,7 @@ fun UiDonutPieChart(
             donutChartConfig
         ) { slice ->
             //Toast.makeText(context, slice.value.toString(), Toast.LENGTH_SHORT).show() 
-        sumTextSlice = "${slice.label}: ${slice.value} ₽"
+        sumTextSlice = "${slice.label}: ${String.format("%.2f",slice.value)} ₽"
         }
         Text(
             text = sumTextSlice,

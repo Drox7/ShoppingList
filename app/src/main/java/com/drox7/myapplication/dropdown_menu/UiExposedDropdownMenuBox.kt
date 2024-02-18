@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.shopping_list_screen.ShoppingListEvent
 import com.drox7.myapplication.shopping_list_screen.ShoppingListViewModel
 
@@ -76,7 +77,7 @@ fun UiExposedDropdownMenuBox(
                     focusedLabelColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
-                    cursorColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+                    cursorColor = Color(android.graphics.Color.parseColor(MainColor))
                 )
             )
 

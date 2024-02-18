@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.dropdown_menu.UiDropDownMenu
 import com.drox7.myapplication.dropdown_menu.UiExposedDropdownMenuBox
@@ -42,7 +43,7 @@ fun ShoppingListScreen(
 ) {
     //val itemsList = viewModel.list.collectAsState(initial = emptyList())
    // val itemsListCategory = viewModel.listCategory.collectAsState(initial = emptyList())
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEven ->
             when (uiEven) {
@@ -96,7 +97,6 @@ fun ShoppingListScreen(
 //            )
         },
     ) {
-
 
         LazyColumn(
             modifier = Modifier

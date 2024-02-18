@@ -1,9 +1,8 @@
 package com.drox7.myapplication.expandableElements
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +41,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.drox7.myapplication.charts.UiDonutPieChart
 import com.drox7.myapplication.data.SummaryItem
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.ui.theme.md_theme_light_tertiary
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,27 +51,28 @@ fun ExpandableCard(
     title: String,
     titleFontSize: TextUnit = MaterialTheme.typography.titleMedium.fontSize,
     summarySum: MutableState<Float> = mutableFloatStateOf(0f),
-    summarySumToday: MutableState<Float> = mutableFloatStateOf(0f),
-    summarySumMonth: MutableState<Float> = mutableFloatStateOf(0f),
+    summarySumToday :Float = 0f,
+    //summarySumToday: MutableState<Float> = mutableFloatStateOf(0f),
     summaryItemList: List<SummaryItem> = emptyList(),
+    summaryMonthMap: Map<String,Float> = emptyMap(),
     titleFontWeight: FontWeight = FontWeight.Bold,
     descriptionFontSize: TextUnit = MaterialTheme.typography.titleSmall.fontSize,
     descriptionFontWeight: FontWeight = FontWeight.Normal,
     descriptionMaxLines: Int = 15,
-    shape: Shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+    shape: Shape = RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp),
     bottomPadding: Dp = 55.dp,
     padding: Dp = 5.dp,
     showSummary: Boolean = false,
     showDescription: Boolean = false
 ) {
     val titleColor =
-        Color(android.graphics.Color.parseColor(expandableCardController.titleColor.value))
+        Color(android.graphics.Color.parseColor(MainColor))
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f, label = ""
     )
     val summaryText: String = if (summarySum.value != 0.0f) {
-        summarySum.value.toString() + "₽"
+        String.format("%.2f",summarySum.value) + " ₽"
     } else ""
 
 
@@ -85,11 +86,13 @@ fun ExpandableCard(
             .alpha(1f)
             .padding(end = 0.dp, start = 0.dp, bottom = bottomPadding, top = 0.dp)
             .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            ),
+                animationSpec = spring(3f)
+//                animationSpec = tween(
+//                    durationMillis = 200,
+//                    easing = LinearEasing
+//                )
+            )
+           ,
         shape = shape,
         onClick = {
             expandedState = !expandedState
@@ -121,7 +124,7 @@ fun ExpandableCard(
                     modifier = Modifier
                         .weight(6f),
                     // text = expandableCardController.description.value,
-                    text = "$title $summaryText",
+                    text = "$title    $summaryText",
                     fontSize = titleFontSize,
                     fontWeight = titleFontWeight,
                     maxLines = 1,
@@ -145,16 +148,13 @@ fun ExpandableCard(
                                 text = "Сегодня:", color = titleColor,
                                 fontWeight = titleFontWeight,
                             )
-                            Text(
-                                text = "Текущий месяц:", modifier = Modifier
-                                    .padding(bottom = 7.dp), color = titleColor,
-                                fontWeight = titleFontWeight,
-                            )
-                            Text(
-                                text = "Предыдущий месяц:", modifier = Modifier
-                                    .padding(bottom = 7.dp), color = titleColor,
-                                fontWeight = titleFontWeight,
-                            )
+                            summaryMonthMap.forEach{
+                                Text(
+                                    text = "${getMonthName(it.key)}:", modifier = Modifier
+                                        .padding(bottom = 7.dp), color = titleColor,
+                                    fontWeight = titleFontWeight,
+                                )
+                            }
                         }
                         Column(
                             modifier = Modifier
@@ -162,17 +162,18 @@ fun ExpandableCard(
                                 .padding(padding)
                         ) {
                             Text(
-                                text = "${summarySumToday.value} ₽", modifier = Modifier
-                                    .padding(bottom = 7.dp)
+                                text = "${String.format("%.2f",summarySumToday)} ₽", modifier = Modifier
+                                    .padding(bottom = 7.dp),
+                                fontWeight = titleFontWeight,
                             )
-                            Text(
-                                text = "${summarySumMonth.value} ₽", modifier = Modifier
-                                    .padding(bottom = 7.dp)
-                            )
-                            Text(
-                                text = "5 000 000 р. ", modifier = Modifier
-                                    .padding(bottom = 7.dp)
-                            )
+
+                            summaryMonthMap.forEach{
+                                Text(
+                                    text = "${String.format("%.2f", it.value)} ₽", modifier = Modifier
+                                        .padding(bottom = 7.dp),
+                                    fontWeight = titleFontWeight,
+                                )
+                            }
                         }
 
                     }
@@ -207,3 +208,27 @@ fun ExpandableCard(
     }
 
 }
+
+fun getMonthName(date:String) :String {
+    if(date.startsWith("01")) return "Январь"
+    else if(date.startsWith("02")) return "Февраль"
+    else if(date.startsWith("03")) return "Март"
+    else if(date.startsWith("04")) return "Апрель"
+    else if(date.startsWith("05")) return "Май"
+    else if(date.startsWith("06")) return "Июнь"
+    else if(date.startsWith("07")) return "Июль"
+    else if(date.startsWith("08")) return "Август"
+    else if(date.startsWith("09")) return "Сентябрь"
+    else if(date.startsWith("10")) return "Октябрь"
+    else if(date.startsWith("11")) return "Ноябрь"
+    else if(date.startsWith("12")) return "Декабрь"
+    return ""
+}
+
+//@Composable
+//fun TextSummary(Text: String){
+//    Text(
+//        text = "$Text ₽", modifier = Modifier
+//            .padding(bottom = 7.dp)
+//    )
+//}

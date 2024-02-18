@@ -29,6 +29,10 @@ fun getCurrentTimeStamp(): Timestamp {
     return Timestamp(currentTimeMillis)
 }
 
+fun getScaleText(initialValue:Float): Float {
+    return initialValue + 0.5f
+}
+
 fun groupByCategory(
     originList: List<ShoppingListItem>,
     categoryId: Int

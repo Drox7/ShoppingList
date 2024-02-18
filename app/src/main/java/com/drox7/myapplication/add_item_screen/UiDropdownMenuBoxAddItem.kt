@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.drox7.myapplication.di.AppModule.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +74,7 @@ fun UiDropdownMenuBoxAddItem(
                     focusedLabelColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
-                    cursorColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+                    cursorColor = Color(android.graphics.Color.parseColor(MainColor))
                 )
             )
 

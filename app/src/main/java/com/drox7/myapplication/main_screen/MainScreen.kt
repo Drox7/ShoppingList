@@ -17,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.drox7.myapplication.R
+import com.drox7.myapplication.di.AppModule.MainColor
 import com.drox7.myapplication.dialog.MainDialog
 import com.drox7.myapplication.navigation.NavigationGraph
 import com.drox7.myapplication.utils.Routes
@@ -32,7 +33,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {

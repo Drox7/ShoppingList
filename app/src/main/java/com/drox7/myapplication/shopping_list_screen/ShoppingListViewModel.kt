@@ -15,6 +15,8 @@ import com.drox7.myapplication.data.CategoryListRepository
 import com.drox7.myapplication.data.ShoppingListItem
 import com.drox7.myapplication.data.ShoppingListRepository
 import com.drox7.myapplication.datastore.DataStoreManager
+import com.drox7.myapplication.di.AppModule.MainColor
+import com.drox7.myapplication.di.AppModule.scaleTextValue
 import com.drox7.myapplication.dialog.DialogController
 import com.drox7.myapplication.dialog.DialogEvent
 import com.drox7.myapplication.ui_drop_down_menu_box.DropDownMenuStateCategory
@@ -85,6 +87,15 @@ class ShoppingListViewModel @Inject constructor(
                 "#FF3699E7"
             ).collect { color ->
                 titleColor.value = color
+                MainColor = color
+            }
+        }
+        viewModelScope.launch {
+            dataStoreManager.getStringPreferences(
+                DataStoreManager.SCALE_TEXT_VALUE,
+                "0.5"
+            ).collect { selectedScaleText ->
+                scaleTextValue = selectedScaleText.toFloat()
             }
         }
        getCategoryFromDataManager()

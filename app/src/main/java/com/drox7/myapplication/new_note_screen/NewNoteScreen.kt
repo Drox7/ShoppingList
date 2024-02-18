@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.drox7.myapplication.R
+import com.drox7.myapplication.di.AppModule.MainColor
+import com.drox7.myapplication.di.AppModule.scaleTextValue
 import com.drox7.myapplication.ui.theme.BlueLight
 import com.drox7.myapplication.utils.UiEvent
 
@@ -57,7 +59,7 @@ fun NewNoteScreen(
         }
     }
 
-    val titleColor = Color(android.graphics.Color.parseColor(viewModel.titleColor.value))
+    val titleColor = Color(android.graphics.Color.parseColor(MainColor))
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -113,7 +115,7 @@ fun NewNoteScreen(
                             ),
                             singleLine = true,
                             textStyle = TextStyle(
-                                fontSize = 18.sp,
+                                fontSize = 18.sp* scaleTextValue,
                                 //fontWeight = FontWeight.Bold,
                                 //color = colorScheme.onBackground
                                 color = titleColor
@@ -156,7 +158,7 @@ fun NewNoteScreen(
                         cursorColor = titleColor
                     ),
                     textStyle = TextStyle(
-                        fontSize = 14.sp,
+                        fontSize = 14.sp*scaleTextValue,
                         color = colorScheme.onBackground
                     )
                 )

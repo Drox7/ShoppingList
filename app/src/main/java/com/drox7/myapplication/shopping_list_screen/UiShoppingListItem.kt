@@ -1,10 +1,6 @@
 package com.drox7.myapplication.shopping_list_screen
 
 
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,7 +21,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.drox7.myapplication.R
 import com.drox7.myapplication.data.ShoppingListItem
+import com.drox7.myapplication.di.AppModule.scaleTextValue
 import com.drox7.myapplication.settings_screen.ColorUtils
 import com.drox7.myapplication.ui.theme.GrayLight
 import com.drox7.myapplication.ui.theme.Red
@@ -92,7 +88,7 @@ fun UiShoppingListItem(
                     style = TextStyle(
                         // color = DarkText,
                         //fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 18.sp*scaleTextValue,
                         color = titleColor
                     )
                 )
@@ -103,7 +99,7 @@ fun UiShoppingListItem(
                     text = item.time,
                     style = TextStyle(
                           color = GrayLight,
-                        fontSize = 10.sp
+                        fontSize = 10.sp*scaleTextValue
                     )
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -111,7 +107,7 @@ fun UiShoppingListItem(
                     text = "${item.planSum}₽ / ${item.actualSum}₽",
                     style = TextStyle(
                         //fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp,
+                        fontSize = 13.sp*scaleTextValue,
                     ),
                     modifier = Modifier,
 

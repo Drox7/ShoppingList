@@ -12,14 +12,26 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+//        runBlocking {
+//            launch {
+//                dataStoreManager.getStringPreferences(
+//                    DataStoreManager.SCALE_TEXT_VALUE,
+//                    "0.5"
+//                ).collect { selectedScaleText ->
+//                    AppModule.scaleTextFloat = selectedScaleText.toFloat()
+//                }
+//            }
+//        }
+
         super.onCreate(savedInstanceState)
         setContent {
             ShoppingListTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                   // color = MaterialTheme.colorScheme.background
+                    // color = MaterialTheme.colorScheme.background
                 ) {
                     MainNavigationGraph()
                 }
@@ -27,3 +39,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+//suspend fun getGlobalSettings(dataStoreManager:DataStoreManager) {
+//   coroutineScope {
+//        launch {
+//            dataStoreManager.getStringPreferences(
+//                DataStoreManager.SCALE_TEXT_VALUE,
+//                "0.5"
+//            ).collect { selectedScaleText ->
+//                AppModule.scaleTextFloat = selectedScaleText.toFloat()
+//            }
+//        }
+//    }
+//}
